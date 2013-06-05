@@ -19,8 +19,8 @@ class Rank(models.Model):
 	number_optional_meritbadges = models.IntegerField()
 
 class ScoutRank(models.Model):
-	scout = models.ForeignKeyField(Scout)
-	rank = models.ForeignKeyField(Rank)
+	scout = models.ForeignKey(Scout)
+	rank = models.ForeignKey(Rank)
 	date_earned = models.DateField(blank=True, null=True)
 	date_awarded = models.DateField(blank=True, null=True)
 
@@ -30,20 +30,20 @@ class MeritBadge(models.Model):
 	alternates = models.CharField(max_length=200)
 
 class ScoutMeritBadge(models.Model):
-	scout = models.ForeignKeyField(Scout)
-	merit_badge = models.ForeignKeyField(MeritBadge)
+	scout = models.ForeignKey(Scout)
+	merit_badge = models.ForeignKey(MeritBadge)
 	goal_date = models.DateField(blank=True, null=True)
 	date_earned = models.DateField(blank=True, null=True)
 	date_awarded = models.DateField(blank=True, null=True)
 
 class MeritBadgeBook(models.Model):
-	merit_badge = models.ForeignKeyField(MeritBadge)
+	merit_badge = models.ForeignKey(MeritBadge)
 	owner = models.CharField(max_length=70)
 	quantity = models.IntegerField()
 
 class ScoutMeritBadgeBook(models.Model):
-	scout = models.ForeignKeyField(Scout)
-	merit_badge_book = models.ForeignKeyField(MeritBadgeBook)
+	scout = models.ForeignKey(Scout)
+	merit_badge_book = models.ForeignKey(MeritBadgeBook)
 	date_requested = models.DateField(blank=True, null=True)
 	date_borrowed = models.DateField(blank=True, null=True)
 	date_due = models.DateField(blank=True, null=True)
@@ -51,7 +51,7 @@ class ScoutMeritBadgeBook(models.Model):
 
 class MeritBadgeCounselor(models.Model):
 	user = models.OneToOneField(User, unique=True)
-	merit_badge = models.ForeignKeyField(MeritBadge)
+	merit_badge = models.ForeignKey(MeritBadge)
 	date_requested = models.DateField(blank=True, null=True)
 	date_started = models.DateField(blank=True, null=True)
 	registered = models.BooleanField()
