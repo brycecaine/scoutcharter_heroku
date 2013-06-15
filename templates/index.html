@@ -1,10 +1,48 @@
 {% load staticfiles %}
 
-<html>
-	<head>
-		<script src="{% static "js/models/scout.js" %}"></script>
-	</head>
-	<body>
-		<input type="button" onclick="test()" value="Click Me!">
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Backbone.js Scouts</title>
+        <!-- <link rel="stylesheet" href="css/cupertino/jquery-ui-1.10.3.custom.css">
+        <link rel="stylesheet" href="css/screen.css"> -->
+    </head>
+    <body>
+		<input type="button" onclick="test_models()" value="models">
+		<input type="button" onclick="test_collections()" value="collections">
+		<input type="button" onclick="test_views_scout()" value="views_scout">
+		<input type="button" onclick="test_views_scouts()" value="views_scouts">
+		<input type="button" onclick="test_app()" value="app">
+		<div id="scouts">
+		    <form id="addScout" action="#">
+		        <div>
+		            <label for="patrol">Patrol: </label><input id="patrol" type="text" />
+		            <label for="rank">Rank: </label><input id="rank" type="text" />
+		            <label for="phone_number">Phone number: </label><input id="phone_number" type="text" />
+		            <button id="add">Add</button>
+		        </div>
+		    </form>
+		</div>
+		
+		<script id="scoutTemplate" type="text/template">
+		    <ul>
+		        <li><%= patrol %></li>
+		        <li><%= rank %></li>
+		        <li><%= phone_number %></li>
+		    </ul>
+
+		    <button class="delete">Delete</button>
+		</script>
+
+        <script src="{% static "js/lib/jquery.min.js" %}"></script>
+        <script src="{% static "js/lib/underscore-min.js" %}"></script>
+        <script src="{% static "js/lib/backbone-min.js" %}"></script>
+        <script src="{% static "js/tastypie-backbone.js" %}"></script>
+        <script src="{% static "js/models/scout.js" %}"></script>
+        <script src="{% static "js/collections/scouts.js" %}"></script>
+        <script src="{% static "js/views/scout.js" %}"></script>
+        <script src="{% static "js/views/scouts.js" %}"></script>
+        <script src="{% static "js/app.js" %}"></script>
+    </body>
 </html>
