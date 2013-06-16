@@ -8,7 +8,7 @@ app.ScoutsView = Backbone.View.extend({
     el: '#scouts',
 
     initialize: function( initialScouts ) {
-    	console.log(initialScouts)
+    	// console.log(initialScouts)
         this.collection = new app.Scouts( initialScouts );
         this.collection.fetch({reset: true});
     	console.log(this.collection)
@@ -34,7 +34,8 @@ app.ScoutsView = Backbone.View.extend({
 	        }
 	    });
 
-	    this.collection.add( new app.Scout( formData ) );
+	    // this.collection.add( new app.Scout( formData ) );
+	    this.collection.create(formData);
 	},
 
     // render scouts by rendering each scout in its collection

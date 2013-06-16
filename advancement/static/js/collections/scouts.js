@@ -6,9 +6,9 @@ var app = app || {};
 
 app.Scouts = TastypieCollection.extend({
     model: app.Scout,
-    url: '/api/scouts',
-    parse: function(response){
-    	console.log(response.objects)
-    	return response.objects;
-	}
+    url: '/api/v1/scouts'
+ //    parse: function(response){
+ //    	console.log('thats why')
+ //    	return response.objects;
+	// }
 });
