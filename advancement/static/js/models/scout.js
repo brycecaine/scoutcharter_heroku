@@ -11,7 +11,13 @@ app.Scout = TastypieModel.extend({
 		patrol: 'test patrol',
 		rank: 'test rank',
 		phone_number: 'test phone_number'
-    }
+    },
+
+	relations: [{type: Backbone.HasOne,
+		         key: 'user',
+				 relatedModel: 'User',
+				 reverseRelation: {type: Backbone.HasOne,
+				 				   key: 'person'}}],
 });
 
 app.Rank = TastypieModel.extend({
@@ -22,3 +28,5 @@ app.Rank = TastypieModel.extend({
 		number_optional_meritbadges: 0
 	}
 })
+
+app.User = Backbone.TastypieModel.extend();

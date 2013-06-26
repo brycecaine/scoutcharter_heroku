@@ -1,5 +1,5 @@
 // From http://goo.gl/c8T15
-window.TastypieModel = Backbone.Model.extend({
+window.TastypieModel = Backbone.RelationalModel.extend({
     base_url: function() {
       var temp_url = Backbone.Model.prototype.url.call(this);
       return (temp_url.charAt(temp_url.length - 1) == '/' ? temp_url : temp_url+'/');

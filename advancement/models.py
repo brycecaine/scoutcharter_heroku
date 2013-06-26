@@ -2,11 +2,14 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Scout(models.Model):
-	# user = models.OneToOneField(User, unique=True)
+	user = models.OneToOneField(User, unique=True)
 	# birth_date = models.DateField(blank=True, null=True)
 	patrol = models.CharField(max_length=50, blank=True, null=True)
 	rank = models.CharField(max_length=50, blank=True, null=True)
 	phone_number = models.CharField(max_length=20, blank=True, null=True)
+
+	def __unicode__(self):
+		return self.user.username
 
 class Parent(models.Model):
 	user = models.OneToOneField(User, unique=True)

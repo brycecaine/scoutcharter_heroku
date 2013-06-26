@@ -27,6 +27,7 @@
 		
 		<script id="scoutTemplate" type="text/template">
 		    <ul>
+		        <li><%= user %></li>
 		        <li><%= patrol %></li>
 		        <li><%= rank %></li>
 		        <li><%= phone_number %></li>
@@ -38,6 +39,7 @@
         <script src="{% static "js/lib/jquery.min.js" %}"></script>
         <script src="{% static "js/lib/underscore-min.js" %}"></script>
         <script src="{% static "js/lib/backbone-min.js" %}"></script>
+		<script src="{% static "js/lib/backbone-relational.js" %}"></script>
         <script src="{% static "js/tastypie-backbone.js" %}"></script>
         <script src="{% static "js/models/scout.js" %}"></script>
         <script src="{% static "js/collections/scouts.js" %}"></script>
