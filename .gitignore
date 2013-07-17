@@ -1,3 +1,4 @@
 venvsc
 *.pyc
 *.sqlite
+fixtures/
