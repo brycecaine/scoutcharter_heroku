@@ -1,3 +1,4 @@
+import sys
 """
 WSGI config for scoutcharter project.
 
@@ -30,3 +31,6 @@ application = get_wsgi_application()
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
+
+sys.path.append('/scoutcharter')
+sys.path.append('/scoutcharter/settings')
