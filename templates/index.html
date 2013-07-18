@@ -32,6 +32,11 @@
             .bottom-margin {
             	margin-bottom: 30px;
             }
+
+            .tooltip-inner {
+			    white-space:pre-wrap;
+			}
+
         </style>
     </head>
     <body>
@@ -47,6 +52,7 @@
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
                             Logged in as <a href="#" class="navbar-link">Username</a>
+                            <a href="{% url 'django.contrib.auth.views.login' %}?next={% firstof request.path '/' %}">Log in</a>
                         </p>
                         <ul class="nav">
                             <li class="active"><a href="#">Home</a></li>
@@ -59,6 +65,8 @@
         </div>
 
         <div class="container-fluid">
+            
+        	<!-- Rank images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_Ranks/ -->
             <div class="row-fluid bottom-margin">
                 <div class="span12">
                     <div class="rank-header">
@@ -86,53 +94,29 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
             <div class="row-fluid">
-                <div class="span6 well">
+                <div class="span8 well">
                     <div class="merit-badge-header">
-                        <h1>Earned Merit Badges</h1>
-                        <a href="#" data-toggle="tooltip" data-placement="top" title="Earn date: 4/13/2012" class="mb-date"><img src="http://images.clipart.com/thw/thw13//CL/5344_2005010018/000803_1058_18/21817998.thc.jpg?000803_1058_1863_v__v" width="40" height="40"></a>
-                        <img src="http://images.clipart.com/thw/thw13//CL/5344_2005010018/000803_1058_18/21817998.thc.jpg?000803_1058_1863_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5344_2005010018/000803_1058_18/21817998.thc.jpg?000803_1058_1863_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5344_2005010018/000803_1058_18/21817998.thc.jpg?000803_1058_1863_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5344_2005010018/000803_1058_18/21817998.thc.jpg?000803_1058_1863_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5344_2005010018/000803_1058_18/21817998.thc.jpg?000803_1058_1863_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw8/CL/pub5396_070306//37188537.thc.jpg?1001618875" width="40" height="40">
+                        <h3>Earned</h3>
+                        {% for scout_merit_badge_earned in scout_merit_badges_earned %}
+	                        <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_earned.merit_badge.name }}
+Earn date: {{ scout_merit_badge_earned.date_earned }}" class="mb-date">
+	                        	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="60" height="60">
+	                        </a>
+                        {% endfor %}
                     </div>
                 </div>
-                <div class="span6 well">
+                <div class="span4 well">
                     <div class="merit-badge-header">
-                        <h1>Planned Merit Badges</h1>
-                        <a href="#" data-toggle="tooltip" data-placement="top" title="Goal date: 8/31/2013" class="mb-date"><img src="http://images.clipart.com/thw/thw13/CL/5344_2005030011/010716_0871_55/24391660.thc.jpg?010716_0871_5510_o__i" width="40" height="40"></a>
-                        <img src="http://images.clipart.com/thw/thw13/CL/5344_2005030011/010716_0871_55/24391660.thc.jpg?010716_0871_5510_o__i" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13/CL/5344_2005030011/010716_0871_55/24391660.thc.jpg?010716_0871_5510_o__i" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13/CL/5344_2005030011/010716_0871_55/24391660.thc.jpg?010716_0871_5510_o__i" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13/CL/5344_2005030011/010716_0871_55/24391660.thc.jpg?010716_0871_5510_o__i" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
-                        <img src="http://images.clipart.com/thw/thw13//CL/5433_2005010014/000803_1063_39/20720569.thc.jpg?000803_1063_3978_v__v" width="40" height="40">
+                        <h3>Planned</h3>
+                        {% for scout_merit_badge_planned in scout_merit_badges_planned %}
+	                        <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_planned.merit_badge.name }}
+Goal date: {{ scout_merit_badge_planned.goal_date }}" class="mb-date">
+	                        	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="60" height="60">
+	                        </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
