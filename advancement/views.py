@@ -3,6 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
+def index(request):
+	
+	return render_to_response('index.html', locals(), context_instance=RequestContext(request))
+
 @login_required
 def home(request):
 	user = request.user
@@ -27,4 +31,4 @@ def home(request):
 	scout_merit_badges_earned = ScoutMeritBadge.objects.filter(scout=scouter, date_earned__gt='1901-01-01').order_by('-merit_badge__required', 'merit_badge__name')
 	scout_merit_badges_planned = ScoutMeritBadge.objects.filter(scout=scouter, goal_date__gt='1901-01-01').order_by('-merit_badge__required', 'merit_badge__name')
 
-	return render_to_response('index.html', locals(), context_instance=RequestContext(request))
+	return render_to_response('home.html', locals(), context_instance=RequestContext(request))

@@ -1,57 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<!-- Rank images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_Ranks/ -->
-	<div class="row-fluid bottom-margin">
-	    <div class="span12">
-	        <div class="rank-header">
-	            <h1>Ranks</h1>
-	            {{scout_rank_names}}
-	        </div>
-	        <table class="table">
-	        	<tbody>
-	        		<tr>
-	                    {% for scout_rank in scout_ranks_list %}
-	                        <td>
-	                        	{% if scout_rank.date_earned %}
-	                        		<a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_rank.rank_name }}
-	Earn date: {{ scout_rank.date_earned }}" class="mb-date">
-	                        			<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}.gif" width="200" height="200">
-	                        		</a>
-	                        	{% else %}
-	                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}_gs.gif" width="200" height="200">
-	                        	{% endif %}
-	                        </td>
-	                    {% endfor %}
-	            	</tr>
-	            </tbody>
-	        </table>
-	    </div>
-	</div>
-
-	<!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
-	<div class="row-fluid">
-	    <div class="span8 well">
-	        <div class="merit-badge-header">
-	            <h3>Earned</h3>
-	            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
-	                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_earned.merit_badge.name }}
-	Earn date: {{ scout_merit_badge_earned.date_earned }}" class="mb-date">
-	                	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="60" height="60">
-	                </a>
-	            {% endfor %}
-	        </div>
-	    </div>
-	    <div class="span4 well">
-	        <div class="merit-badge-header">
-	            <h3>Planned</h3>
-	            {% for scout_merit_badge_planned in scout_merit_badges_planned %}
-	                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_planned.merit_badge.name }}
-	Goal date: {{ scout_merit_badge_planned.goal_date }}" class="mb-date">
-	                	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="60" height="60">
-	                </a>
-	            {% endfor %}
-	        </div>
-	    </div>
+ 	<div class="row-fluid">
+	    <div class="span12 well">
+	    	hi
+		</div>
 	</div>
 {% endblock %}
+
+
+
