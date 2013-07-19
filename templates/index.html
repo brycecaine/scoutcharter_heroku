@@ -1,12 +1,66 @@
-{% extends "base.html" %}
+<html>
+  <head>
+    <style type="text/css">
+    	html { 
+			background: url({{ STATIC_URL }}img/design/home_background.jpg) no-repeat center center fixed; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
 
-{% block content %}
- 	<div class="row-fluid">
-	    <div class="span12 well">
-	    	hi
-		</div>
-	</div>
-{% endblock %}
+      div.imageSub { position: relative; }
+      div.imageSub img { z-index: 1; }
+      div.imageSub div {
+        position: absolute;
+        top: 140px;
+        left: 300px;
+        right: 15%;
+        bottom: 0;
+        padding: 4px;
+        height: 320px;
+        width: 600px;
+        line-height: 16px;
+        text-align: center;
+        overflow: hidden;
+      }
+      div.imageSub div.blackbg {
+        z-index: 2;
+        background-color: #000;
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+        filter: alpha(opacity=50);
+        opacity: 0.5;
+      }
+      div.imageSub div.label {
+        z-index: 3;
+        color: white;
+      }
+    </style>
+  </head>
+    <body>
+      <div class="imageSub" style="width: 300px;"> <!-- Put Your Image Width -->
+        <div class="blackbg"></div>
+        <div class="label">
+        	<h1>Scout Charter</h1>
+        	<p>Helping boys advance through scouting</p>
+        	<p><a href="#">Sign up</a> <a href="/login">Login</a></p>
+        </div>
+      </div>
+    </body>
+</html>
 
-
-
+<!-- <html>
+	<head>
+		<style type="text/css">
+			html { 
+				background: url({{ STATIC_URL }}img/design/home_background.jpg) no-repeat center center fixed; 
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+			}
+		</style>
+	</head>
+	<body></body>
+</html>
+ -->
