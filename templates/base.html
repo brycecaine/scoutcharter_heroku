@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Scout Charter</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le styles -->
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+                padding-left: 150px;
+                padding-right: 150px;
+            }
+            .sidebar-nav {
+                padding: 9px 0;
+            }
+
+            @media (max-width: 980px) {
+                /* Enable use of floated navbar text */
+                .navbar-text.pull-right {
+                    float: none;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+            }
+
+            .bottom-margin {
+            	margin-bottom: 30px;
+            }
+
+            .tooltip-inner {
+			    white-space:pre-wrap;
+			}
+
+        </style>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="brand" href="#">Scout Charter</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right">
+                            {% if user.is_authenticated %}
+                            	<li><a href="#" class="navbar-link">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</a></li>
+                            	<li><a href="{% url 'django.contrib.auth.views.logout' %}?next={% firstof request.path '/' %}" class="navbar-link">Log out</a></li>
+                            {% else %}
+                            	<li><a href="{% url 'django.contrib.auth.views.login' %}?next={% firstof request.path '/' %}" class="navbar-link">Log in</a></li>
+                            {% endif %}
+                        </ul>
+                        <ul class="nav">
+                            <li class="active"><a href="#">Home</a></li>
+                            <!-- <li><a href="#about">About</a></li> -->
+                            <!-- <li><a href="#contact">Contact</a></li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            
+			{% block content %}{% endblock %}
+            
+            <hr>
+
+            <footer>
+                <p>&copy; Scout Charter 2013</p>
+            </footer>
+        </div>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+        	$('.mb-date').tooltip()
+        </script>
+    </body>
+</html>
