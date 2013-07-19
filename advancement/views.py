@@ -1,7 +1,9 @@
+from advancement.models import Scouter, Rank, ScoutRank, ScoutMeritBadge
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from advancement.models import Scouter, Rank, ScoutRank, ScoutMeritBadge
 
+@login_required
 def home(request):
 	user = request.user
 	scouter = Scouter.objects.get(user=user)
