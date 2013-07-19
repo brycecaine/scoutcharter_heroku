@@ -71,27 +71,26 @@
                 <div class="span12">
                     <div class="rank-header">
                         <h1>Ranks</h1>
+                        {{scout_rank_names}}
                     </div>
-                    <div class="row-fluid">
-                        <div class="span2">
-                        	<img src="http://images.clipart.com/thw/thw13//CL/5344_2005030030/010716_0881_92/25134729.thc.jpg?010716_0881_9228_o__i" width="200" height="200">
-                        </div>
-                        <div class="span2">
-                        	<img src="http://images.clipart.com/thw/thw13//CL/5344_2005030030/010716_0881_92/25134729.thc.jpg?010716_0881_9228_o__i" width="200" height="200">
-                        </div>
-                        <div class="span2">
-                        	<img src="http://images.clipart.com/thw/thw13//CL/5344_2005030030/010716_0881_92/25134729.thc.jpg?010716_0881_9228_o__i" width="200" height="200">
-                        </div>
-                        <div class="span2">
-                        	<img src="http://images.clipart.com/thw/thw13//CL/5344_2005030030/010716_0881_92/25134729.thc.jpg?010716_0881_9228_o__i" width="200" height="200">
-                        </div>
-                        <div class="span2">
-                        	<img src="http://images.clipart.com/thw/thw13//CL/5344_2005030030/010716_0881_92/25134729.thc.jpg?010716_0881_9228_o__i" width="200" height="200">
-                        </div>
-                        <div class="span2">
-                        	<img src="http://images.clipart.com/thw/thw13//CL/5344_2005030030/010716_0881_92/25134729.thc.jpg?010716_0881_9228_o__i" width="200" height="200">
-                        </div>
-                    </div>
+                    <table class="table">
+                    	<tbody>
+                    		<tr>
+		                        {% for scout_rank in scout_ranks_list %}
+			                        <td>
+			                        	{% if scout_rank.date_earned %}
+			                        		<a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_rank.rank_name }}
+Earn date: {{ scout_rank.date_earned }}" class="mb-date">
+			                        			<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}.gif" width="200" height="200">
+			                        		</a>
+			                        	{% else %}
+			                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}_gs.gif" width="200" height="200">
+			                        	{% endif %}
+			                        </td>
+		                        {% endfor %}
+                        	</tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
