@@ -6,9 +6,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'advancement.views.index', name='index'),
-    url(r'^home/$', 'advancement.views.home', name='home'),
-    url(r'^login/$', 'django.contrib.auth.views.login', name='my_login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', name='my_logout'),
+    url(r'^home/?$', 'advancement.views.home', name='home'),
+    url(r'^home/scout/(?P<scouter_id>\d+)/?$', 'advancement.views.home', name='home'),
+    url(r'^login/?$', 'django.contrib.auth.views.login', name='my_login'),
+    url(r'^logout/?$', 'django.contrib.auth.views.logout', name='my_logout'),
     # url(r'^giftplanner/', include('giftplanner.urls')),
     # Examples:
     # url(r'^$', 'giftaway.views.home', name='home'),
@@ -18,5 +19,5 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/?', include(admin.site.urls)),
 )
