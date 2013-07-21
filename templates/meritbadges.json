@@ -1,0 +1,5 @@
+{"options": [
+	{% for merit_badge in merit_badges %}
+		"{{ merit_badge }}"{% if not forloop.last %},{% endif %}
+	{% endfor %}
+]}

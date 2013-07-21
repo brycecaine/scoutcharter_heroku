@@ -9,6 +9,7 @@
 
         <!-- Le styles -->
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
         <style type="text/css">
             body {
                 padding-top: 60px;
@@ -37,6 +38,10 @@
 			    white-space:pre-wrap;
 			}
 
+			div.modal-body {
+				height: 200px;
+			    max-height: 200px;
+			}
         </style>
     </head>
     <body>
@@ -91,8 +96,65 @@
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+
         <script type="text/javascript">
-        	$('.mb-date').tooltip()
+        	$(document).ready(function(){
+	        	$('.mb-date').tooltip()
+
+	        	console.log('hello world')
+
+				$('.ajax-typeahead').typeahead({
+				    items: 4,
+				    source: function(query, process) {
+				        return $.ajax({
+				            url: $(this)[0].$element[0].dataset.link,
+				            type: 'get',
+				            data: {query: query},
+				            dataType: 'json',
+				            success: function(json) {
+				                return typeof json.options == 'undefined' ? false : process(json.options);
+				            }
+				        });
+				    }
+				});
+
+				$('.datepicker').datepicker({
+				    format: 'mm/dd/yyyy',
+				    autoclose: true
+				});
+
+				$('#save-earned-mb').click(function() {
+					scout_id = document.URL.split('/').slice(-1)[0].split('#')[0]
+					var mb_name = $('#earned-mb-name').val()
+					var mb_date = $('#earned-mb-date').val()
+					console.log(mb_name)
+
+		            $.ajax({
+						type: 'POST',
+						url: '/save-meritbadge',
+		                data: {
+		                    scout_id: scout_id,
+		                    mb_name: mb_name,
+		                    mb_date: mb_date,
+		                    csrfmiddlewaretoken: '{{ csrf_token }}'
+		                },
+						dataType: 'json',
+						success: function(data) {
+							console.log(data)
+							$('#earned-mb-div').append('<a href="#" data-toggle="tooltip" data-placement="top" title="' + data.name + ' \
+		Earn date: ' + data.date_earned + '" class="mb-date"> \
+		                	<img src="{{ STATIC_URL }}img/merit_badges/' + data.image_name + '" width="60" height="60"> \
+		                </a>')
+						}
+					})
+
+
+					// $.post('/save-meritbadge', {scout_id: scout_id, mb_name: mb_name, mb_date: mb_date}, function() {
+					// 	console.log('done!')
+					// })
+				})
+			});
         </script>
     </body>
 </html>

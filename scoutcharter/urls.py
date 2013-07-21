@@ -10,6 +10,9 @@ urlpatterns = patterns('',
     url(r'^home/scout/(?P<scouter_id>\d+)/?$', 'advancement.views.home', name='home'),
     url(r'^login/?$', 'django.contrib.auth.views.login', name='my_login'),
     url(r'^logout/?$', 'django.contrib.auth.views.logout', name='my_logout'),
+    url(r'^meritbadges/?$', 'advancement.views.meritbadges', name='meritbadges'),
+    url(r'^save-meritbadge/?$', 'advancement.views.save_meritbadge', name='save_meritbadge'),
+
     # url(r'^giftplanner/', include('giftplanner.urls')),
     # Examples:
     # url(r'^$', 'giftaway.views.home', name='home'),

@@ -1,8 +1,11 @@
 from advancement import service
-from advancement.models import Scouter, Rank, ScoutRank, ScoutMeritBadge
+from advancement.models import Scouter, Rank, ScoutRank, ScoutMeritBadge, MeritBadge
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+import json
 
 def index(request):
 
@@ -58,3 +61,25 @@ def home(request, scouter_id=None):
 			scout_dict['turns_month'] = service.get_birth_info(scout.birth_date, 'next_birthday').strftime('%b %d, %Y')
 
 	return render_to_response('home.html', locals(), context_instance=RequestContext(request))
+
+def meritbadges(request):
+	merit_badges = MeritBadge.objects.all().values_list('name', flat=True)
+	
+	return render_to_response('meritbadges.json', locals(), context_instance=RequestContext(request))
+
+def save_meritbadge(request):
+	# if request.method == 'POST':
+	scout_id = request.POST.get('scout_id')
+	mb_name = request.POST.get('mb_name')
+	mb_date = datetime.strptime(request.POST.get('mb_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+
+	merit_badge = MeritBadge.objects.get(name=mb_name)
+	scout_merit_badge, created = ScoutMeritBadge.objects.get_or_create(scout_id=scout_id, merit_badge=merit_badge)
+	scout_merit_badge.date_earned = mb_date
+	scout_merit_badge.save()
+
+	merit_badge_json = json.dumps({'name': merit_badge.name,
+		                           'date_earned': scout_merit_badge.date_earned,
+		                           'image_name': merit_badge.image_name})
+
+	return HttpResponse(merit_badge_json)
