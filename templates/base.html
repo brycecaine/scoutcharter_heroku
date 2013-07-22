@@ -38,6 +38,10 @@
             	margin-bottom: 15px;
             }
 
+            .top-margin-small {
+            	margin-top: 15px;
+            }
+
             .tooltip-inner {
 			    white-space:pre-wrap;
 			}
@@ -45,6 +49,41 @@
 			div.modal-body {
 				height: 200px;
 			    max-height: 200px;
+			}
+
+			span.wrapper{  
+			    position:relative; /* important(so we can absolutely position the description span */  
+			    margin: 2px;
+			}  
+
+			span.description{  
+			    position: absolute; /* absolute position (so we can position it where we want)*/  
+			    height: 40px;
+			    width: 100%;
+			    top: 20px;
+			    left: 0px; 
+			    padding-top: 4px;
+			    /* styling below */
+			    text-align: center;
+			    font-size: 12px;
+			    line-height: 94%;
+			    background-color: #fff;  
+			    color: #333;  
+			    opacity: 0.75; /* transparency */  
+			    filter: alpha(opacity=75); /* IE transparency */  
+			}
+
+			span.mb-close-label {
+			    position: absolute; /* absolute position (so we can position it where we want)*/  
+			    width: 100%;
+			    top: -30px;
+			    left: -7px;
+			    /* styling below */
+			    text-align: center;
+			    font-size: 12px;
+			    line-height: 94%;
+			    opacity: 1; /* transparency */  
+			    filter: alpha(opacity=1); /* IE transparency */ 
 			}
         </style>
     </head>
@@ -128,7 +167,8 @@
 				    autoclose: true
 				});
 
-				$('#save-earned-mb').click(function() {
+				$('.save-earned-mb').click(function() {
+					console.log(this)
 					scout_id = document.URL.split('/').slice(-1)[0].split('#')[0]
 					var mb_name = $('#earned-mb-name').val()
 					var mb_date = $('#earned-mb-date').val()
@@ -136,27 +176,41 @@
 
 		            $.ajax({
 						type: 'POST',
-						url: '/save-meritbadge',
+						url: '/update-scoutmeritbadge',
 		                data: {
 		                    scout_id: scout_id,
 		                    mb_name: mb_name,
 		                    mb_date: mb_date,
-		                    csrfmiddlewaretoken: '{{ csrf_token }}'
+		                    csrfmiddlewaretoken: '{{ csrf_token }}',
+		                    action: 'add'
 		                },
 						dataType: 'json',
 						success: function(data) {
 							console.log(data)
 							$('#earned-mb-div').append('<a href="#" data-toggle="tooltip" data-placement="top" title="' + data.name + ' \
-		Earn date: ' + data.date_earned + '" class="mb-date"> \
+Earn date: ' + data.date_earned + '" class="mb-date"> \
 		                	<img src="{{ STATIC_URL }}img/merit_badges/' + data.image_name + '" width="60" height="60"> \
 		                </a>')
 						}
 					})
+				})
 
+				$('.delete-earned-mb').click(function() {
+					$this_el = $(this)
+					id = $(this).attr('id')
+					console.log($(this).attr('id'))
+					$.ajax({
+						type: 'POST',
+						url: '/update-scoutmeritbadge',
+						data: {scout_merit_badge_id: id,
+	  	                       csrfmiddlewaretoken: '{{ csrf_token }}',
+						       action: 'delete'},
+						dataType: 'json',
+						success: function(data) {
 
-					// $.post('/save-meritbadge', {scout_id: scout_id, mb_name: mb_name, mb_date: mb_date}, function() {
-					// 	console.log('done!')
-					// })
+							$this_el.parent().parent().remove()
+						}
+					})
 				})
 			});
         </script>

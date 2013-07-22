@@ -75,19 +75,27 @@ def meritbadges(request):
 	
 	return render_to_response('meritbadges.json', locals(), context_instance=RequestContext(request))
 
-def save_meritbadge(request):
-	# if request.method == 'POST':
-	scout_id = request.POST.get('scout_id')
-	mb_name = request.POST.get('mb_name')
-	mb_date = datetime.strptime(request.POST.get('mb_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+def update_scoutmeritbadge(request):
+	if request.method == 'POST':
+		action = request.POST.get('action')
+		if action == 'add':
+			scout_id = request.POST.get('scout_id')
+			mb_name = request.POST.get('mb_name')
+			mb_date = datetime.strptime(request.POST.get('mb_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
 
-	merit_badge = MeritBadge.objects.get(name=mb_name)
-	scout_merit_badge, created = ScoutMeritBadge.objects.get_or_create(scout_id=scout_id, merit_badge=merit_badge)
-	scout_merit_badge.date_earned = mb_date
-	scout_merit_badge.save()
+			merit_badge = MeritBadge.objects.get(name=mb_name)
+			scout_merit_badge, created = ScoutMeritBadge.objects.get_or_create(scout_id=scout_id, merit_badge=merit_badge)
+			scout_merit_badge.date_earned = mb_date
+			scout_merit_badge.save()
 
-	merit_badge_json = json.dumps({'name': merit_badge.name,
-		                           'date_earned': scout_merit_badge.date_earned,
-		                           'image_name': merit_badge.image_name})
+			merit_badge_json = json.dumps({'name': merit_badge.name,
+				                           'date_earned': scout_merit_badge.date_earned,
+				                           'image_name': merit_badge.image_name})
+
+		if action == 'delete':
+			scoutmeritbadge_id = request.POST.get('scout_merit_badge_id')
+			ScoutMeritBadge.objects.get(id=scoutmeritbadge_id).delete()
+
+			merit_badge_json = json.dumps({})
 
 	return HttpResponse(merit_badge_json)

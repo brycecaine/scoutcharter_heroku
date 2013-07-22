@@ -55,40 +55,25 @@
 		            	{% if scouter.role == 'leader' %}
 			            	<div class="pull-right">
 			            		<small>
-						            <a data-toggle="modal" href="#earned-mb-modal">Add</a>
+						            <a data-toggle="modal" href="#earned-mb-modal" class="close">&plus;</a>
 			            		</small>
 			            	</div>
 		            	{% endif %}
 		            </h3>
 
-					<div id="earned-mb-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h3 id="myModalLabel">Enter Earned Merit Badge</h3>
-						</div>
-						<div class="modal-body">
-							<div class="row-fluid">
-								<div class="span6">
-									<h4>Select merit badge</h4>
-									<input id="earned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
-								</div>
-								<div class="span6">
-									<h4 class="text-right">Enter date earned</h4>
-									<input id="earned-mb-date" type="text" class="input-small pull-right datepicker">
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button class="btn" data-dismiss="modal">Close</button>
-							<button id="save-earned-mb" class="btn btn-primary" data-dismiss="modal">Save</button>
-						</div>
-					</div>
-
 		            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
-		                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_earned.merit_badge.name }}
-Earn date: {{ scout_merit_badge_earned.date_earned }}" class="mb-date">
-		                	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="60" height="60">
-		                </a>
+	                	<span class="wrapper">
+					    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small">
+						    <span class="description"> 
+						        {{ scout_merit_badge_earned.merit_badge.name }}<br />
+								{{ scout_merit_badge_earned.date_earned }}
+						    </span>  
+						    {% if scouter.role == 'leader' %}
+						    	<span class="mb-close-label"> 
+						        	<a class="close delete-earned-mb" id="{{ scout_merit_badge_earned.id }}">&times;</a>
+						    	</span>  
+						    {% endif %}
+						</span>  
 		            {% endfor %}
 		        </div>
 		    </div>
@@ -96,10 +81,13 @@ Earn date: {{ scout_merit_badge_earned.date_earned }}" class="mb-date">
 		        <div id="planned-mb-div" class="merit-badge-header">
 		            <h3>Planned</h3>
 		            {% for scout_merit_badge_planned in scout_merit_badges_planned %}
-		                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_planned.merit_badge.name }}
-Goal date: {{ scout_merit_badge_planned.goal_date }}" class="mb-date">
-		                	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="60" height="60">
-		                </a>
+	                	<span class="wrapper">
+					    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small">
+						    <span class="description"> 
+						        {{ scout_merit_badge_planned.merit_badge.name }}<br />
+								{{ scout_merit_badge_planned.goal_date }}
+						    </span>  
+						</span>  
 		            {% endfor %}
 		        </div>
 		    </div>
@@ -133,4 +121,28 @@ Goal date: {{ scout_merit_badge_planned.goal_date }}" class="mb-date">
 			</div>
 		{% endif %}
 	{% endif %}
+
+	<div id="earned-mb-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Enter Earned Merit Badge</h3>
+		</div>
+		<div class="modal-body">
+			<div class="row-fluid">
+				<div class="span6">
+					<h4>Select merit badge</h4>
+					<input id="earned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
+				</div>
+				<div class="span6">
+					<h4 class="text-right">Enter date earned</h4>
+					<input id="earned-mb-date" type="text" class="input-small pull-right datepicker">
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+			<button class="btn btn-primary save-earned-mb" data-dismiss="modal">Save</button>
+		</div>
+	</div>
+
 {% endblock %}
