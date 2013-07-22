@@ -31,10 +31,11 @@
 		                    {% for scout_rank in scout_ranks_list %}
 		                        <td>
 		                        	{% if scout_rank.date_earned %}
-		                        		<a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_rank.rank_name }}
-Earn date: {{ scout_rank.date_earned }}" class="mb-date">
-		                        			<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}.gif" width="200" height="200">
-		                        		</a>
+	                        			<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}.gif" width="200" height="200" class="bottom-margin-small">
+	                        			<p class="text-center muted">
+	                        				{{ scout_rank.rank_name }}<br />
+	                        				{{ scout_rank.date_earned }}
+	                        			</p>
 		                        	{% else %}
 		                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}_gs.gif" width="200" height="200">
 		                        	{% endif %}
@@ -51,11 +52,13 @@ Earn date: {{ scout_rank.date_earned }}" class="mb-date">
 		    <div class="span8 well">
 		        <div id="earned-mb-div" class="merit-badge-header">
 		            <h3>Earned
-		            	<div class="pull-right">
-		            		<small>
-					            <a data-toggle="modal" href="#earned-mb-modal">Add</a>
-		            		</small>
-		            	</div>
+		            	{% if scouter.role == 'leader' %}
+			            	<div class="pull-right">
+			            		<small>
+						            <a data-toggle="modal" href="#earned-mb-modal">Add</a>
+			            		</small>
+			            	</div>
+		            	{% endif %}
 		            </h3>
 
 					<div id="earned-mb-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
