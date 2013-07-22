@@ -1,0 +1,13 @@
+Add contact notes to home
+Add rank for leaders
+Find MB counselor
+Request MB Book
+
+Edit MB earned date
+Delete MB earned
+
+Show labels of ranks rather than tooltip
+
+Include phone number for leader's view
+
+Implement parents view
