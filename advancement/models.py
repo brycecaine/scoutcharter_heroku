@@ -82,3 +82,12 @@ class MeritBadgeCounselor(models.Model):
 
 	def __unicode__(self):
 		return '{0} - {1}'.format(self.scouter.user.username, self.merit_badge.name)
+
+class ScoutNote(models.Model):
+	scout = models.ForeignKey(Scouter, related_name='scoutnote_scout')
+	leader = models.ForeignKey(Scouter, related_name='scoutnote_leader')
+	note_date = models.DateField(blank=True, null=True)
+	method = models.CharField(max_length=30, blank=True, null=True)
+	purpose = models.CharField(max_length=500, blank=True, null=True)
+	comment = models.CharField(max_length=1500)
+	followup_date = models.DateField(blank=True, null=True)

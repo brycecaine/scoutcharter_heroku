@@ -1,5 +1,5 @@
 from django.contrib import admin
-from advancement.models import Scouter, Parent, Rank, ScoutRank, MeritBadge, ScoutMeritBadge, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor
+from advancement.models import Scouter, Parent, Rank, ScoutRank, MeritBadge, ScoutMeritBadge, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor, ScoutNote
 
 admin.site.register(Scouter)
 admin.site.register(Parent)
@@ -10,3 +10,4 @@ admin.site.register(ScoutMeritBadge)
 admin.site.register(MeritBadgeBook)
 admin.site.register(ScoutMeritBadgeBook)
 admin.site.register(MeritBadgeCounselor)
+admin.site.register(ScoutNote)

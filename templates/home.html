@@ -18,7 +18,8 @@
 		            	<h5 class="pull-right text-right">{{ scout_dict.name }}
 		            		{% if scout.birth_date %}
 		            			<small>Age {{ scout_dict.age }}</small><br />
-		            			<small>Turns {{ scout_dict.turns_age }} on {{ scout_dict.turns_month }}</small>
+		            			<small>Turns {{ scout_dict.turns_age }} on {{ scout_dict.turns_month }}</small><br />
+		            			<small>{{ scout_dict.phone_number }}</small>
 		            		{% endif %}
 		            	</h5>
 		            {% endif %}
@@ -31,7 +32,7 @@
 		                        <td>
 		                        	{% if scout_rank.date_earned %}
 		                        		<a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_rank.rank_name }}
-		Earn date: {{ scout_rank.date_earned }}" class="mb-date">
+Earn date: {{ scout_rank.date_earned }}" class="mb-date">
 		                        			<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}.gif" width="200" height="200">
 		                        		</a>
 		                        	{% else %}
@@ -82,7 +83,7 @@
 
 		            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
 		                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_earned.merit_badge.name }}
-		Earn date: {{ scout_merit_badge_earned.date_earned }}" class="mb-date">
+Earn date: {{ scout_merit_badge_earned.date_earned }}" class="mb-date">
 		                	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="60" height="60">
 		                </a>
 		            {% endfor %}
@@ -93,12 +94,40 @@
 		            <h3>Planned</h3>
 		            {% for scout_merit_badge_planned in scout_merit_badges_planned %}
 		                <a href="#" data-toggle="tooltip" data-placement="top" title="{{ scout_merit_badge_planned.merit_badge.name }}
-		Goal date: {{ scout_merit_badge_planned.goal_date }}" class="mb-date">
+Goal date: {{ scout_merit_badge_planned.goal_date }}" class="mb-date">
 		                	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="60" height="60">
 		                </a>
 		            {% endfor %}
 		        </div>
 		    </div>
 		</div>
+		{% if scout_notes %}
+			<div class="row-fluid">
+			    <div class="span12 well">
+			    	<table class="table">
+			    		<thead>
+			    			<tr>
+			    				<th>Date</th>
+			    				<th>Method</th>
+			    				<th>Purpose</th>
+			    				<th>Comment</th>
+			    				<th>Followup Date</th>
+			    			</tr>
+			    		</thead>
+				    	<tbody>
+				    		{% for scout_note in scout_notes %}
+				    			<tr>
+				    				<td>{{ scout_note.note_date }}</td>
+				    				<td>{{ scout_note.method }}</td>
+				    				<td>{{ scout_note.purpose }}</td>
+				    				<td>{{ scout_note.comment }}</td>
+				    				<td>{{ scout_note.followup_date }}</td>
+				    			</tr>
+				    		{% endfor %}
+				    	</tbody>
+			    	</table>
+			    </div>
+			</div>
+		{% endif %}
 	{% endif %}
 {% endblock %}

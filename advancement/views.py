@@ -1,5 +1,5 @@
 from advancement import service
-from advancement.models import Scouter, Rank, ScoutRank, ScoutMeritBadge, MeritBadge
+from advancement.models import Scouter, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -23,6 +23,9 @@ def home(request, scouter_id=None):
 
 	if scouter_role == 'leader':
 		scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
+		if scouter.patrol == 'all':
+			scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
+			
 		scout = None
 		if scouter_id:
 			scout = Scouter.objects.get(id=scouter_id)
@@ -54,11 +57,16 @@ def home(request, scouter_id=None):
 	scout_dict = {}
 	if scout:
 		scout_dict['name'] = '{0} {1}'.format(scout.user.first_name, scout.user.last_name)
+		scout_dict['phone_number'] = scout.phone_number
 		if scout.birth_date:
 			age = service.get_birth_info(scout.birth_date, 'age')
 			scout_dict['age'] = age
 			scout_dict['turns_age'] = age + 1
 			scout_dict['turns_month'] = service.get_birth_info(scout.birth_date, 'next_birthday').strftime('%b %d, %Y')
+
+		scout_notes = []
+		if scouter_role == 'leader':
+			scout_notes = ScoutNote.objects.filter(scout=scout).order_by('-note_date')
 
 	return render_to_response('home.html', locals(), context_instance=RequestContext(request))
 
