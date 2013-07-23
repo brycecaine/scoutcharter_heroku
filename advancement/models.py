@@ -6,6 +6,8 @@ class Rank(models.Model):
 	name = models.CharField(max_length=30)
 	number_required_meritbadges = models.IntegerField()
 	number_optional_meritbadges = models.IntegerField()
+	image_name = models.CharField(max_length=200, blank=True, null=True)
+	image_ph_name = models.CharField(max_length=200, blank=True, null=True)
 
 	def __unicode__(self):
 		return self.name

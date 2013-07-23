@@ -15,7 +15,10 @@
 		    <div class="span12">
 		        <div class="rank-header">
 		            {% if scouter.role == 'leader' %}
-		            	<h5 class="pull-right text-right">{{ scout_dict.name }}
+		            	<h5 class="pull-right text-right">
+
+		            		{{ scout_dict.name }}
+
 		            		{% if scout.birth_date %}
 		            			<small>Age {{ scout_dict.age }}</small><br />
 		            			<small>Turns {{ scout_dict.turns_age }} on {{ scout_dict.turns_month }}</small><br />
@@ -23,23 +26,35 @@
 		            		{% endif %}
 		            	</h5>
 		            {% endif %}
-		            <h1>Ranks</h1>
+		            <h1 class="pull-left">
+		            	Ranks
+		            </h1>
+		            <a data-toggle="modal" href="#rank-modal" class="close pull-left">&plus;</a>
 		        </div>
 		        <table class="table">
 		        	<tbody>
 		        		<tr>
 		                    {% for scout_rank in scout_ranks_list %}
-		                        <td>
-		                        	{% if scout_rank.date_earned %}
-	                        			<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}.gif" width="200" height="200" class="bottom-margin-small">
-	                        			<p class="text-center muted">
-	                        				{{ scout_rank.rank_name }}<br />
-	                        				{{ scout_rank.date_earned }}
-	                        			</p>
-		                        	{% else %}
-		                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}_gs.gif" width="200" height="200">
-		                        	{% endif %}
-		                        </td>
+	                        	{% if scout_rank.date_earned %}
+		                        	<td id="scout-rank-{{ scout_rank.id }}">
+					                	<span class="wrapper">
+									    	<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}" width="200" height="200" class="bottom-margin-small">
+										    {% if scouter.role == 'leader' %}
+										    	<span class="rank-close-label"> 
+										        	<a class="close delete-rank" id="{{ scout_rank.id }}">&times;</a>
+										    	</span>  
+										    {% endif %}
+		                        			<p class="text-center muted">
+		                        				{{ scout_rank.rank_name }}<br />
+		                        				{{ scout_rank.date_earned }}
+		                        			</p>
+										</span>  
+			                        </td>
+	                        	{% else %}
+			                        <td id="scout-rank-{{ scout_rank.rank_id }}">
+		                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_ph_name }}" width="200" height="200">
+			                        </td>
+	                        	{% endif %}
 		                    {% endfor %}
 		            	</tr>
 		            </tbody>
@@ -135,6 +150,10 @@
 		{% endif %}
 	{% endif %}
 
+	<!-- -------------------------------------------------------------------- -->
+	<!-- ------------------------------ Modals ------------------------------ -->
+	<!-- -------------------------------------------------------------------- -->
+
 	<div id="earned-mb-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -178,6 +197,29 @@
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal">Close</button>
 			<button class="btn btn-primary save-planned-mb" data-dismiss="modal">Save</button>
+		</div>
+	</div>
+
+	<div id="rank-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Enter Rank</h3>
+		</div>
+		<div class="modal-body">
+			<div class="row-fluid">
+				<div class="span6">
+					<h4>Select rank</h4>
+					<input id="rank-name" type="text" class="input-xlarge ajax-typeahead" data-link="/ranks">
+				</div>
+				<div class="span6">
+					<h4 class="text-right">Enter date earned</h4>
+					<input id="rank-date" type="text" class="input-small pull-right datepicker">
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+			<button class="btn btn-primary save-rank" data-dismiss="modal">Save</button>
 		</div>
 	</div>
 

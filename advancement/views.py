@@ -6,6 +6,9 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 def index(request):
 
@@ -39,10 +42,13 @@ def home(request, scouter_id=None):
 
 	scout_ranks_list = []
 	for rank in ranks:
-		scout_rank_dict = {'image_name': '_'.join(rank.name.split(' ')).lower(),
+		scout_rank_dict = {'image_name': rank.image_name,
+		                   'image_ph_name': rank.image_ph_name,
+		                   'rank_id': rank.id,
 		                   'rank_name': rank.name}
 		for scout_rank in scout_ranks:
 			if rank == scout_rank.rank:
+				scout_rank_dict['id'] = scout_rank.id
 				scout_rank_dict['date_earned'] = scout_rank.date_earned
 				break
 			
@@ -108,3 +114,45 @@ def update_scoutmeritbadge(request):
 			merit_badge_json = json.dumps({})
 
 	return HttpResponse(merit_badge_json)
+
+def ranks(request):
+	ranks = Rank.objects.all().values_list('name', flat=True)
+	
+	return render_to_response('ranks.json', locals(), context_instance=RequestContext(request))
+
+def update_scoutrank(request):
+	if request.method == 'POST':
+		action = request.POST.get('action')
+		entry_type = request.POST.get('entry_type')
+		if action == 'add':
+			logger.debug('here1')
+
+			scout_id = request.POST.get('scout_id')
+			rank_name = request.POST.get('rank_name')
+			rank_date = datetime.strptime(request.POST.get('rank_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
+
+			rank = Rank.objects.get(name=rank_name)
+			scout_rank, created = ScoutRank.objects.get_or_create(scout_id=scout_id, rank=rank)
+			scout_rank.date_earned = rank_date
+			scout_rank.save()
+
+			rank_json = json.dumps({'name': rank.name,
+		                            'rank_date': rank_date,
+		                            'image_name': rank.image_name,
+		                            'image_ph_name': rank.image_ph_name,
+		                            'scoutrank_id': scout_rank.id,
+		                            'rank_id': rank.id,
+		                            'created': created})
+
+		if action == 'delete':
+			logger.debug('here2')
+			scoutrank_id = request.POST.get('scout_rank_id')
+			scout_rank = ScoutRank.objects.get(id=scoutrank_id)
+			rank = scout_rank.rank
+			scout_rank.delete()
+
+			rank_json = json.dumps({'rank_id': rank.id,
+				                    'image_ph_name': rank.image_ph_name})
+
+	return HttpResponse(rank_json)
+

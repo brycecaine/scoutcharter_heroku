@@ -86,6 +86,19 @@
 			    opacity: 1; /* transparency */  
 			    filter: alpha(opacity=1); /* IE transparency */ 
 			}
+
+			span.rank-close-label {
+			    position: absolute; /* absolute position (so we can position it where we want)*/  
+			    width: 100%;
+			    top: -65px;
+			    left: -7px;
+			    /* styling below */
+			    text-align: center;
+			    font-size: 12px;
+			    line-height: 94%;
+			    opacity: 1; /* transparency */  
+			    filter: alpha(opacity=1); /* IE transparency */ 
+			}
         </style>
     </head>
     <body>
@@ -261,6 +274,50 @@
 						}
 					})
 				})
+
+				$('.save-rank').click(function() {
+					console.log(this)
+					scout_id = document.URL.split('/').slice(-1)[0].split('#')[0]
+					var rank_name = $('#rank-name').val()
+					var rank_date = $('#rank-date').val()
+					console.log(rank_name)
+
+		            $.ajax({
+						type: 'POST',
+						url: '/update-scoutrank',
+		                data: {
+		                    scout_id: scout_id,
+		                    rank_name: rank_name,
+		                    rank_date: rank_date,
+		                    csrfmiddlewaretoken: '{{ csrf_token }}',
+		                    action: 'add'
+		                },
+						dataType: 'json',
+						success: function(data) {
+							console.log(data)
+							$('#scout-rank-' + data.rank_id).replaceWith('<td id="scout-rank-' + data.scoutrank_id + '"><span class="wrapper"><img src="{{ STATIC_URL }}img/ranks/' + data.image_name + '" width="200" height="200" class="bottom-margin-small"><span class="rank-close-label"><a class="close delete-rank" id="' + data.scoutrank_id + '">&times;</a></span><p class="text-center muted">' + data.name + '<br />' + data.rank_date + '</p></span></td>')
+						}
+					})
+				})
+
+				$('.delete-rank').click(function() {
+					$this_el = $(this)
+					id = $(this).attr('id')
+					console.log($(this).attr('id'))
+					$.ajax({
+						type: 'POST',
+						url: '/update-scoutrank',
+						data: {scout_rank_id: id,
+	  	                       csrfmiddlewaretoken: '{{ csrf_token }}',
+						       action: 'delete'},
+						dataType: 'json',
+						success: function(data) {
+							$('#scout-rank-' + id).replaceWith('<td id="scout-rank-' + data.rank_id + '"><img src="{{ STATIC_URL }}img/ranks/' + data.image_ph_name + '" width="200" height="200"></td>')
+						}
+					})
+				})
+
+
 			});
         </script>
     </body>

@@ -11,7 +11,9 @@ urlpatterns = patterns('',
     url(r'^login/?$', 'django.contrib.auth.views.login', name='my_login'),
     url(r'^logout/?$', 'django.contrib.auth.views.logout', name='my_logout'),
     url(r'^meritbadges/?$', 'advancement.views.meritbadges', name='meritbadges'),
+    url(r'^ranks/?$', 'advancement.views.ranks', name='ranks'),
     url(r'^update-scoutmeritbadge/?$', 'advancement.views.update_scoutmeritbadge', name='update_scoutmeritbadge'),
+    url(r'^update-scoutrank/?$', 'advancement.views.update_scoutrank', name='update_scoutrank'),
 
     # url(r'^giftplanner/', include('giftplanner.urls')),
     # Examples:
