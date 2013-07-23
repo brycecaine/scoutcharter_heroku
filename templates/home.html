@@ -79,14 +79,27 @@
 		    </div>
 		    <div class="span4 well">
 		        <div id="planned-mb-div" class="merit-badge-header">
-		            <h3>Planned</h3>
+		            <h3>Planned
+		            	{% if scouter.role == 'scout' %}
+			            	<div class="pull-right">
+			            		<small>
+						            <a data-toggle="modal" href="#planned-mb-modal" class="close">&plus;</a>
+			            		</small>
+			            	</div>
+		            	{% endif %}
+		            </h3>
 		            {% for scout_merit_badge_planned in scout_merit_badges_planned %}
-	                	<span class="wrapper">
+	                	<span id="planned-mb-{{ scout_merit_badge_planned.id }}" class="wrapper">
 					    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small">
 						    <span class="description"> 
 						        {{ scout_merit_badge_planned.merit_badge.name }}<br />
 								{{ scout_merit_badge_planned.goal_date }}
 						    </span>  
+						    {% if scouter.role == 'scout' %}
+						    	<span class="mb-close-label"> 
+						        	<a class="close delete-planned-mb" id="{{ scout_merit_badge_planned.id }}">&times;</a>
+						    	</span>  
+						    {% endif %}
 						</span>  
 		            {% endfor %}
 		        </div>
@@ -142,6 +155,29 @@
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal">Close</button>
 			<button class="btn btn-primary save-earned-mb" data-dismiss="modal">Save</button>
+		</div>
+	</div>
+
+	<div id="planned-mb-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Set Merit Badge Goal</h3>
+		</div>
+		<div class="modal-body">
+			<div class="row-fluid">
+				<div class="span6">
+					<h4>Select merit badge</h4>
+					<input id="planned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
+				</div>
+				<div class="span6">
+					<h4 class="text-right">Enter goal date</h4>
+					<input id="planned-mb-date" type="text" class="input-small pull-right datepicker">
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+			<button class="btn btn-primary save-planned-mb" data-dismiss="modal">Save</button>
 		</div>
 	</div>
 

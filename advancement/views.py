@@ -78,19 +78,28 @@ def meritbadges(request):
 def update_scoutmeritbadge(request):
 	if request.method == 'POST':
 		action = request.POST.get('action')
+		entry_type = request.POST.get('entry_type')
 		if action == 'add':
+
 			scout_id = request.POST.get('scout_id')
 			mb_name = request.POST.get('mb_name')
 			mb_date = datetime.strptime(request.POST.get('mb_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
 
 			merit_badge = MeritBadge.objects.get(name=mb_name)
 			scout_merit_badge, created = ScoutMeritBadge.objects.get_or_create(scout_id=scout_id, merit_badge=merit_badge)
-			scout_merit_badge.date_earned = mb_date
+			if entry_type == 'earned':
+				scout_merit_badge.date_earned = mb_date
+				scout_merit_badge.goal_date = None
+			elif entry_type == 'planned':
+				if created:
+					scout_merit_badge.goal_date = mb_date
 			scout_merit_badge.save()
 
 			merit_badge_json = json.dumps({'name': merit_badge.name,
-				                           'date_earned': scout_merit_badge.date_earned,
-				                           'image_name': merit_badge.image_name})
+				                           'mb_date': mb_date,
+				                           'image_name': merit_badge.image_name,
+				                           'scoutmeritbadge_id': scout_merit_badge.id,
+				                           'created': created})
 
 		if action == 'delete':
 			scoutmeritbadge_id = request.POST.get('scout_merit_badge_id')
