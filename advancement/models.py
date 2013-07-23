@@ -21,7 +21,7 @@ class Scouter(models.Model):
 	phone_number = models.CharField(max_length=20, blank=True, null=True)
 
 	def __unicode__(self):
-		return self.user.username
+		return self.user.first_name
 
 class Parent(Scouter):
 	scouts = models.ManyToManyField(Scouter, blank=True, null=True, related_name='parent_scouts')
@@ -93,3 +93,6 @@ class ScoutNote(models.Model):
 	purpose = models.CharField(max_length=500, blank=True, null=True)
 	comment = models.CharField(max_length=1500)
 	followup_date = models.DateField(blank=True, null=True)
+
+	def __unicode__(self):
+		return '{0}: {1} (Followup on {2})'.format(self.note_date, self.comment, self.followup_date)

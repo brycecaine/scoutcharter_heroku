@@ -24,19 +24,56 @@ def home(request, scouter_id=None):
 		scouter = None
 		scouter_role = None
 
+	# -------------------------------------------------------------------------
+	# Get list of scouts for leaders	
 	if scouter_role == 'leader':
 		scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
 		if scouter.patrol == 'all':
 			scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
+			scouts_by_age = Scouter.objects.exclude(role='leader').order_by('birth_date')
+
+		scout_list = []
+		for scout in scouts_by_age:
+			scout_ranks = ScoutRank.objects.filter(scout=scout).order_by('-rank__weight')
+			if scout_ranks:
+				rank = scout_ranks[0].rank
+			else:
+				rank = '-'
+
+			if scout.birth_date:
+				age = service.get_birth_info(scout.birth_date, 'age')
+			else:
+				age = None
+
+			mb_goals = ScoutMeritBadge.objects.filter(scout=scout, goal_date__gt='1901-01-01').order_by('-merit_badge__required', 'merit_badge__name').values_list('merit_badge__name', flat=True)
+			
+			scout_notes = ScoutNote.objects.filter(scout=scout).order_by('-note_date')
+			if scout_notes:
+				status = scout_notes[0]
+			else:
+				status = None
+			scout_dict = {'id': scout.id,
+			              'first_name': scout.user.first_name,
+			              'last_name': scout.user.last_name,
+			              'patrol': scout.patrol,
+			              'rank': rank,
+			              'age': age,
+			              'birth_date': scout.birth_date,
+			              'phone_number': scout.phone_number,
+			              'mb_goals': 'Set' if mb_goals else '', # Change this if merit badges should appear in list
+			              'status': status}
+			scout_list.append(scout_dict)
 			
 		scout = None
 		if scouter_id:
 			scout = Scouter.objects.get(id=scouter_id)
 
 	else:
-		scouts = []
+		scout_list = []
 		scout = scouter
 
+	# -------------------------------------------------------------------------
+	# Get ranks
 	ranks = Rank.objects.all()
 	scout_ranks = ScoutRank.objects.filter(scout=scout)
 
@@ -57,9 +94,13 @@ def home(request, scouter_id=None):
 		
 		scout_ranks_list.append(scout_rank_dict)
 	
+	# -------------------------------------------------------------------------
+	# Get merit badges
 	scout_merit_badges_earned = ScoutMeritBadge.objects.filter(scout=scout, date_earned__gt='1901-01-01').order_by('-merit_badge__required', 'merit_badge__name')
 	scout_merit_badges_planned = ScoutMeritBadge.objects.filter(scout=scout, goal_date__gt='1901-01-01').order_by('-merit_badge__required', 'merit_badge__name')
 
+	# -------------------------------------------------------------------------
+	# Get individual scout info
 	scout_dict = {}
 	if scout:
 		scout_dict['name'] = '{0} {1}'.format(scout.user.first_name, scout.user.last_name)
