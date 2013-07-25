@@ -2,7 +2,7 @@
 
 {% block content %}
 	<!-- Rank images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_Ranks/ -->
-	{% if scouter.role == 'leader' and not scout %}
+	{% if scouter.role in 'leader, parent' and not scout %}
 		<div class="row-fluid bottom-margin">
 		    <div class="span12">
 		        <div class="leader-note">
@@ -16,7 +16,9 @@
 		        				<th nowrap width="13%" class="no-spill">Birthday</th>
 		        				<th nowrap width="12%" class="no-spill">Phone Number</th>
 		        				<th nowrap width="6%" class="no-spill">Goals</th>
-		        				<th nowrap width="33%" class="no-spill">Status</th>
+		        				{% if scouter.role in 'leader' %}
+		        					<th nowrap width="33%" class="no-spill">Status</th>
+		        				{% endif %}
 		        			</tr>
 		        		</thead>
 		        		<tbody>
@@ -31,7 +33,9 @@
 									<td nowrap width="13%" class="no-spill">{{ scout.birth_date }}</td>
 									<td nowrap width="12%" class="no-spill">{{ scout.phone_number }}</td>
 									<td nowrap width="6%" class="no-spill">{{ scout.mb_goals }}</td>
-									<td nowrap width="33%" class="no-spill">{{ scout.status }}</td>
+			        				{% if scouter.role in 'leader' %}
+										<td nowrap width="33%" class="no-spill">{{ scout.status }}</td>
+			        				{% endif %}
 								</tr>
 							{% endfor %}
 		        		</tbody>
@@ -43,7 +47,7 @@
 		<div class="row-fluid bottom-margin">
 		    <div class="span12">
 		        <div class="rank-header">
-		            {% if scouter.role == 'leader' %}
+		            {% if scouter.role in 'leader, parent' %}
 		            	<h5 class="pull-right text-right">
 
 		            		{{ scout_dict.name }}

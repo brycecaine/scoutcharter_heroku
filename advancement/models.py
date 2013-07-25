@@ -21,7 +21,7 @@ class Scouter(models.Model):
 	phone_number = models.CharField(max_length=20, blank=True, null=True)
 
 	def __unicode__(self):
-		return self.user.first_name
+		return '{0} {1}'.format(self.user.first_name, self.user.last_name)
 
 class Parent(Scouter):
 	scouts = models.ManyToManyField(Scouter, blank=True, null=True, related_name='parent_scouts')

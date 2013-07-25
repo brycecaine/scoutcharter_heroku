@@ -1,5 +1,5 @@
 from advancement import service
-from advancement.models import Scouter, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote
+from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -25,12 +25,17 @@ def home(request, scouter_id=None):
 		scouter_role = None
 
 	# -------------------------------------------------------------------------
-	# Get list of scouts for leaders	
+	# Get list of scouts for leaders or parents
 	if scouter_role == 'leader':
 		scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
 		if scouter.patrol == 'all':
 			scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
-			scouts_by_age = Scouter.objects.exclude(role='leader').order_by('birth_date')
+			scouts_by_age = scouts.order_by('birth_date') # Need to fix this so the order_by doesn't happen twice
+
+	elif scouter_role == 'parent':
+		parent = Parent.objects.get(user=user)
+		scouts = parent.scouts.all()
+		scouts_by_age = scouts.order_by('birth_date')
 
 		scout_list = []
 		for scout in scouts_by_age:
