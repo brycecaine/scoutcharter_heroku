@@ -132,13 +132,21 @@ def update_scoutmeritbadge(request):
 		action = request.POST.get('action')
 		entry_type = request.POST.get('entry_type')
 		if action == 'add':
-
-			scout_id = request.POST.get('scout_id')
+			user = request.user
+			scouter = Scouter.objects.get(user=user)
+			
+			if scouter.role in ('leader', 'parent'):
+				scout_id = request.POST.get('scout_id')
+				scout = Scouter.objects.get(id=scout_id)
+			
+			else:
+				scout = scouter
+			
 			mb_name = request.POST.get('mb_name')
 			mb_date = datetime.strptime(request.POST.get('mb_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
 
 			merit_badge = MeritBadge.objects.get(name=mb_name)
-			scout_merit_badge, created = ScoutMeritBadge.objects.get_or_create(scout_id=scout_id, merit_badge=merit_badge)
+			scout_merit_badge, created = ScoutMeritBadge.objects.get_or_create(scout=scout, merit_badge=merit_badge)
 			if entry_type == 'earned':
 				scout_merit_badge.date_earned = mb_date
 				scout_merit_badge.goal_date = None

@@ -256,8 +256,7 @@
 		                },
 						dataType: 'json',
 						success: function(data) {
-							console.log(data)
-							if (data.created == 'True') {
+							if (data.created == true) {
 								$('#planned-mb-div').append('<span class="wrapper"><img src="{{ STATIC_URL }}img/merit_badges/' + data.image_name + '" width="80" height="80" class="top-margin-small"><span class="description">' + data.name + '<br />' + data.mb_date + '</span><span class="mb-close-label"><a class="close delete-planned-mb" id="' + data.scoutmeritbadge_id + '">&times;</a></span></span>')
 							}
 						}
