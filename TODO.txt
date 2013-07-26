@@ -1,4 +1,14 @@
-Find MB counselor
-Request MB Book
-
-Implement parents view
+--- Before implementation ---
+Fix UI
+Test
+Clean up:
+ - MB counselors' user names
+ - Brayson and Byrd boy data
+ - Add missing data
+Scoutnet import
+Better theme
+Splash page
+Login page
+Add form for users to update their info
+Assign unique passwords
+Read up on deploying in django docs
