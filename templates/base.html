@@ -324,6 +324,22 @@
 					})
 				})
 
+				$('.request-mbbook').click(function() {
+					$this_el = $(this)
+					id = $this_el.attr('id')
+					console.log('here0')
+					$.ajax({
+						type: 'POST',
+						url: '/request-mbbook',
+						data: {meritbadge_id: id,
+						       csrfmiddlewaretoken: '{{ csrf_token }}'},
+						dataType: 'json',
+						success: function(data) {
+							console.log('here')
+							$this_el.replaceWith(data.outcome)
+						}
+					})
+				})
 
 			});
         </script>

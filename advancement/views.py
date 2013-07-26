@@ -1,5 +1,5 @@
 from advancement import service
-from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote
+from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -31,6 +31,10 @@ def home(request, scouter_id=None):
 		if scouter.patrol == 'all':
 			scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
 			scouts_by_age = scouts.order_by('birth_date') # Need to fix this so the order_by doesn't happen twice
+
+		scout = None
+		if scouter_id:
+			scout = Scouter.objects.get(id=scouter_id)
 
 	elif scouter_role == 'parent':
 		parent = Parent.objects.get(user=user)
@@ -73,6 +77,9 @@ def home(request, scouter_id=None):
 		if scouter_id:
 			scout = Scouter.objects.get(id=scouter_id)
 
+
+	# -------------------------------------------------------------------------
+	# Get other info if a scout is logged in
 	else:
 		scout_list = []
 		scout = scouter
@@ -119,6 +126,43 @@ def home(request, scouter_id=None):
 		scout_notes = []
 		if scouter_role == 'leader':
 			scout_notes = ScoutNote.objects.filter(scout=scout).order_by('-note_date')
+
+	# -------------------------------------------------------------------------
+	# Get merit-badge book info
+	scout_merit_badge_books = ScoutMeritBadgeBook.objects.filter(scout=scout).exclude(date_returned__gt='1901-01-01')
+	scout_merit_badges_planned_mbs = scout_merit_badges_planned.values_list('merit_badge', flat=True)
+
+	scout_merit_badge_books_planned = []
+	scout_merit_badge_books_unplanned = []
+	for scout_merit_badge_book in scout_merit_badge_books:
+		if scout_merit_badge_book.merit_badge_book.merit_badge.id in scout_merit_badges_planned_mbs:
+			scout_merit_badge_books_planned.append(scout_merit_badge_book)
+		
+		elif scout_merit_badge_book.date_borrowed:
+			scout_merit_badge_books_unplanned.append(scout_merit_badge_book)
+
+	scout_merit_badges_planned_list = []
+	for scout_merit_badge_planned in scout_merit_badges_planned:
+		logging.error(1)
+		scout_merit_badge_planned_dict = {'id': scout_merit_badge_planned.id,
+		                                  'merit_badge': scout_merit_badge_planned.merit_badge,
+		                                  'goal_date': scout_merit_badge_planned.goal_date}
+		for scout_merit_badge_book_planned in scout_merit_badge_books_planned:
+			logging.error(2)
+			if scout_merit_badge_book_planned.merit_badge_book.merit_badge == scout_merit_badge_planned.merit_badge:
+				logging.error(3)
+				scout_merit_badge_planned_dict['book_in_library'] = True
+				scout_merit_badge_planned_dict['book_date_requested'] = scout_merit_badge_book_planned.date_requested
+				scout_merit_badge_planned_dict['book_date_borrowed'] = scout_merit_badge_book_planned.date_borrowed
+				scout_merit_badge_planned_dict['book_date_due'] = scout_merit_badge_book_planned.date_due
+
+			else:
+				scout_merit_badge_planned_dict['book_in_library'] = False
+				scout_merit_badge_planned_dict['book_date_requested'] = None
+				scout_merit_badge_planned_dict['book_date_borrowed'] = None
+				scout_merit_badge_planned_dict['book_date_due'] = None
+
+		scout_merit_badges_planned_list.append(scout_merit_badge_planned_dict)
 
 	return render_to_response('home.html', locals(), context_instance=RequestContext(request))
 
@@ -209,4 +253,56 @@ def update_scoutrank(request):
 				                    'image_ph_name': rank.image_ph_name})
 
 	return HttpResponse(rank_json)
+
+def request_mbbook(request):
+	# Create mb book request in the database
+	user = request.user
+	scout = Scouter.objects.get(user=user)
+
+	meritbadge_id = request.POST.get('meritbadge_id')
+	merit_badge = MeritBadge.objects.get(id=meritbadge_id)
+	
+	try:
+		logging.error(0)
+		merit_badge_book = MeritBadgeBook.objects.get(merit_badge=merit_badge)
+		logging.error(1)
+	except:
+		outcome = '<div>Merit badge book not in library</div>'
+
+	try:
+		scout_merit_badge_book = ScoutMeritBadgeBook.objects.get(scout=scout, merit_badge_book=merit_badge_book)
+		if scout_merit_badge_book.date_returned:
+			scout_merit_badge_book = ScoutMeritBadgeBook.objects.create(scout=scout, merit_badge_book=merit_badge_book)
+	except:
+		scout_merit_badge_book = ScoutMeritBadgeBook.objects.create(scout=scout, merit_badge_book=merit_badge_book)
+
+	scout_merit_badge_book = ScoutMeritBadgeBook.objects.create(scout=scout, merit_badge_book=merit_badge_book)
+	
+	logging.error(2)
+	scout_merit_badge_book.date_requested = datetime.now()
+	logging.error(3)
+	scout_merit_badge_book.save()
+	logging.error(4)
+	outcome = '<div>Book requested, you will be contacted soon</div>'
+	logging.error(5)
+
+	# Email admin
+	# Add functionality to notify the admin of this request
+
+	return_json = json.dumps({'outcome': outcome})
+
+	return HttpResponse(return_json)
+
+
+
+
+
+
+
+
+
+
+
+
+
 

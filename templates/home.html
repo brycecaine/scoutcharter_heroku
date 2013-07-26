@@ -136,20 +136,44 @@
 			            	</div>
 		            	{% endif %}
 		            </h3>
-		            {% for scout_merit_badge_planned in scout_merit_badges_planned %}
-	                	<span id="planned-mb-{{ scout_merit_badge_planned.id }}" class="wrapper">
-					    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small">
-						    <span class="description"> 
+		            {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
+	                	<div class="row-fluid" id="planned-mb-{{ scout_merit_badge_planned.id }}">
+					    	<div class="span4">
+					    		<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80">
+							    {% if scouter.role == 'scout' %}
+						        	<a class="close delete-planned-mb pull-right" id="{{ scout_merit_badge_planned.id }}">&times;</a>
+							    {% endif %}
+						    </div>
+						    <div class="span8"> 
 						        {{ scout_merit_badge_planned.merit_badge.name }}<br />
-								{{ scout_merit_badge_planned.goal_date }}
-						    </span>  
-						    {% if scouter.role == 'scout' %}
-						    	<span class="mb-close-label"> 
-						        	<a class="close delete-planned-mb" id="{{ scout_merit_badge_planned.id }}">&times;</a>
-						    	</span>  
-						    {% endif %}
-						</span>  
+								Goal {{ scout_merit_badge_planned.goal_date }}<br />
+								{% if scout_merit_badge_planned.book_in_library %}
+									{% if scout_merit_badge_planned.book_date_requested and not scout_merit_badge_planned.book_date_borrowed %}
+										Book requested, you will be contacted soon<br />
+									{% elif scout_merit_badge_planned.book_date_borrowed %}
+										Book checked out (due {{ scout_merit_badge_planned.book_date_due }})<br />
+									{% else %}
+										<a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Check out book</a><br />
+									{% endif %}
+								{% else %}
+									Book not in library<br />
+								{% endif %}
+								{{ scout_merit_badge_planned.merit_badge.id }}
+						    </div>  
+						</div> 
 		            {% endfor %}
+					{% if scout_merit_badge_books_unplanned %}
+						<div class="row-fluid">
+							<div class="span12">
+								<h3>Books to return</h3>
+								{% for scout_merit_badge_book_unplanned in scout_merit_badge_books_unplanned %}
+									{% if scout_merit_badge_book_unplanned.date_borrowed %}
+										{{ scout_merit_badge_book_unplanned.merit_badge_book }} - due {{ scout_merit_badge_book_unplanned.date_due }}
+									{% endif %}
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
 		        </div>
 		    </div>
 		</div>

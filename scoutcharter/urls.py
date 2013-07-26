@@ -15,6 +15,8 @@ urlpatterns = patterns('',
     url(r'^update-scoutmeritbadge/?$', 'advancement.views.update_scoutmeritbadge', name='update_scoutmeritbadge'),
     url(r'^update-scoutrank/?$', 'advancement.views.update_scoutrank', name='update_scoutrank'),
 
+    url(r'^request-mbbook/?$', 'advancement.views.request_mbbook', name='request_mbbook'),
+
     # url(r'^giftplanner/', include('giftplanner.urls')),
     # Examples:
     # url(r'^$', 'giftaway.views.home', name='home'),
