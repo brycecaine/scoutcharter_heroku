@@ -341,6 +341,14 @@
 					})
 				})
 
+                $('.view-mbcounselors').click(function() {
+                    console.log('hi there')
+                    $this_el = $(this)
+                    id = $this_el.attr('id')
+                    console.log('hi there')
+                    $('#mbcounselors-modal').modal({remote: '/view-mbcounselors/' + id})
+                })
+
 			});
         </script>
     </body>

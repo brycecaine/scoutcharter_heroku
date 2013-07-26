@@ -158,7 +158,7 @@
 								{% else %}
 									Book not in library<br />
 								{% endif %}
-								{{ scout_merit_badge_planned.merit_badge.id }}
+								<a class="view-mbcounselors" id="{{ scout_merit_badge_planned.merit_badge.id }}" href="#">Merit Badge Counselors</a>
 						    </div>  
 						</div> 
 		            {% endfor %}
@@ -277,6 +277,18 @@
 		<div class="modal-footer">
 			<button class="btn" data-dismiss="modal">Close</button>
 			<button class="btn btn-primary save-rank" data-dismiss="modal">Save</button>
+		</div>
+	</div>
+
+	<div id="mbcounselors-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Merit Badge Counselors</h3>
+		</div>
+		<div class="modal-body">
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
 		</div>
 	</div>
 

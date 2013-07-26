@@ -83,7 +83,7 @@ class MeritBadgeCounselor(models.Model):
 	active = models.BooleanField()
 
 	def __unicode__(self):
-		return '{0} - {1}'.format(self.scouter.user.username, self.merit_badge.name)
+		return '{0} - {1}'.format(self.scouter, self.merit_badge.name)
 
 class ScoutNote(models.Model):
 	scout = models.ForeignKey(Scouter, related_name='scoutnote_scout')

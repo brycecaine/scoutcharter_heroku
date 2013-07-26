@@ -1,5 +1,5 @@
 from advancement import service
-from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook
+from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -293,8 +293,11 @@ def request_mbbook(request):
 
 	return HttpResponse(return_json)
 
+def view_mbcounselors(request, meritbadge_id=None):
+	merit_badge = MeritBadge.objects.get(id=meritbadge_id)
+	merit_badge_counselors = MeritBadgeCounselor.objects.filter(merit_badge=merit_badge)
 
-
+	return render_to_response('mbcounselors.html', locals(), context_instance=RequestContext(request))
 
 
 
