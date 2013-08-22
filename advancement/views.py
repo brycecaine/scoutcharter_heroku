@@ -175,6 +175,7 @@ def update_scoutmeritbadge(request):
 	if request.method == 'POST':
 		action = request.POST.get('action')
 		entry_type = request.POST.get('entry_type')
+		merit_badge_json = json.dumps({})
 		if action == 'add':
 			user = request.user
 			scouter = Scouter.objects.get(user=user)
@@ -191,19 +192,46 @@ def update_scoutmeritbadge(request):
 
 			merit_badge = MeritBadge.objects.get(name=mb_name)
 			scout_merit_badge, created = ScoutMeritBadge.objects.get_or_create(scout=scout, merit_badge=merit_badge)
+			
+			try:
+				merit_badge_book = MeritBadgeBook.objects.get(merit_badge=merit_badge)
+			except MeritBadgeBook.DoesNotExist:
+				merit_badge_book = None
+			
+			try:
+				scout_merit_badge_book = ScoutMeritBadgeBook.objects.get(scout=scout, merit_badge_book=merit_badge_book)
+			except ScoutMeritBadgeBook.DoesNotExist:
+				scout_merit_badge_book = None
+
 			if entry_type == 'earned':
 				scout_merit_badge.date_earned = mb_date
 				scout_merit_badge.goal_date = None
+			
 			elif entry_type == 'planned':
 				if created:
 					scout_merit_badge.goal_date = mb_date
 			scout_merit_badge.save()
 
-			merit_badge_json = json.dumps({'name': merit_badge.name,
-				                           'mb_date': mb_date,
-				                           'image_name': merit_badge.image_name,
-				                           'scoutmeritbadge_id': scout_merit_badge.id,
-				                           'created': created})
+			planned_mb_dict = {'name': merit_badge.name,
+				               'mb_date': mb_date,
+				               'image_name': merit_badge.image_name,
+				               'scoutmeritbadge_id': scout_merit_badge.id,
+				               'meritbadge_id': scout_merit_badge.merit_badge.id,
+				               'created': created,
+				               'book_in_library': None,
+				               'book_date_requested': None,
+				               'book_date_borrowed': None,
+				               'book_date_due': None}
+
+			if merit_badge_book:
+				planned_mb_dict['book_in_library'] = merit_badge_book.in_library
+
+			if scout_merit_badge_book:
+				planned_mb_dict['book_date_requested'] = scout_merit_badge_book.date_requested
+				planned_mb_dict['book_date_borrowed'] = scout_merit_badge_book.date_borrowed
+				planned_mb_dict['book_date_due'] = scout_merit_badge_book.date_due
+
+			merit_badge_json = json.dumps(planned_mb_dict)
 
 		if action == 'delete':
 			scoutmeritbadge_id = request.POST.get('scout_merit_badge_id')

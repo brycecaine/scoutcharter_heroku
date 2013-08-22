@@ -1,295 +1,331 @@
 {% extends "base.html" %}
 
+{% block style %}
+    <link href="{{ STATIC_URL }}css/home.css" rel="stylesheet">        
+{% endblock %}
+
 {% block content %}
-	<!-- Rank images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_Ranks/ -->
-	{% if scouter.role in 'leader, parent' and not scout %}
-		<div class="row-fluid bottom-margin">
-		    <div class="span12">
-		        <div class="leader-note">
-		        	<table class="table fixed">
-		        		<thead>
-		        			<tr>
-		        				<th nowrap width="14%" class="no-spill">Name</th>
-		        				<th nowrap width="7%" class="no-spill">Patrol</th>
-		        				<th nowrap width="10%" class="no-spill">Rank</th>
-		        				<th nowrap width="5%" class="no-spill">Age</th>
-		        				<th nowrap width="13%" class="no-spill">Birthday</th>
-		        				<th nowrap width="12%" class="no-spill">Phone Number</th>
-		        				<th nowrap width="6%" class="no-spill">Goals</th>
-		        				{% if scouter.role in 'leader' %}
-		        					<th nowrap width="33%" class="no-spill">Status</th>
-		        				{% endif %}
-		        			</tr>
-		        		</thead>
-		        		<tbody>
-							{% for scout in scout_list %}
-								<tr>
-									<td width="14%">
-										<a href="/home/scout/{{ scout.id }}">{{ scout.first_name }} {{ scout.last_name }}</a>
-									</td>
-									<td nowrap width="7%" class="no-spill">{{ scout.patrol }}</td>
-									<td nowrap width="10%" class="no-spill">{{ scout.rank }}</td>
-									<td nowrap width="5%" class="no-spill">{{ scout.age }}</td>
-									<td nowrap width="13%" class="no-spill">{{ scout.birth_date }}</td>
-									<td nowrap width="12%" class="no-spill">{{ scout.phone_number }}</td>
-									<td nowrap width="6%" class="no-spill">{{ scout.mb_goals }}</td>
+    <div class="container-fluid">
+		{% if scouter.role in 'leader, parent' and not scout %}
+			<div class="row-fluid bottom-margin">
+			    <div class="col-lg-12">
+			        <div class="leader-note">
+			        	<table class="table fixed">
+			        		<thead>
+			        			<tr>
+			        				<th nowrap width="14%" class="no-spill">Name</th>
+			        				<th nowrap width="7%" class="no-spill">Patrol</th>
+			        				<th nowrap width="10%" class="no-spill">Rank</th>
+			        				<th nowrap width="5%" class="no-spill">Age</th>
+			        				<th nowrap width="13%" class="no-spill">Birthday</th>
+			        				<th nowrap width="12%" class="no-spill">Phone Number</th>
+			        				<th nowrap width="6%" class="no-spill">Goals</th>
 			        				{% if scouter.role in 'leader' %}
-										<td nowrap width="33%" class="no-spill">{{ scout.status }}</td>
+			        					<th nowrap width="33%" class="no-spill">Status</th>
 			        				{% endif %}
-								</tr>
-							{% endfor %}
-		        		</tbody>
-		        	</table>
-		        </div>
-		    </div>
-		</div>
-	{% else %}
-		<div class="row-fluid bottom-margin">
-		    <div class="span12">
-		        <div class="rank-header">
-		            {% if scouter.role in 'leader, parent' %}
-		            	<h5 class="pull-right text-right">
-
-		            		{{ scout_dict.name }}
-
-		            		{% if scout.birth_date %}
-		            			<small>Age {{ scout_dict.age }}</small><br />
-		            			<small>Turns {{ scout_dict.turns_age }} on {{ scout_dict.turns_month }}</small><br />
-		            			<small>{{ scout_dict.phone_number }}</small>
-		            		{% endif %}
-		            	</h5>
-		            {% endif %}
-		            <h1 class="pull-left">
-		            	Ranks
-		            </h1>
-		            <a data-toggle="modal" href="#rank-modal" class="close pull-left">&plus;</a>
-		        </div>
-		        <table class="table">
-		        	<tbody>
-		        		<tr>
-		                    {% for scout_rank in scout_ranks_list %}
-	                        	{% if scout_rank.date_earned %}
-		                        	<td id="scout-rank-{{ scout_rank.id }}">
-					                	<span class="wrapper">
-									    	<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}" width="200" height="200" class="bottom-margin-small">
-										    {% if scouter.role == 'leader' %}
-										    	<span class="rank-close-label"> 
-										        	<a class="close delete-rank" id="{{ scout_rank.id }}">&times;</a>
-										    	</span>  
-										    {% endif %}
-		                        			<p class="text-center muted">
-		                        				{{ scout_rank.rank_name }}<br />
-		                        				{{ scout_rank.date_earned }}
-		                        			</p>
-										</span>  
-			                        </td>
-	                        	{% else %}
-			                        <td id="scout-rank-{{ scout_rank.rank_id }}">
-		                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_ph_name }}" width="200" height="200">
-			                        </td>
-	                        	{% endif %}
-		                    {% endfor %}
-		            	</tr>
-		            </tbody>
-		        </table>
-		    </div>
-		</div>
-
-		<!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
-		<div class="row-fluid">
-		    <div class="span8 well">
-		        <div id="earned-mb-div" class="merit-badge-header">
-		            <h3>Earned
-		            	{% if scouter.role == 'leader' %}
-			            	<div class="pull-right">
-			            		<small>
-						            <a data-toggle="modal" href="#earned-mb-modal" class="close">&plus;</a>
-			            		</small>
-			            	</div>
-		            	{% endif %}
-		            </h3>
-
-		            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
-	                	<span class="wrapper">
-					    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small">
-						    <span class="description"> 
-						        {{ scout_merit_badge_earned.merit_badge.name }}<br />
-								{{ scout_merit_badge_earned.date_earned }}
-						    </span>  
-						    {% if scouter.role == 'leader' %}
-						    	<span class="mb-close-label"> 
-						        	<a class="close delete-earned-mb" id="{{ scout_merit_badge_earned.id }}">&times;</a>
-						    	</span>  
-						    {% endif %}
-						</span>  
-		            {% endfor %}
-		        </div>
-		    </div>
-		    <div class="span4 well">
-		        <div id="planned-mb-div" class="merit-badge-header">
-		            <h3>Planned
-		            	{% if scouter.role == 'scout' %}
-			            	<div class="pull-right">
-			            		<small>
-						            <a data-toggle="modal" href="#planned-mb-modal" class="close">&plus;</a>
-			            		</small>
-			            	</div>
-		            	{% endif %}
-		            </h3>
-		            {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
-	                	<div class="row-fluid" id="planned-mb-{{ scout_merit_badge_planned.id }}">
-					    	<div class="span4">
-					    		<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80">
-							    {% if scouter.role == 'scout' %}
-						        	<a class="close delete-planned-mb pull-right" id="{{ scout_merit_badge_planned.id }}">&times;</a>
-							    {% endif %}
-						    </div>
-						    <div class="span8"> 
-						        {{ scout_merit_badge_planned.merit_badge.name }}<br />
-								Goal {{ scout_merit_badge_planned.goal_date }}<br />
-								{% if scout_merit_badge_planned.book_in_library %}
-									{% if scout_merit_badge_planned.book_date_requested and not scout_merit_badge_planned.book_date_borrowed %}
-										Book requested, you will be contacted soon<br />
-									{% elif scout_merit_badge_planned.book_date_borrowed %}
-										Book checked out (due {{ scout_merit_badge_planned.book_date_due }})<br />
-									{% else %}
-										<a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Check out book</a><br />
-									{% endif %}
-								{% else %}
-									Book not in library<br />
-								{% endif %}
-								<a class="view-mbcounselors" id="{{ scout_merit_badge_planned.merit_badge.id }}" href="#">Merit Badge Counselors</a>
-						    </div>  
-						</div> 
-		            {% endfor %}
-					{% if scout_merit_badge_books_unplanned %}
-						<div class="row-fluid">
-							<div class="span12">
-								<h3>Books to return</h3>
-								{% for scout_merit_badge_book_unplanned in scout_merit_badge_books_unplanned %}
-									{% if scout_merit_badge_book_unplanned.date_borrowed %}
-										{{ scout_merit_badge_book_unplanned.merit_badge_book }} - due {{ scout_merit_badge_book_unplanned.date_due }}
-									{% endif %}
+			        			</tr>
+			        		</thead>
+			        		<tbody>
+								{% for scout in scout_list %}
+									<tr>
+										<td width="14%">
+											<a href="/home/scout/{{ scout.id }}">{{ scout.first_name }} {{ scout.last_name }}</a>
+										</td>
+										<td nowrap width="7%" class="no-spill">{{ scout.patrol }}</td>
+										<td nowrap width="10%" class="no-spill">{{ scout.rank }}</td>
+										<td nowrap width="5%" class="no-spill">{{ scout.age }}</td>
+										<td nowrap width="13%" class="no-spill">{{ scout.birth_date }}</td>
+										<td nowrap width="12%" class="no-spill">{{ scout.phone_number }}</td>
+										<td nowrap width="6%" class="no-spill">{{ scout.mb_goals }}</td>
+				        				{% if scouter.role in 'leader' %}
+											<td nowrap width="33%" class="no-spill">{{ scout.status }}</td>
+				        				{% endif %}
+									</tr>
 								{% endfor %}
-							</div>
-						</div>
-					{% endif %}
-		        </div>
-		    </div>
-		</div>
-		{% if scout_notes %}
-			<div class="row-fluid">
-			    <div class="span12 well">
-			    	<table class="table">
-			    		<thead>
-			    			<tr>
-			    				<th>Date</th>
-			    				<th>Method</th>
-			    				<th>Purpose</th>
-			    				<th>Comment</th>
-			    				<th>Followup Date</th>
-			    			</tr>
-			    		</thead>
-				    	<tbody>
-				    		{% for scout_note in scout_notes %}
-				    			<tr>
-				    				<td>{{ scout_note.note_date }}</td>
-				    				<td>{{ scout_note.method }}</td>
-				    				<td>{{ scout_note.purpose }}</td>
-				    				<td>{{ scout_note.comment }}</td>
-				    				<td>{{ scout_note.followup_date }}</td>
-				    			</tr>
-				    		{% endfor %}
-				    	</tbody>
-			    	</table>
+			        		</tbody>
+			        	</table>
+			        </div>
 			    </div>
 			</div>
+		{% else %}
+			<div class="row-fluid bottom-margin">
+			    <div class="col-lg-12">
+			        <div class="rank-header">
+			            {% if scouter.role in 'leader, parent' %}
+			            	<h5 class="pull-right text-right">
+
+			            		{{ scout_dict.name }}
+
+			            		{% if scout.birth_date %}
+			            			<small>Age {{ scout_dict.age }}</small><br />
+			            			<small>Turns {{ scout_dict.turns_age }} on {{ scout_dict.turns_month }}</small><br />
+			            			<small>{{ scout_dict.phone_number }}</small>
+			            		{% endif %}
+			            	</h5>
+			            {% endif %}
+			            <h1>
+			            	Ranks
+			            	<a data-toggle="modal" href="#rank-modal"><i class="icon-plus-sign"></i></a>
+			            </h1>
+			        </div>
+					<!-- -------------------------------------------------------------------- -->
+					<!-- ------------------------------ Ranks ------------------------------- -->
+					<!-- -------------------------------------------------------------------- -->
+
+					<!-- Rank images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_Ranks/ -->
+			        <table class="table">
+			        	<tbody>
+			        		<tr>
+			                    {% for scout_rank in scout_ranks_list %}
+		                        	{% if scout_rank.date_earned %}
+			                        	<td id="scout-rank-{{ scout_rank.id }}">
+						                	<span class="wrapper">
+										    	<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}" width="100%" class="bottom-margin-small">
+											    {% if scouter.role == 'leader' %}
+											    	<span class="rank-close-label"> 
+											        	<a class="close delete-rank" id="{{ scout_rank.id }}"><i class="icon-minus-sign"></i></a>
+											    	</span>  
+											    {% endif %}
+			                        			<p class="text-center muted">
+			                        				{{ scout_rank.rank_name }}<br />
+			                        				{{ scout_rank.date_earned }}
+			                        			</p>
+											</span>  
+				                        </td>
+		                        	{% else %}
+				                        <td id="scout-rank-{{ scout_rank.rank_id }}">
+			                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_ph_name }}" width="100%">
+				                        </td>
+		                        	{% endif %}
+			                    {% endfor %}
+			            	</tr>
+			            </tbody>
+			        </table>
+			    </div>
+			</div>
+			<div class="row-fluid">
+			    <div class="col-lg-8">
+				    <div class="well">
+				        <div id="earned-mb-div" class="merit-badge-header">
+				            <h1>Earned
+				            	{% if scouter.role == 'leader' %}
+					            	<div class="pull-right">
+					            		<small>
+								            <a data-toggle="modal" href="#earned-mb-modal" class="close"><i class="icon-plus-sign"></i></a>
+					            		</small>
+					            	</div>
+				            	{% endif %}
+				            </h1>
+							<!-- -------------------------------------------------------------------- -->
+							<!-- --------------------------- Merit Badges --------------------------- -->
+							<!-- -------------------------------------------------------------------- -->
+
+							<!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
+				            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
+			                	<span class="wrapper">
+							    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small">
+								    <span class="description"> 
+								        {{ scout_merit_badge_earned.merit_badge.name }}<br />
+										{{ scout_merit_badge_earned.date_earned }}
+								    </span>  
+								    {% if scouter.role == 'leader' %}
+								    	<span class="mb-close-label"> 
+								        	<a class="close delete-earned-mb" id="{{ scout_merit_badge_earned.id }}"><i class="icon-minus-sign"></i></a>
+								    	</span>  
+								    {% endif %}
+								</span>  
+				            {% endfor %}
+				        </div>
+				    </div>
+			    </div>
+			    <div class="col-lg-4">
+			        <div id="planned-mb-div" class="merit-badge-header">
+			            <h1>
+			            	Planned
+			            	{% if scouter.role == 'scout' %}
+			            		<a data-toggle="modal" href="#planned-mb-modal"><i class="icon-plus-sign"></i></a>
+			            	{% endif %}
+			            </h1>
+			            {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
+		                	<div class="row-fluid" id="planned-mb-{{ scout_merit_badge_planned.id }}">
+						    	<div class="col-lg-4">
+						    		<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80">
+								    {% if scouter.role == 'scout' %}
+							        	<a class="delete-planned-mb badge-delete" id="{{ scout_merit_badge_planned.id }}"><i class="icon-minus-sign"></i></a>
+								    {% endif %}
+							    </div>
+							    <div class="col-lg-8"> 
+							        <h3 class="compact">
+							        	{{ scout_merit_badge_planned.merit_badge.name }} <small>{{ scout_merit_badge_planned.goal_date }}</small>
+							        </h3>
+									{% if scout_merit_badge_planned.book_in_library %}
+										{% if scout_merit_badge_planned.book_date_requested and not scout_merit_badge_planned.book_date_borrowed %}
+											Book requested, you will be contacted soon<br />
+										{% elif scout_merit_badge_planned.book_date_borrowed %}
+											Book checked out (due {{ scout_merit_badge_planned.book_date_due }})<br />
+										{% else %}
+											<a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Check out book</a><br />
+										{% endif %}
+									{% else %}
+										Book not in library<br />
+									{% endif %}
+									<a class="view-mbcounselors" id="{{ scout_merit_badge_planned.merit_badge.id }}" href="#">Merit Badge Counselors</a>
+									<hr class="dashed-line">
+							    </div>  
+							</div> 
+			            {% endfor %}
+						{% if scout_merit_badge_books_unplanned %}
+							<div class="row-fluid">
+								<div class="col-lg-12">
+									<h3>Books to return</h3>
+									{% for scout_merit_badge_book_unplanned in scout_merit_badge_books_unplanned %}
+										{% if scout_merit_badge_book_unplanned.date_borrowed %}
+											{{ scout_merit_badge_book_unplanned.merit_badge_book }} - due {{ scout_merit_badge_book_unplanned.date_due }}
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+						{% endif %}
+			        </div>
+			    </div>
+			</div>
+			{% if scout_notes %}
+				<div class="row-fluid">
+				    <div class="col-lg-12 well">
+				    	<table class="table">
+				    		<thead>
+				    			<tr>
+				    				<th>Date</th>
+				    				<th>Method</th>
+				    				<th>Purpose</th>
+				    				<th>Comment</th>
+				    				<th>Followup Date</th>
+				    			</tr>
+				    		</thead>
+					    	<tbody>
+					    		{% for scout_note in scout_notes %}
+					    			<tr>
+					    				<td>{{ scout_note.note_date }}</td>
+					    				<td>{{ scout_note.method }}</td>
+					    				<td>{{ scout_note.purpose }}</td>
+					    				<td>{{ scout_note.comment }}</td>
+					    				<td>{{ scout_note.followup_date }}</td>
+					    			</tr>
+					    		{% endfor %}
+					    	</tbody>
+				    	</table>
+				    </div>
+				</div>
+			{% endif %}
 		{% endif %}
-	{% endif %}
 
-	<!-- -------------------------------------------------------------------- -->
-	<!-- ------------------------------ Modals ------------------------------ -->
-	<!-- -------------------------------------------------------------------- -->
+		<!-- -------------------------------------------------------------------- -->
+		<!-- ------------------------------ Modals ------------------------------ -->
+		<!-- -------------------------------------------------------------------- -->
 
-	<div id="earned-mb-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="myModalLabel">Enter Earned Merit Badge</h3>
-		</div>
-		<div class="modal-body">
-			<div class="row-fluid">
-				<div class="span6">
-					<h4>Select merit badge</h4>
-					<input id="earned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
-				</div>
-				<div class="span6">
-					<h4 class="text-right">Enter date earned</h4>
-					<input id="earned-mb-date" type="text" class="input-small pull-right datepicker">
-				</div>
-			</div>
-		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal">Close</button>
-			<button class="btn btn-primary save-earned-mb" data-dismiss="modal">Save</button>
-		</div>
-	</div>
-
-	<div id="planned-mb-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="myModalLabel">Set Merit Badge Goal</h3>
-		</div>
-		<div class="modal-body">
-			<div class="row-fluid">
-				<div class="span6">
-					<h4>Select merit badge</h4>
-					<input id="planned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
-				</div>
-				<div class="span6">
-					<h4 class="text-right">Enter goal date</h4>
-					<input id="planned-mb-date" type="text" class="input-small pull-right datepicker">
+		<div id="earned-mb-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 id="myModalLabel">Enter Earned Merit Badge</h3>
+					</div>
+					<div class="modal-body">
+						<div class="row-fluid">
+							<div class="col-lg-6">
+								<h4>Select merit badge</h4>
+								<input id="earned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
+							</div>
+							<div class="col-lg-6">
+								<h4 class="text-right">Enter date earned</h4>
+								<input id="earned-mb-date" type="text" class="input-small pull-right datepicker">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal">Close</button>
+						<button class="btn btn-primary save-earned-mb" data-dismiss="modal">Save</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal">Close</button>
-			<button class="btn btn-primary save-planned-mb" data-dismiss="modal">Save</button>
-		</div>
-	</div>
 
-	<div id="rank-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="myModalLabel">Enter Rank</h3>
-		</div>
-		<div class="modal-body">
-			<div class="row-fluid">
-				<div class="span6">
-					<h4>Select rank</h4>
-					<input id="rank-name" type="text" class="input-xlarge ajax-typeahead" data-link="/ranks">
-				</div>
-				<div class="span6">
-					<h4 class="text-right">Enter date earned</h4>
-					<input id="rank-date" type="text" class="input-small pull-right datepicker">
+		<div id="planned-mb-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 id="myModalLabel">Set Merit Badge Goal</h3>
+					</div>
+					<div class="modal-body">
+						<div class="row-fluid">
+							<div class="col-lg-6">
+								<h4>Select merit badge</h4>
+								<input id="planned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
+							</div>
+							<div class="col-lg-6">
+								<h4 class="text-right">Enter goal date</h4>
+								<input id="planned-mb-date" type="text" class="input-small pull-right datepicker">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal">Close</button>
+						<button class="btn btn-primary save-planned-mb" data-dismiss="modal">Save</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal">Close</button>
-			<button class="btn btn-primary save-rank" data-dismiss="modal">Save</button>
+
+		<div id="rank-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 id="myModalLabel">Enter Rank</h3>
+					</div>
+					<div class="modal-body">
+						<div class="row-fluid">
+							<div class="col-lg-6">
+								<h4>Select rank</h4>
+								<input id="rank-name" type="text" class="input-xlarge ajax-typeahead" data-link="/ranks">
+							</div>
+							<div class="col-lg-6">
+								<h4 class="text-right">Enter date earned</h4>
+								<input id="rank-date" type="text" class="input-small pull-right datepicker">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal">Close</button>
+						<button class="btn btn-primary save-rank" data-dismiss="modal">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="mbcounselors-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 id="myModalLabel">Merit Badge Counselors</h3>
+					</div>
+					<div class="modal-body">
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
-	<div id="mbcounselors-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="myModalLabel">Merit Badge Counselors</h3>
-		</div>
-		<div class="modal-body">
-		</div>
-		<div class="modal-footer">
-			<button class="btn" data-dismiss="modal">Close</button>
-		</div>
-	</div>
+{% endblock %}
 
+{% block script %}
+	<script type="text/javascript">
+		var template_vars = {"csrf_token": "{% csrf_token %}", "static_url": "{{ STATIC_URL }}"}
+	</script>
+    <script src="{{ STATIC_URL }}js/home.js"></script>
 {% endblock %}

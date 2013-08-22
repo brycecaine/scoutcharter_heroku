@@ -1,0 +1,119 @@
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+                padding-left: 50px;
+                padding-right: 50px;
+            }
+            .sidebar-nav {
+                padding: 9px 0;
+            }
+
+            @media (max-width: 980px) {
+                /* Enable use of floated navbar text */
+                .navbar-text.pull-right {
+                    float: none;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+            }
+
+            .bottom-margin {
+                margin-bottom: 30px;
+            }
+
+            .bottom-margin-small {
+                margin-bottom: 15px;
+            }
+
+            .top-margin-small {
+                margin-top: 15px;
+            }
+
+            .tooltip-inner {
+                white-space:pre-wrap;
+            }
+
+            div.modal-body {
+                height: 200px;
+                max-height: 200px;
+            }
+
+            span.wrapper{  
+                position:relative; /* important(so we can absolutely position the description span */  
+                margin: 2px;
+            }  
+
+            span.description{  
+                position: absolute; /* absolute position (so we can position it where we want)*/  
+                height: 40px;
+                width: 100%;
+                top: 20px;
+                left: 0px; 
+                padding-top: 4px;
+                white-space: nowrap;
+                /* styling below */
+                text-align: center;
+                font-size: 12px;
+                line-height: 94%;
+                background-color: #fff;  
+                color: #333;  
+                opacity: 0.75; /* transparency */  
+                filter: alpha(opacity=75); /* IE transparency */  
+            }
+
+            span.mb-close-label {
+                position: absolute; /* absolute position (so we can position it where we want)*/  
+                width: 100%;
+                top: -30px;
+                left: -7px;
+                /* styling below */
+                text-align: center;
+                font-size: 12px;
+                line-height: 94%;
+                opacity: 1; /* transparency */  
+                filter: alpha(opacity=1); /* IE transparency */ 
+            }
+
+            span.rank-close-label {
+                position: absolute; /* absolute position (so we can position it where we want)*/  
+                width: 100%;
+                top: -65px;
+                left: -7px;
+                /* styling below */
+                text-align: center;
+                font-size: 12px;
+                line-height: 94%;
+                opacity: 1; /* transparency */  
+                filter: alpha(opacity=1); /* IE transparency */ 
+            }
+
+            .fixed {
+                table-layout: fixed;
+            }
+
+            .no-spill {
+                overflow: hidden;
+            }
+
+            .badge-delete {
+                position: relative;
+                top: -88px;
+                left: 68px;
+/*                margin-top: -12px;
+                margin-top: -12px;
+                line-height: 0px;
+                display: block;
+*/            }
+
+            hr.dashed-line {
+                border: 0;
+                border-bottom: 1px dashed #ccc;
+                background: #999;
+                margin-top: 8px;
+                margin-bottom: 8px;
+            }
+
+            .compact {
+                margin-top: 2px;
+                margin-bottom: 8px;   
+            }
