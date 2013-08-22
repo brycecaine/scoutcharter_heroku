@@ -18,9 +18,9 @@
         }
 
     .page-features {
-        height: 650px;
+        height: 720px;
         background-color: #EAF1FB;
-        text-align: center;
+        text-align: left;
         padding: 60px;
         /* From http://jsfiddle.net/B9Uyj/1/ */
         box-shadow: 0 0 15px 2px #ccc;
@@ -29,7 +29,7 @@
     .page-about {
         height: 650px;
         background-color: #FCFCE9;
-        text-align: center;
+        text-align: left;
         padding: 60px;
         box-shadow: 0 0 15px 2px #ccc;
         }
