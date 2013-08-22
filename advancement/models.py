@@ -59,6 +59,7 @@ class MeritBadgeBook(models.Model):
 	merit_badge = models.ForeignKey(MeritBadge)
 	owner = models.CharField(max_length=70)
 	quantity = models.IntegerField()
+	in_library = models.BooleanField()
 
 	def __unicode__(self):
 		return self.merit_badge.name
