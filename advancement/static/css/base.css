@@ -1,0 +1,22 @@
+*{
+    font-family: 'News Cycle', sans-serif;
+    font-size: 20px;
+    }
+
+body {
+    padding-top: 60px;
+    }
+
+.center {
+    margin: 0 auto;
+    float: none;
+    }
+
+.btn-xlg {
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 15px;
+    margin: 10px;
+    font-size: 28px;
+}

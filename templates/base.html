@@ -6,354 +6,64 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
+        <link rel="icon" type="image/png" href="{{ STATIC_URL }}img/design/favicon.ico">
 
-        <!-- Le styles -->
-        <!-- <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet"> -->
+        <!-- Styling ------------------------------------------------------ -->
+        <link href='http://fonts.googleapis.com/css?family=News+Cycle|Raleway' rel='stylesheet' type='text/css'>
         <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-        <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
-        <link href="{{ STATIC_URL }}css/font-awesome.min.css" rel="stylesheet">
-        <link href="{{ STATIC_URL }}css/bootswatch.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
         <link href="{{ STATIC_URL }}css/datepicker.css" rel="stylesheet">
-        <style type="text/css">
-            body {
-                padding-top: 60px;
-                padding-bottom: 40px;
-                padding-left: 150px;
-                padding-right: 150px;
-            }
-            .sidebar-nav {
-                padding: 9px 0;
-            }
-
-            @media (max-width: 980px) {
-                /* Enable use of floated navbar text */
-                .navbar-text.pull-right {
-                    float: none;
-                    padding-left: 5px;
-                    padding-right: 5px;
-                }
-            }
-
-            .bottom-margin {
-            	margin-bottom: 30px;
-            }
-
-            .bottom-margin-small {
-            	margin-bottom: 15px;
-            }
-
-            .top-margin-small {
-            	margin-top: 15px;
-            }
-
-            .tooltip-inner {
-			    white-space:pre-wrap;
-			}
-
-			div.modal-body {
-				height: 200px;
-			    max-height: 200px;
-			}
-
-			span.wrapper{  
-			    position:relative; /* important(so we can absolutely position the description span */  
-			    margin: 2px;
-			}  
-
-			span.description{  
-			    position: absolute; /* absolute position (so we can position it where we want)*/  
-			    height: 40px;
-			    width: 100%;
-			    top: 20px;
-			    left: 0px; 
-			    padding-top: 4px;
-			    white-space: nowrap;
-			    /* styling below */
-			    text-align: center;
-			    font-size: 12px;
-			    line-height: 94%;
-			    background-color: #fff;  
-			    color: #333;  
-			    opacity: 0.75; /* transparency */  
-			    filter: alpha(opacity=75); /* IE transparency */  
-			}
-
-			span.mb-close-label {
-			    position: absolute; /* absolute position (so we can position it where we want)*/  
-			    width: 100%;
-			    top: -30px;
-			    left: -7px;
-			    /* styling below */
-			    text-align: center;
-			    font-size: 12px;
-			    line-height: 94%;
-			    opacity: 1; /* transparency */  
-			    filter: alpha(opacity=1); /* IE transparency */ 
-			}
-
-			span.rank-close-label {
-			    position: absolute; /* absolute position (so we can position it where we want)*/  
-			    width: 100%;
-			    top: -65px;
-			    left: -7px;
-			    /* styling below */
-			    text-align: center;
-			    font-size: 12px;
-			    line-height: 94%;
-			    opacity: 1; /* transparency */  
-			    filter: alpha(opacity=1); /* IE transparency */ 
-			}
-
-			.fixed {
-				table-layout: fixed;
-			}
-
-			.no-spill {
-				overflow: hidden;
-			}
-        </style>
+        <link href="{{ STATIC_URL }}css/base.css" rel="stylesheet" type="text/css">
+        {% block style %}{% endblock %}
+        <!-- -------------------------------------------------------------- -->
     </head>
+
     <body>
         <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="brand" href="/">Scout Charter</a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav pull-right">
-                            {% if user.is_authenticated %}
-                            	<li><a href="#" class="navbar-link">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</a></li>
-                            	<li><a href="{% url 'django.contrib.auth.views.logout' %}?next={% firstof request.path '/login' %}" class="navbar-link">Log out</a></li>
-                            {% else %}
-                            	<li><a href="{% url 'django.contrib.auth.views.login' %}?next={% firstof request.path '/home' %}" class="navbar-link">Log in</a></li>
-                            {% endif %}
-                        </ul>
-                        <ul class="nav">
-                            <li class="active"><a href="/home">Home</a></li>
-							{% if scouter.role in 'leader, parent' %}
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown">Scouts <b class="caret"></b></a>
-									<ul class="dropdown-menu">
-										{% for scout in scouts %}
-											<li><a href="/home/scout/{{ scout.id }}">{{ scout.user.first_name }} {{ scout.user.last_name }}</a></li>
-										{% endfor %}
-									</ul>
-								</li>
-							{% endif %}
-                            <!-- <li><a href="#about">About</a></li> -->
-                            <!-- <li><a href="#contact">Contact</a></li> -->
-                        </ul>
-                    </div>
-                </div>
+            <div class="container">
+                <ul class="nav navbar-nav pull-right">
+                    {% if user.is_authenticated %}
+                        <li><a href="#" class="navbar-link">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</a></li>
+                        <li><a href="{% url 'django.contrib.auth.views.logout' %}?next={% firstof request.path '/login' %}" class="navbar-link">Log out</a></li>
+                    {% else %}
+                        <li><a href="{% url 'django.contrib.auth.views.login' %}?next={% firstof request.path '/home' %}" class="navbar-link">Log in</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a class="brand" href="/">Scout Charter</a>
+                    </li>
+                    {% block navbaritems %}{% endblock %}
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="/home">Advancement</a>
+                    </li>
+                    {% if scouter.role in 'leader, parent' %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scouts <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                {% for scout in scouts %}
+                                    <li><a href="/home/scout/{{ scout.id }}">{{ scout.user.first_name }} {{ scout.user.last_name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
 
-        <div class="container-fluid">
-            
-			{% block content %}{% endblock %}
-            
-            <hr>
+        {% block content %}{% endblock %}
+        
+        <footer>
+            <p style="text-align: center;">&copy; Scout Charter 2013</p>
+        </footer>
 
-            <footer>
-                <p>&copy; Scout Charter 2013</p>
-            </footer>
-        </div>
-
+        <!-- Scripts ------------------------------------------------------ -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
         <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+        {% block script %}{% endblock %}
+        <!-- -------------------------------------------------------------- -->
 
-        <script type="text/javascript">
-        	$(document).ready(function(){
-	        	$('.mb-date').tooltip()
-
-	        	console.log('hello world')
-
-				$('.ajax-typeahead').typeahead({
-				    items: 4,
-				    source: function(query, process) {
-				        return $.ajax({
-				            url: $(this)[0].$element[0].dataset.link,
-				            type: 'get',
-				            data: {query: query},
-				            dataType: 'json',
-				            success: function(json) {
-				                return typeof json.options == 'undefined' ? false : process(json.options);
-				            }
-				        });
-				    }
-				});
-
-				$('.datepicker').datepicker({
-				    format: 'mm/dd/yyyy',
-				    autoclose: true
-				});
-
-				$('.save-earned-mb').click(function() {
-					console.log(this)
-					scout_id = document.URL.split('/').slice(-1)[0].split('#')[0]
-					var mb_name = $('#earned-mb-name').val()
-					var mb_date = $('#earned-mb-date').val()
-					console.log(mb_name)
-
-		            $.ajax({
-						type: 'POST',
-						url: '/update-scoutmeritbadge',
-		                data: {
-		                    scout_id: scout_id,
-		                    mb_name: mb_name,
-		                    mb_date: mb_date,
-		                    csrfmiddlewaretoken: '{{ csrf_token }}',
-		                    action: 'add',
-		                    entry_type: 'earned'
-		                },
-						dataType: 'json',
-						success: function(data) {
-							console.log(data)
-							$('#earned-mb-div').append('<span class="wrapper"><img src="{{ STATIC_URL }}img/merit_badges/' + data.image_name + '" width="80" height="80" class="top-margin-small"><span class="description">' + data.name + '<br />' + data.mb_date + '</span><span class="mb-close-label"><a class="close delete-earned-mb" id="' + data.scoutmeritbadge_id + '">&times;</a></span></span>')
-
-							$('#planned-mb-' + data.scoutmeritbadge_id).remove()
-						}
-					})
-				})
-
-				$('.delete-earned-mb').click(function() {
-					$this_el = $(this)
-					id = $(this).attr('id')
-					console.log($(this).attr('id'))
-					$.ajax({
-						type: 'POST',
-						url: '/update-scoutmeritbadge',
-						data: {scout_merit_badge_id: id,
-	  	                       csrfmiddlewaretoken: '{{ csrf_token }}',
-						       action: 'delete',
-		                    entry_type: 'earned'},
-						dataType: 'json',
-						success: function(data) {
-
-							$this_el.parent().parent().remove()
-						}
-					})
-				})
-
-				$('.save-planned-mb').click(function() {
-					console.log(this)
-					scout_id = document.URL.split('/').slice(-1)[0].split('#')[0]
-					var mb_name = $('#planned-mb-name').val()
-					var mb_date = $('#planned-mb-date').val()
-					console.log(mb_name)
-
-		            $.ajax({
-						type: 'POST',
-						url: '/update-scoutmeritbadge',
-		                data: {
-		                    scout_id: scout_id,
-		                    mb_name: mb_name,
-		                    mb_date: mb_date,
-		                    csrfmiddlewaretoken: '{{ csrf_token }}',
-		                    action: 'add',
-		                    entry_type: 'planned'
-		                },
-						dataType: 'json',
-						success: function(data) {
-							if (data.created == true) {
-								$('#planned-mb-div').append('<span class="wrapper"><img src="{{ STATIC_URL }}img/merit_badges/' + data.image_name + '" width="80" height="80" class="top-margin-small"><span class="description">' + data.name + '<br />' + data.mb_date + '</span><span class="mb-close-label"><a class="close delete-planned-mb" id="' + data.scoutmeritbadge_id + '">&times;</a></span></span>')
-							}
-						}
-					})
-				})
-
-				$('.delete-planned-mb').click(function() {
-					$this_el = $(this)
-					id = $(this).attr('id')
-					console.log($(this).attr('id'))
-					$.ajax({
-						type: 'POST',
-						url: '/update-scoutmeritbadge',
-						data: {scout_merit_badge_id: id,
-	  	                       csrfmiddlewaretoken: '{{ csrf_token }}',
-						       action: 'delete',
-		                       entry_type: 'planned'},
-						dataType: 'json',
-						success: function(data) {
-
-							$this_el.parent().parent().remove()
-						}
-					})
-				})
-
-				$('.save-rank').click(function() {
-					console.log(this)
-					scout_id = document.URL.split('/').slice(-1)[0].split('#')[0]
-					var rank_name = $('#rank-name').val()
-					var rank_date = $('#rank-date').val()
-					console.log(rank_name)
-
-		            $.ajax({
-						type: 'POST',
-						url: '/update-scoutrank',
-		                data: {
-		                    scout_id: scout_id,
-		                    rank_name: rank_name,
-		                    rank_date: rank_date,
-		                    csrfmiddlewaretoken: '{{ csrf_token }}',
-		                    action: 'add'
-		                },
-						dataType: 'json',
-						success: function(data) {
-							console.log(data)
-							$('#scout-rank-' + data.rank_id).replaceWith('<td id="scout-rank-' + data.scoutrank_id + '"><span class="wrapper"><img src="{{ STATIC_URL }}img/ranks/' + data.image_name + '" width="200" height="200" class="bottom-margin-small"><span class="rank-close-label"><a class="close delete-rank" id="' + data.scoutrank_id + '">&times;</a></span><p class="text-center muted">' + data.name + '<br />' + data.rank_date + '</p></span></td>')
-						}
-					})
-				})
-
-				$('.delete-rank').click(function() {
-					$this_el = $(this)
-					id = $(this).attr('id')
-					console.log($(this).attr('id'))
-					$.ajax({
-						type: 'POST',
-						url: '/update-scoutrank',
-						data: {scout_rank_id: id,
-	  	                       csrfmiddlewaretoken: '{{ csrf_token }}',
-						       action: 'delete'},
-						dataType: 'json',
-						success: function(data) {
-							$('#scout-rank-' + id).replaceWith('<td id="scout-rank-' + data.rank_id + '"><img src="{{ STATIC_URL }}img/ranks/' + data.image_ph_name + '" width="200" height="200"></td>')
-						}
-					})
-				})
-
-				$('.request-mbbook').click(function() {
-					$this_el = $(this)
-					id = $this_el.attr('id')
-					console.log('here0')
-					$.ajax({
-						type: 'POST',
-						url: '/request-mbbook',
-						data: {meritbadge_id: id,
-						       csrfmiddlewaretoken: '{{ csrf_token }}'},
-						dataType: 'json',
-						success: function(data) {
-							console.log('here')
-							$this_el.replaceWith(data.outcome)
-						}
-					})
-				})
-
-                $('.view-mbcounselors').click(function() {
-                    console.log('hi there')
-                    $this_el = $(this)
-                    id = $this_el.attr('id')
-                    console.log('hi there')
-                    $('#mbcounselors-modal').modal({remote: '/view-mbcounselors/' + id})
-                })
-
-			});
-        </script>
     </body>
 </html>
