@@ -1,129 +1,78 @@
-<html>
-  <head>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=News+Cycle|Raleway' rel='stylesheet' type='text/css'>
-    <style type="text/css">
-      *{
-        font-family: 'News Cycle', sans-serif;
-        font-size: 20px;
-        }
+{% extends "base.html" %}
 
-      .page-home {
-        height: 300px;
-        background-color: #fff;
-        text-align: center;
-        padding: 30px;
-        padding-top: 70px;
-      }
+{% block style %}
+    <link href="{{ STATIC_URL }}css/index.css" rel="stylesheet" type="text/css">
+{% endblock %}
 
-      .page-login {
-        height: 400px;
-        background-color: #E9F1EA;
-        text-align: center;
-        padding: 60px;
-        /* From http://jsfiddle.net/B9Uyj/1/ */
-        box-shadow: 0 0 15px 2px #ccc;
-      }
+{% block navbaritems %}
+    <li>
+        <a href="#features" class="smoothScroll">Features</a>
+    </li>
+    <li>
+        <a href="#about" class="smoothScroll">About</a>
+    </li>
+{% endblock %}
 
-      .page-features {
-        height: 650px;
-        background-color: #EAF1FB;
-        text-align: center;
-        padding: 60px;
-        /* From http://jsfiddle.net/B9Uyj/1/ */
-        box-shadow: 0 0 15px 2px #ccc;
-      }
-
-      .page-about {
-        height: 650px;
-        background-color: #FCFCE9;
-        text-align: center;
-        padding: 60px;
-        box-shadow: 0 0 15px 2px #ccc;
-      }
-
-      .main-title {
-        font-family: 'Raleway', cursive;
-        font-size: 110px;
-      }
-      
-      .sub-title {
-        font-family: 'Raleway', cursive;
-        font-size: 50px;
-      }
-      
-    </style>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <!-- From http://goo.gl/t0zr3 -->
-    <script type="text/javascript" src="{{ STATIC_URL }}js/smoothscroll.js"></script>
-  </head>
-  <body>
-
-    <div class="navbar navbar-fixed-top bs-docs-nav">
-      <div class="container">
-        <a href="#home" class="navbar-brand smoothScroll">Scout Charter</a>
-        <div class="nav-collapse collapse bs-navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="#login" class="smoothScroll">Login</a>
-            </li>
-            <li>
-              <a href="#features" class="smoothScroll">Features</a>
-            </li>
-            <li>
-              <a href="#about" class="smoothScroll">About</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
+{% block content %}
     <div id="home" class="page-home" name="home">
         <h1 class="main-title">Scout Charter</h1>
-        <p>Building boy scouts through advancement</p>
+        <p>Helping boy scouts advance through life</p>
     </div>
 
     <a name="login"></a>
     <div id="login" class="page-login">
         <div class="row-fluid">
-          <div class="col-lg-4">
-            <h2 class="sub-title">Welcome</h2>
-            <p>Scout Charter is a website dedicated to helping boy scouts succeed in their scouting advancement.  Its focus is to provide scouts, parents, and leaders with the simple tools they need to accomplish this endeavor.</p>
-          </div>
-          <div class="col-lg-4">
-            <img src="{{ STATIC_URL }}img/design/MP910216311.PNG" height="100%">
-          </div>
-          <div class="col-lg-4">
-            <h2 class="sub-title">Login</h2>
-
-            <form class="form-horizontal">
-              <div class="form-group">
-                <label for="inputEmail" class="col-lg-4 control-label">Email</label>
-                <div class="col-lg-8">
-                  <input type="text" class="form-control" id="inputEmail" placeholder="Email">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputPassword" class="col-lg-4 control-label">Password</label>
-                <div class="col-lg-8">
-                  <input type="password" class="form-control" id="inputPassword" placeholder="Password">
-                </div>
-              </div>
-              <button type="submit" class="btn btn-default">Sign in</button>
-            </form>
-
-          </div>
+            <div class="col-lg-4">
+              <h2 class="sub-title">Welcome . . .</h2>
+              <p>Scout Charter is a website dedicated to helping boy scouts succeed in their scouting advancement.  Its focus is to provide scouts, parents, and leaders with the simple tools they need to accomplish this endeavor.</p>
+            </div>
+            <div class="col-lg-4">
+               <img src="{{ STATIC_URL }}img/design/MP910216311.PNG" style="max-width: 100%; margin-top=-120px;">
+            </div>
+            <div class="col-lg-4">
+                <h2 class="sub-title">. . . Aboard</h2>
+                <button type="button" class="btn btn-primary btn-lg btn-xlg">Log in</button>
+                <button type="button" class="btn btn-default btn-lg btn-xlg">Sign up</button>
+                <p>To sign up, you'll need to provide your name and patrol number.</p>
+            </div>
         </div>
     </div>
 
     <a name="features"></a>
     <div id="features" class="page-features">
         <h2 class="sub-title">Features</h2>
+        <div class="col-lg-4">
+          <h3>Track advancement</h3>
+          <p>With a simple view of ranks and merit badges, scouts can quickly see their progress in advancement.  Parents can too.  Leaders can manage the ranks and merit badges scouts have earned.</p>
+        </div>
+        <div class="col-lg-4">
+          <h3>Set goals</h3>
+          <p>Scouts can set merit-badge goals to keep them focused on what scouting steps to take next.</p>
+        </div>
+        <div class="col-lg-4">
+            <img src="{{ STATIC_URL }}img/design/map_telescope.JPG" style="max-width: 100%; margin-top=-120px;">
+        </div>
+        <div class="col-lg-4">
+          <h3>Find merit badge counselors</h3>
+          <p>When scouts set merit badge goals, they can look  Charter is a website dedicated to helping boy scouts succeed in their scouting advancement.  Its focus is to provide scouts, parents, and leaders with the simple tools they need to accomplish this endeavor.</p>
+        </div>
+        <div class="col-lg-4">
+          <h3>Request merit badge books</h3>
+          <p>Scout Charter is a website dedicated to helping boy scouts succeed in their scouting advancement.  Its focus is to provide scouts, parents, and leaders with the simple tools they need to accomplish this endeavor.</p>
+        </div>
+        <div class="col-lg-4">
+          <h3>Record notes</h3>
+          <p>Scout Charter is a website dedicated to helping boy scouts succeed in their scouting advancement.  Its focus is to provide scouts, parents, and leaders with the simple tools they need to accomplish this endeavor.</p>
+        </div>
     </div>
 
     <a name="about"></a>
     <div id="about" class="page-about">
         <h2 class="sub-title">About</h2>
     </div>
-  </body>
-</html>
+{% endblock %}
+
+{% block script %}
+    <!-- From http://goo.gl/t0zr3 -->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/smoothscroll.js"></script>
+{% endblock %}
