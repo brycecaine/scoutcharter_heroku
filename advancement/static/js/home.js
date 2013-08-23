@@ -173,7 +173,19 @@
                         dataType: 'json',
                         success: function(data) {
                             console.log(data)
-                            $('#scout-rank-' + data.rank_id).replaceWith('<td id="scout-rank-' + data.scoutrank_id + '"><span class="wrapper"><img src="' + template_vars.static_url + 'img/ranks/' + data.image_name + '" width="200" height="200" class="bottom-margin-small"><span class="rank-close-label"><a class="close delete-rank" id="' + data.scoutrank_id + '">&times;</a></span><p class="text-center muted">' + data.name + '<br />' + data.rank_date + '</p></span></td>')
+                            earned_rank_html = 
+                                        '<td id="scout-rank-' + data.rank_id + '">' +
+                                            '<img src="' + template_vars.static_url + 'img/ranks/' + data.image_name + '" width="100%">' +
+                                            '<a class="delete-rank rank-delete hand-pointer" id="' + data.scoutrank_id + '"><i class="icon-minus-sign"></i></a>' +
+                                            '<h3 class="text-center rank-label">' +
+                                                data.name +
+                                            '</h3>' +
+                                            '<p class="text-center text-muted rank-label">' +
+                                                data.rank_date +
+                                            '</p>' +
+                                        '</td>'
+
+                            $('#scout-rank-' + data.rank_id).replaceWith(earned_rank_html)
                         }
                     })
                 })
@@ -190,7 +202,7 @@
                                action: 'delete'},
                         dataType: 'json',
                         success: function(data) {
-                            $('#scout-rank-' + id).replaceWith('<td id="scout-rank-' + data.rank_id + '"><img src="' + template_vars.static_url + 'img/ranks/' + data.image_ph_name + '" width="200" height="200"></td>')
+                            $('#scout-rank-' + id).replaceWith('<td id="scout-rank-' + data.rank_id + '"><img src="' + template_vars.static_url + 'img/ranks/' + data.image_ph_name + '" width="100%"></td>')
                         }
                     })
                 })

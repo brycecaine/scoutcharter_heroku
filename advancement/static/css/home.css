@@ -122,6 +122,12 @@
                 top: -16px;
             }
 
+            .rank-delete {
+                position: relative;
+                top: -182px;
+                left: 138px;
+            }
+            
             hr.dashed-line {
                 border: 0;
                 border-bottom: 1px dashed #ccc;
@@ -149,4 +155,8 @@
             .hand-pointer {
                 cursor: pointer;
                 cursor: hand;
+            }
+
+            .rank-label {
+                margin-top: -20px;
             }
