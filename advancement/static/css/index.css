@@ -1,8 +1,11 @@
     .page-home {
-        height: 300px;
+        height: 250px;
         background-color: #fff;
         text-align: center;
-        padding: 30px;
+        padding-top: 30px;
+        padding-right: 30px;
+        padding-bottom: 0px;
+        padding-left: 30px;
         }
 
     .page-login {
@@ -13,6 +16,7 @@
         padding-right: 60px;
         padding-bottom: 60px;
         padding-left: 60px;
+        margin-bottom: -60px;
         /* From http://jsfiddle.net/B9Uyj/1/ */
         box-shadow: 0 0 15px 2px #ccc;
         }
@@ -21,7 +25,12 @@
         height: 720px;
         background-color: #EAF1FB;
         text-align: left;
-        padding: 60px;
+        padding-top: 5px;
+        padding-right: 60px;
+        padding-bottom: 60px;
+        padding-left: 60px;
+        margin-top: 60px;
+        margin-bottom: -60px;
         /* From http://jsfiddle.net/B9Uyj/1/ */
         box-shadow: 0 0 15px 2px #ccc;
         }
@@ -30,13 +39,18 @@
         height: 650px;
         background-color: #FCFCE9;
         text-align: left;
-        padding: 60px;
+        padding-top: 5px;
+        padding-right: 60px;
+        padding-bottom: 60px;
+        padding-left: 60px;
+        margin-top: 60px;
         box-shadow: 0 0 15px 2px #ccc;
         }
 
     .main-title {
         font-family: 'Raleway', cursive;
         font-size: 110px;
+        margin-top: 0px;
         }
       
     .sub-title {
