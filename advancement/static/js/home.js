@@ -43,8 +43,17 @@
                         },
                         dataType: 'json',
                         success: function(data) {
-                            console.log(data)
-                            $('#earned-mb-div').append('<span class="wrapper"><img src="' + template_vars.static_url + 'img/merit_badges/' + data.image_name + '" width="80" height="80" class="top-margin-small"><span class="description">' + data.name + '<br />' + data.mb_date + '</span><span class="mb-close-label"><a class="close delete-earned-mb" id="' + data.scoutmeritbadge_id + '">&times;</a></span></span>')
+                            earned_mb_html = '<div class="pull-left mb-card">' +
+                                                 '<img src="' + template_vars.static_url + 'img/merit_badges/' + data.image_name + '" width="80" height="80" class="top-margin-small" style="margin: auto; display: block;">' +
+                                                 '<div>' +
+                                                     '<h6 style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">' +
+                                                         data.name + '</h6>' +
+                                                     '<h6 class="text-muted">' + data.mb_date + '</h6>' +
+                                                 '</div>' +
+                                                 '<a class="delete-earned-mb earned-mb-delete hand-pointer" id="' + data.scoutmeritbadge_id + '"><i class="icon-minus-sign"></i></a>' +
+                                             '</div>'
+
+                            $('#earned-mb-div').append(earned_mb_html)
 
                             $('#planned-mb-' + data.scoutmeritbadge_id).remove()
                         }
@@ -64,8 +73,7 @@
                             entry_type: 'earned'},
                         dataType: 'json',
                         success: function(data) {
-
-                            $this_el.parent().parent().remove()
+                            $this_el.parent().remove()
                         }
                     })
                 })

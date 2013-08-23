@@ -65,7 +65,7 @@
 			            {% endif %}
 			            <h1>
 			            	Ranks
-			            	<a data-toggle="modal" href="#rank-modal"><i class="icon-plus-sign"></i></a>
+			            	<a data-toggle="modal" href="#rank-modal"><i class="icon-plus-sign rank-add"></i></a>
 			            </h1>
 			        </div>
 					<!-- -------------------------------------------------------------------- -->
@@ -105,45 +105,39 @@
 			</div>
 			<div class="row-fluid">
 			    <div class="col-lg-8">
-				    <div class="well">
-				        <div id="earned-mb-div" class="merit-badge-header">
-				            <h1>Earned
-				            	{% if scouter.role == 'leader' %}
-					            	<div class="pull-right">
-					            		<small>
-								            <a data-toggle="modal" href="#earned-mb-modal" class="close"><i class="icon-plus-sign"></i></a>
-					            		</small>
-					            	</div>
-				            	{% endif %}
-				            </h1>
-							<!-- -------------------------------------------------------------------- -->
-							<!-- --------------------------- Merit Badges --------------------------- -->
-							<!-- -------------------------------------------------------------------- -->
+			        <div id="earned-mb-div" class="merit-badge-header">
+			            <h1>Merit Badges Earned
+			            	{% if scouter.role == 'leader' %}
+					            <a data-toggle="modal" href="#earned-mb-modal" class="earned-mb-add"><i class="icon-plus-sign"></i></a>
+			            	{% endif %}
+			            </h1>
+						<!-- -------------------------------------------------------------------- -->
+						<!-- --------------------------- Merit Badges --------------------------- -->
+						<!-- -------------------------------------------------------------------- -->
 
-							<!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
-				            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
-			                	<span class="wrapper">
-							    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small">
-								    <span class="description"> 
-								        {{ scout_merit_badge_earned.merit_badge.name }}<br />
-										{{ scout_merit_badge_earned.date_earned }}
-								    </span>  
-								    {% if scouter.role == 'leader' %}
-								    	<span class="mb-close-label"> 
-								        	<a class="close delete-earned-mb" id="{{ scout_merit_badge_earned.id }}"><i class="icon-minus-sign"></i></a>
-								    	</span>  
-								    {% endif %}
-								</span>  
-				            {% endfor %}
-				        </div>
-				    </div>
+						<!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
+			            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
+		                	<div class="pull-left mb-card">
+						    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small" style="margin: auto; display: block;">
+							    <div>
+							    	<h6 style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+							    		{{ scout_merit_badge_earned.merit_badge.name }}</h6>
+							    		<h6 class="text-muted">{{ scout_merit_badge_earned.date_earned }}</h6>
+							    	
+							    </div>
+							    {% if scouter.role == 'leader' %}
+						        	<a class="delete-earned-mb earned-mb-delete hand-pointer" id="{{ scout_merit_badge_earned.id }}"><i class="icon-minus-sign"></i></a>
+							    {% endif %}
+							</div>  
+			            {% endfor %}
+			        </div>
 			    </div>
 			    <div class="col-lg-4">
 			        <div id="planned-mb-div" class="merit-badge-header">
 			            <h1>
 			            	Planned
 			            	{% if scouter.role == 'scout' %}
-			            		<a data-toggle="modal" href="#planned-mb-modal"><i class="icon-plus-sign"></i></a>
+			            		<a data-toggle="modal" href="#planned-mb-modal"><i class="icon-plus-sign planned-mb-add"></i></a>
 			            	{% endif %}
 			            </h1>
 			            {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
