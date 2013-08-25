@@ -19,7 +19,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="sc-navbar">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
                     <span class="sr-only"></span>
@@ -61,14 +61,26 @@
 
         {% block content %}{% endblock %}
         
-        <footer>
-            <p style="text-align: center;">&copy; Scout Charter 2013</p>
-        </footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <footer>
+                    <p style="text-align: center;">&copy; Scout Charter 2013</p>
+                </footer>
+            </div>
+        </div>
 
         <!-- Scripts ------------------------------------------------------ -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+            // From http://goo.gl/y96Rq
+            $("#sc-navbar ul li a[href^='#']").on('click', function(e) {
+                e.preventDefault();
+                scroll_to = $(this.hash).offset().top - 110
+                $('html, body').animate({scrollTop: scroll_to}, 300);
+            });
+        </script>
         {% block script %}{% endblock %}
         <!-- -------------------------------------------------------------- -->
 

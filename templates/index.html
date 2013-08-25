@@ -6,88 +6,91 @@
 
 {% block navbaritems %}
     <li>
-        <a href="#features" class="smoothScroll">Features</a>
+        <a href="#features">Features</a>
     </li>
     <li>
-        <a href="#about" class="smoothScroll">About</a>
+        <a href="#about">About</a>
     </li>
 {% endblock %}
 
 {% block content %}
-    <div id="home" class="page-home" name="home">
-        <h1 class="main-title">Scout Charter</h1>
-        <p>Helping boy scouts advance through life</p>
-    </div>
-
-    <div class="page-login">
-        <div class="row-fluid">
-            <div class="col-lg-4">
-              <h1 class="sub-title">Welcome . . .</h1>
-              <p>Scout Charter is a website dedicated to helping boy scouts succeed in their scouting advancement.  Its focus is to provide scouts, parents, and leaders with the simple tools they need to accomplish this endeavor.</p>
-            </div>
-            <div class="col-lg-4">
-               <img src="{{ STATIC_URL }}img/design/MP910216311.PNG" style="max-width: 100%; margin-top=-120px;">
-            </div>
-            <div class="col-lg-4">
-                <h1 class="sub-title">. . . Aboard</h1>
-                <button type="button" class="btn btn-primary btn-lg btn-xlg">Log in</button>
-                <button type="button" class="btn btn-default btn-lg btn-xlg">Sign up</button>
-                <p>To sign up, you'll need to provide your name and patrol number.</p>
-            </div>
+    
+    <div class="row page-home">
+        <div class="col-lg-12">
+            <h1 class="main-title">Scout Charter</h1>
+            <p>Helping boy scouts advance through life</p>
         </div>
     </div>
 
-    <a id="features" name="features"></a>
-    <div class="page-features">
-        <h1 class="sub-title">Features</h1>
+    <div class="row page-login">
         <div class="col-lg-4">
-          <h2>Track advancement</h2>
-          <p>With a simple view of ranks and merit badges, scouts can quickly see their progress in advancement.  Parents can too.  Leaders can manage the ranks and merit badges scouts have earned.</p>
+          <h2>Welcome . . .</h2>
+          <p>Scout Charter is a website dedicated to helping boy scouts succeed in their scouting advancement.  Its focus is to provide scouts, parents, and leaders with the simple tools they need to accomplish this endeavor.</p>
         </div>
         <div class="col-lg-4">
-          <h2>Set goals</h2>
-          <p>Scouts can set merit-badge goals to keep them focused on what scouting steps to take next.</p>
+           <img src="{{ STATIC_URL }}img/design/compass.png" style="max-width: 100%; margin-top=-120px;">
+        </div>
+        <div class="col-lg-4">
+            <h2>. . . Aboard</h2>
+            <button type="button" class="btn btn-primary btn-lg btn-xlg">Log in</button>
+            <button type="button" class="btn btn-default btn-lg btn-xlg">Sign up</button>
+            <p>To sign up, you'll need to provide your name and patrol number.</p>
+        </div>
+    </div>
+
+    <div class="row page-features">
+        <div class="col-lg-12">
+            <h2 id="features">Features</h2>
+        </div>
+        <div class="col-lg-4">
+            <h3>Track advancement</h3>
+            <p>With a simple view of ranks and merit badges, scouts can quickly see their progress in advancement.  Parents can too.  Leaders can manage the ranks and merit badges scouts have earned.</p>
+        </div>
+        <div class="col-lg-4">
+            <h3>Set goals</h3>
+            <p>Scouts can set merit-badge goals to keep them focused on what scouting steps to take next.</p>
         </div>
         <div class="col-lg-4">
             <img src="{{ STATIC_URL }}img/design/map_telescope.JPG" style="max-width: 100%; margin-top=-120px;">
         </div>
         <div class="col-lg-4">
-          <h2>Find merit badge counselors</h2>
-          <p>When scouts set merit badge goals, they can view lists of merit badge counselors to help them pass off requirements.</p>
+            <h3>Find merit badge counselors</h3>
+            <p>When scouts set merit badge goals, they can view lists of merit badge counselors to help them pass off requirements.</p>
         </div>
         <div class="col-lg-4">
-          <h2>Request merit badge books</h2>
-          <p>Scouts can also request merit badge books.  They will be informed if or when books are available.  Leaders are given the responsibility to contact the scout after a book has been requested to make sure they receive it.</p>
+            <h3>Request merit badge books</h3>
+            <p>Scouts can also request merit badge books.  They will be informed if or when books are available.  Leaders are given the responsibility to contact the scout after a book has been requested to make sure they receive it.</p>
         </div>
         <div class="col-lg-4">
-          <h2>Record notes</h2>
-          <p>Leaders can add notes/comments on their scouts' progress.  This helps remind leaders the latest status on scouts and their advancement.</p>
+            <h3>Record notes</h3>
+            <p>Leaders can add notes/comments on their scouts' progress.  This helps remind leaders the latest status on scouts and their advancement.</p>
         </div>
     </div>
 
-    <a id="about" name="about"></a>
-    <div class="page-about">
-        <h1 class="sub-title">About</h1>
-        <a href="https://github.com/cainebryce/scoutcharter">
-          <img style="position: absolute; top: 1430px; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
-        </a>
+    <div class="row page-about">
+        <div class="col-lg-12">
+            <h2 id="about">About</h2>
+            <a href="https://github.com/cainebryce/scoutcharter">
+              <img style="position: absolute; top: -51px; right: -15px; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
+            </a>
+        </div>
         <div class="col-lg-4">
             <img src="{{ STATIC_URL }}img/design/pen.png" style="width: 60%; margin-top=-120px;">
         </div>
         <div class="col-lg-4">
-          <h2>Purpose</h2>
+          <h3>Purpose</h3>
           <p>text here.</p>
         </div>
         <div class="col-lg-4">
-          <h2>Volunteer driven</h2>
+          <h3>Volunteer driven</h3>
           <p>text here.</p>
         </div>
         <div class="col-lg-4">
-          <h2>Open source</h2>
+          <h3>Open source</h3>
           <p>text here.</p>
         </div>
         <div class="col-lg-4">
-          <h2>Contact</h2>
+          <h3>Contact</h3>
           <p>text here.</p>
         </div>
     </div>
