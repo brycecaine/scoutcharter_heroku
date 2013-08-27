@@ -69,21 +69,23 @@
 			            {% endif %}
 			            <h1>
 			            	Ranks
-							<a class="open-rank-form">
-								<i class="icon-plus-sign rank-add"></i>
-							</a>
-							<div id="rank-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
-								<form class="form-inline">
-									<div class="form-group">
-										<input type="text" class="form-control typeahead" id="rank-name" placeholder="Add rank">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control datepicker datepicker-input" id="rank-date" placeholder="Date earned">
-									</div>
-									<a class="btn btn-default btn-link-short open-rank-form">Close</a>
-									<button class="btn btn-primary btn-short save-rank">Save</button>
-								</form>
-							</div>
+							{% if scouter.role in 'leader, parent' %}
+								<a class="open-rank-form">
+									<i class="icon-plus-sign rank-add"></i>
+								</a>
+								<div id="rank-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
+									<form class="form-inline">
+										<div class="form-group">
+											<input type="text" class="form-control typeahead" id="rank-name" placeholder="Add rank">
+										</div>
+										<div class="form-group">
+											<input type="text" class="form-control datepicker datepicker-input" id="rank-date" placeholder="Date earned">
+										</div>
+										<a class="btn btn-default btn-link-short open-rank-form">Close</a>
+										<button class="btn btn-primary btn-short save-rank">Save</button>
+									</form>
+								</div>
+							{% endif %}
 			            </h1>
 			        </div>
 					<!-- -------------------------------------------------------------------- -->
@@ -282,33 +284,6 @@
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal">Close</button>
 						<button class="btn btn-primary save-planned-mb" data-dismiss="modal">Save</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="rank-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3 id="myModalLabel">Enter Rank</h3>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<h4>Select rank</h4>
-								<input id="rank-name" type="text" class="input-xlarge typeahead" data-link="/ranks">
-							</div>
-							<div class="col-lg-6">
-								<h4 class="text-right">Enter date earned</h4>
-								<input id="rank-date" type="text" class="input-small pull-right datepicker">
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" data-dismiss="modal">Close</button>
-						<button class="btn btn-primary save-rank" data-dismiss="modal">Save</button>
 					</div>
 				</div>
 			</div>
