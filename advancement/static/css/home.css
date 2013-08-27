@@ -1,5 +1,5 @@
-            body {
-                padding-top: 60px;
+            .main {
+                padding-top: 10px;
                 padding-bottom: 40px;
                 padding-left: 50px;
                 padding-right: 50px;
@@ -159,4 +159,12 @@
 
             .rank-label {
                 margin-top: -20px;
+            }
+
+            .add-form {
+                padding: 10px;
+                /*border: #eee solid 1px;*/
+                -webkit-border-radius: 6px;
+                   -moz-border-radius: 6px;
+                        border-radius: 6px;
             }

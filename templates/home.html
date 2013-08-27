@@ -5,10 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid main">
 		{% if scouter.role in 'leader, parent' and not scout %}
-			<div class="row-fluid bottom-margin">
+			<div class="row bottom-margin">
 			    <div class="col-lg-12">
+		        	{% if scouter.role == 'leader' %}
+			            <a data-toggle="modal" href="#export" class="btn btn-info pull-right">Export ScoutNET File</a>
+		        	{% endif %}
+			    	<h1>Scout List</h1>
 			        <div class="leader-note">
 			        	<table class="table fixed">
 			        		<thead>
@@ -18,7 +22,7 @@
 			        				<th nowrap width="10%" class="no-spill">Rank</th>
 			        				<th nowrap width="5%" class="no-spill">Age</th>
 			        				<th nowrap width="13%" class="no-spill">Birthday</th>
-			        				<th nowrap width="12%" class="no-spill">Phone Number</th>
+			        				<th nowrap width="12%" class="no-spill">Phone</th>
 			        				<th nowrap width="6%" class="no-spill">Goals</th>
 			        				{% if scouter.role in 'leader' %}
 			        					<th nowrap width="33%" class="no-spill">Status</th>
@@ -48,7 +52,7 @@
 			    </div>
 			</div>
 		{% else %}
-			<div class="row-fluid bottom-margin">
+			<div class="row bottom-margin">
 			    <div class="col-lg-12">
 			        <div class="rank-header">
 			            {% if scouter.role in 'leader, parent' %}
@@ -65,7 +69,21 @@
 			            {% endif %}
 			            <h1>
 			            	Ranks
-			            	<a data-toggle="modal" href="#rank-modal"><i class="icon-plus-sign rank-add"></i></a>
+							<a class="open-rank-form">
+								<i class="icon-plus-sign rank-add"></i>
+							</a>
+							<div id="rank-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
+								<form class="form-inline">
+									<div class="form-group">
+										<input type="text" class="form-control typeahead" id="rank-name" placeholder="Add rank">
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control datepicker datepicker-input" id="rank-date" placeholder="Date earned">
+									</div>
+									<a class="btn btn-default btn-link-short open-rank-form">Close</a>
+									<button class="btn btn-primary btn-short save-rank">Save</button>
+								</form>
+							</div>
 			            </h1>
 			        </div>
 					<!-- -------------------------------------------------------------------- -->
@@ -101,7 +119,7 @@
 			        </table>
 			    </div>
 			</div>
-			<div class="row-fluid">
+			<div class="row">
 			    <div class="col-lg-8">
 			        <div id="earned-mb-div" class="merit-badge-header">
 			            <h1>Merit Badges Earned
@@ -139,7 +157,7 @@
 			            	{% endif %}
 			            </h1>
 			            {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
-		                	<div class="row-fluid" id="planned-mb-{{ scout_merit_badge_planned.id }}">
+		                	<div class="row" id="planned-mb-{{ scout_merit_badge_planned.id }}">
 						    	<div class="col-lg-4">
 						    		<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80">
 								    {% if scouter.role == 'scout' %}
@@ -167,7 +185,7 @@
 							</div> 
 			            {% endfor %}
 						{% if scout_merit_badge_books_unplanned %}
-							<div class="row-fluid">
+							<div class="row">
 								<div class="col-lg-12">
 									<h3>Books to return</h3>
 									{% for scout_merit_badge_book_unplanned in scout_merit_badge_books_unplanned %}
@@ -182,7 +200,7 @@
 			    </div>
 			</div>
 			{% if scout_notes %}
-				<div class="row-fluid">
+				<div class="row">
 				    <div class="col-lg-12 well">
 				    	<table class="table">
 				    		<thead>
@@ -223,7 +241,7 @@
 						<h3 id="myModalLabel">Enter Earned Merit Badge</h3>
 					</div>
 					<div class="modal-body">
-						<div class="row-fluid">
+						<div class="row">
 							<div class="col-lg-6">
 								<h4>Select merit badge</h4>
 								<input id="earned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
@@ -250,7 +268,7 @@
 						<h3 id="myModalLabel">Set Merit Badge Goal</h3>
 					</div>
 					<div class="modal-body">
-						<div class="row-fluid">
+						<div class="row">
 							<div class="col-lg-6">
 								<h4>Select merit badge</h4>
 								<input id="planned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
@@ -277,10 +295,10 @@
 						<h3 id="myModalLabel">Enter Rank</h3>
 					</div>
 					<div class="modal-body">
-						<div class="row-fluid">
+						<div class="row">
 							<div class="col-lg-6">
 								<h4>Select rank</h4>
-								<input id="rank-name" type="text" class="input-xlarge ajax-typeahead" data-link="/ranks">
+								<input id="rank-name" type="text" class="input-xlarge typeahead" data-link="/ranks">
 							</div>
 							<div class="col-lg-6">
 								<h4 class="text-right">Enter date earned</h4>
@@ -307,6 +325,34 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="export" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 id="myModalLabel">Enter Date Range</h3>
+						<p>Enter the start and end dates of the period for which you want to upload advancement data to ScoutNET.  This allows you to not re-import data.</p>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-lg-6">
+								<h4>Enter start date</h4>
+								<input id="export-start-date" type="text" class="input-small datepicker">
+							</div>
+							<div class="col-lg-6">
+								<h4 class="text-right">Enter end date</h4>
+								<input id="export-end-date" type="text" class="input-small pull-right datepicker">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal">Close</button>
+						<button class="btn btn-primary export" data-dismiss="modal">Save</button>
 					</div>
 				</div>
 			</div>

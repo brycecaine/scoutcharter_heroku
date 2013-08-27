@@ -242,7 +242,9 @@ def update_scoutmeritbadge(request):
 	return HttpResponse(merit_badge_json)
 
 def ranks(request):
-	ranks = Rank.objects.all().values_list('name', flat=True)
+	search_key = request.GET.get('q', '')
+	ranks = Rank.objects.filter(name__icontains=search_key).values_list('name', flat=True)
+	logging.error(ranks)
 	
 	return render_to_response('ranks.json', locals(), context_instance=RequestContext(request))
 
