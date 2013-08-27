@@ -26,6 +26,7 @@ def home(request, scouter_id=None):
 
 	# -------------------------------------------------------------------------
 	# Get list of scouts for leaders or parents
+	scouts_by_age = []
 	if scouter_role == 'leader':
 		scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
 		if scouter.patrol == 'all':
