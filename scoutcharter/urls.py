@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^request-mbbook/?$', 'advancement.views.request_mbbook', name='request_mbbook'),
     url(r'^view-mbcounselors/(?P<meritbadge_id>\d+)/?$', 'advancement.views.view_mbcounselors', name='view_mbcounselors'),
 
-    url(r'^export/(?P<start_date>\w+)/(?P<end_date>\w+)/?$', 'advancement.views.export', name='export'),
+    url(r'^export/?$', 'advancement.views.export', name='export'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

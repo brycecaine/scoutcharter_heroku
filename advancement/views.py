@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+import csv
 import json
 import logging
 
@@ -168,7 +169,8 @@ def home(request, scouter_id=None):
 	return render_to_response('home.html', locals(), context_instance=RequestContext(request))
 
 def meritbadges(request):
-	merit_badges = MeritBadge.objects.all().values_list('name', flat=True)
+	search_key = request.GET.get('q', '')
+	merit_badges = MeritBadge.objects.filter(name__icontains=search_key).values_list('name', flat=True)
 	
 	return render_to_response('meritbadges.json', locals(), context_instance=RequestContext(request))
 
@@ -245,7 +247,6 @@ def update_scoutmeritbadge(request):
 def ranks(request):
 	search_key = request.GET.get('q', '')
 	ranks = Rank.objects.filter(name__icontains=search_key).values_list('name', flat=True)
-	logging.error(ranks)
 	
 	return render_to_response('ranks.json', locals(), context_instance=RequestContext(request))
 
@@ -330,12 +331,35 @@ def view_mbcounselors(request, meritbadge_id=None):
 
 	return render_to_response('mbcounselors.html', locals(), context_instance=RequestContext(request))
 
-def export(request, start_date=None, end_date=None):
-	# Get list of ranks earned within date range
-	# Get list of merit badges earned within date range
-	# Combine list
-	# Return as csv
-	return
+def export(request):
+    from_date = request.POST.get('from_date')
+    to_date = request.POST.get('to_date')
 
+    # Get list of ranks earned within date range
+    scout_ranks = ScoutRank.objects.filter(date_earned__range=(from_date, to_date))
 
+    # Get list of merit badges earned within date range
+    scout_merit_badges = ScoutMeritBadge.objects.filter(date_earned__range=(from_date, to_date))
 
+    # Return as csv
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="ADVS1886.CSV"' # Not sure if this has to be the exact file name or not
+
+    writer = csv.writer(response)
+    writer.writerow('001,1,A,20130824,222151,ScoutCharter,02.00,'.split(',')) # 'TroopMaster ME' changed to ScoutCharter
+    writer.writerow('020,2,Troop,1886,201401,Cedar Breaks,Cedar City,UT,84721,Valley View Ward,,,,,,,,,,,,,,,,,,,,20130824,20130829,20130824,'.split(','))
+    
+    i = 0
+    for i, scout_merit_badge in enumerate(scout_merit_badges, start=3):
+    	# Need to figure out the merit badge ids and the 021
+    	row_list = ['021', i, scout_merit_badge.scout.user.first_name, None, scout_merit_badge.scout.user.first_name, scout_merit_badge.scout.birth_date.strftime('%Y%m%d'), None, scout_merit_badge.date_earned.strftime('%Y%m%d'), '033', None]
+    	writer.writerow(row_list)
+
+    for j, scout_rank in enumerate(scout_ranks, start=i+1):
+    	# Need to figure out the rank ids and the 021
+    	row_list = ['021', j, scout_rank.scout.user.first_name, None, scout_rank.scout.user.first_name, scout_rank.scout.birth_date.strftime('%Y%m%d'), None, scout_rank.date_earned.strftime('%Y%m%d'), 'RN', None]
+    	writer.writerow(row_list)
+
+    writer.writerow('900,6,'.split(','))
+
+    return response

@@ -3,18 +3,59 @@
 
                 console.log('hello world')
 
+                // ------------------------------------------------------------
+                // Rank form
                 $('#rank-form').hide()
                 $('.open-rank-form').click(function() {
                     $('#rank-form').toggle('fast')
                 })
 
-                $('.typeahead').typeahead({
+                $('.typeahead-rank').typeahead({
                     name: 'ranks',
                     prefetch: '/ranks',
                     remote: '/ranks?q=%QUERY'
                     // local: [ "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" ]
                 });
 
+                // ------------------------------------------------------------
+                // Planned MB form
+                $('#planned-mb-form').hide()
+                $('.open-planned-mb-form').click(function() {
+                    $('#planned-mb-form').toggle('fast')
+                })
+
+                $('.typeahead-planned-mb').typeahead({
+                    name: 'planned-mbs',
+                    prefetch: '/meritbadges',
+                    remote: '/meritbadges?q=%QUERY'
+                });
+
+                // ------------------------------------------------------------
+                // Earned MB form
+                $('#earned-mb-form').hide()
+                $('.open-earned-mb-form').click(function() {
+                    $('#earned-mb-form').toggle('fast')
+                })
+
+                $('.typeahead-earned-mb').typeahead({
+                    name: 'earned-mbs',
+                    prefetch: '/meritbadges',
+                    remote: '/meritbadges?q=%QUERY'
+                });
+
+                // ------------------------------------------------------------
+                // Export form
+                $('#export-form').hide()
+                $('.open-export-form').click(function() {
+                    $('#export-form').toggle('fast')
+                })
+
+                $('.save-export').click(function() {
+                    $('#export-form').toggle('fast')  
+                })
+
+                // ------------------------------------------------------------
+                // Not sure if this is needed
                 $('.tt-dropdown-menu').css('z-index', 999999)
 
                 $('.datepicker').datepicker({
@@ -229,41 +270,6 @@
                     id = $this_el.attr('id')
                     console.log('hi there')
                     $('#mbcounselors-modal').modal({remote: '/view-mbcounselors/' + id})
-                })
-
-                $('.export').click(function() {
-                    console.log(this)
-                    console.log($('#export-start-date').val())
-                    console.log($('#export-end-date').val())
-
-                    // $.ajax({
-                    //     type: 'POST',
-                    //     url: '/update-scoutmeritbadge',
-                    //     data: {
-                    //         scout_id: scout_id,
-                    //         mb_name: mb_name,
-                    //         mb_date: mb_date,
-                    //         csrfmiddlewaretoken: $(template_vars.csrf_token).val(),
-                    //         action: 'add',
-                    //         entry_type: 'earned'
-                    //     },
-                    //     dataType: 'json',
-                    //     success: function(data) {
-                    //         earned_mb_html = '<div class="pull-left mb-card">' +
-                    //                              '<img src="' + template_vars.static_url + 'img/merit_badges/' + data.image_name + '" width="80" height="80" class="top-margin-small" style="margin: auto; display: block;">' +
-                    //                              '<div>' +
-                    //                                  '<h6 style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">' +
-                    //                                      data.name + '</h6>' +
-                    //                                  '<h6 class="text-muted">' + data.mb_date + '</h6>' +
-                    //                              '</div>' +
-                    //                              '<a class="delete-earned-mb earned-mb-delete hand-pointer" id="' + data.scoutmeritbadge_id + '"><i class="icon-minus-sign"></i></a>' +
-                    //                          '</div>'
-
-                    //         $('#earned-mb-div').append(earned_mb_html)
-
-                    //         $('#planned-mb-' + data.scoutmeritbadge_id).remove()
-                    //     }
-                    // })
                 })
 
             });

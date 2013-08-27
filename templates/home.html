@@ -10,7 +10,23 @@
 			<div class="row bottom-margin">
 			    <div class="col-lg-12">
 		        	{% if scouter.role == 'leader' %}
-			            <a data-toggle="modal" href="#export" class="btn btn-info pull-right">Export ScoutNET File</a>
+						<span>
+						<a class="btn btn-info pull-right open-export-form">
+							Export ScoutNET File
+						</a>
+						<div id="export-form" class="add-form translucent pull-right" style="z-index: 999999; position: relative;">
+							<form class="form-inline" action="/export">
+								<div class="form-group">
+									<input type="text" class="form-control datepicker datepicker-input" id="export-from-date" placeholder="From date">
+								</div>
+								<div class="form-group">
+									<input type="text" class="form-control datepicker datepicker-input" id="export-to-date" placeholder="To date">
+								</div>
+								<a class="btn btn-default btn-link-short open-export-form">Close</a>
+								<input type="submit" class="btn btn-primary btn-short save-export">Export</input>
+							</form>
+						</div>
+						</span>
 		        	{% endif %}
 			    	<h1>Scout List</h1>
 			        <div class="leader-note">
@@ -76,7 +92,7 @@
 								<div id="rank-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
 									<form class="form-inline">
 										<div class="form-group">
-											<input type="text" class="form-control typeahead" id="rank-name" placeholder="Add rank">
+											<input type="text" class="form-control typeahead-rank" id="rank-name" placeholder="Add rank">
 										</div>
 										<div class="form-group">
 											<input type="text" class="form-control datepicker datepicker-input" id="rank-date" placeholder="Date earned">
@@ -126,7 +142,21 @@
 			        <div id="earned-mb-div" class="merit-badge-header">
 			            <h1>Merit Badges Earned
 			            	{% if scouter.role == 'leader' %}
-					            <a data-toggle="modal" href="#earned-mb-modal" class="earned-mb-add"><i class="icon-plus-sign"></i></a>
+								<a class="open-earned-mb-form">
+									<i class="icon-plus-sign earned-mb-add"></i>
+								</a>
+								<div id="earned-mb-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
+									<form class="form-inline">
+										<div class="form-group">
+											<input type="text" class="form-control typeahead-earned-mb" id="earned-mb-name" placeholder="Add merit badge">
+										</div>
+										<div class="form-group">
+											<input type="text" class="form-control datepicker datepicker-input" id="earned-mb-date" placeholder="Date earned">
+										</div>
+										<a class="btn btn-default btn-link-short open-earned-mb-form">Close</a>
+										<button class="btn btn-primary btn-short save-earned-mb">Save</button>
+									</form>
+								</div>
 			            	{% endif %}
 			            </h1>
 						<!-- -------------------------------------------------------------------- -->
@@ -155,7 +185,21 @@
 			            <h1>
 			            	Planned
 			            	{% if scouter.role == 'scout' %}
-			            		<a data-toggle="modal" href="#planned-mb-modal"><i class="icon-plus-sign planned-mb-add"></i></a>
+								<a class="open-planned-mb-form">
+									<i class="icon-plus-sign planned-mb-add"></i>
+								</a>
+								<div id="planned-mb-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
+									<form class="form-inline">
+										<div class="form-group">
+											<input type="text" class="form-control typeahead-planned-mb" id="planned-mb-name" placeholder="Add merit badge">
+										</div>
+										<div class="form-group">
+											<input type="text" class="form-control datepicker datepicker-input" id="planned-mb-date" placeholder="Date planned">
+										</div>
+										<a class="btn btn-default btn-link-short open-planned-mb-form">Close</a>
+										<button class="btn btn-primary btn-short save-planned-mb">Save</button>
+									</form>
+								</div>
 			            	{% endif %}
 			            </h1>
 			            {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
@@ -234,60 +278,6 @@
 		<!-- -------------------------------------------------------------------- -->
 		<!-- ------------------------------ Modals ------------------------------ -->
 		<!-- -------------------------------------------------------------------- -->
-
-		<div id="earned-mb-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3 id="myModalLabel">Enter Earned Merit Badge</h3>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<h4>Select merit badge</h4>
-								<input id="earned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
-							</div>
-							<div class="col-lg-6">
-								<h4 class="text-right">Enter date earned</h4>
-								<input id="earned-mb-date" type="text" class="input-small pull-right datepicker">
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" data-dismiss="modal">Close</button>
-						<button class="btn btn-primary save-earned-mb" data-dismiss="modal">Save</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div id="planned-mb-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h3 id="myModalLabel">Set Merit Badge Goal</h3>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-lg-6">
-								<h4>Select merit badge</h4>
-								<input id="planned-mb-name" type="text" class="input-xlarge ajax-typeahead" data-link="/meritbadges">
-							</div>
-							<div class="col-lg-6">
-								<h4 class="text-right">Enter goal date</h4>
-								<input id="planned-mb-date" type="text" class="input-small pull-right datepicker">
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button class="btn" data-dismiss="modal">Close</button>
-						<button class="btn btn-primary save-planned-mb" data-dismiss="modal">Save</button>
-					</div>
-				</div>
-			</div>
-		</div>
 
 		<div id="mbcounselors-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
