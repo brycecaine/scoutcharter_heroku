@@ -1,7 +1,12 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+class Patrol(models.Model):
+	kind = models.CharField(max_length=30) # troop, team, crew
+
+
 class Rank(models.Model):
+	bsa_id = models.CharField(max_length=10)
 	weight = models.IntegerField()
 	name = models.CharField(max_length=30)
 	number_required_meritbadges = models.IntegerField()
@@ -13,6 +18,7 @@ class Rank(models.Model):
 		return self.name
 
 class Scouter(models.Model):
+	bsa_id = models.CharField(max_length=10)
 	user = models.OneToOneField(User, unique=True)
 	birth_date = models.DateField(blank=True, null=True)
 	role = models.CharField(max_length=50, blank=True, null=True) 

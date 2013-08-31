@@ -75,9 +75,9 @@ def home(request, scouter_id=None):
 		              'status': status}
 		scout_list.append(scout_dict)
 			
-		scout = None
-		if scouter_id:
-			scout = Scouter.objects.get(id=scouter_id)
+	scout = None
+	if scouter_id:
+		scout = Scouter.objects.get(id=scouter_id)
 
 
 	# -------------------------------------------------------------------------
@@ -332,6 +332,8 @@ def view_mbcounselors(request, meritbadge_id=None):
 	return render_to_response('mbcounselors.html', locals(), context_instance=RequestContext(request))
 
 def export(request):
+    today_string = datetime.now().strftime('%Y%m%d')
+    now_string = datetime.now().strftime('%H%M%S')
     from_date = request.POST.get('from_date')
     to_date = request.POST.get('to_date')
 
@@ -345,21 +347,86 @@ def export(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="ADVS1886.CSV"' # Not sure if this has to be the exact file name or not
 
-    writer = csv.writer(response)
-    writer.writerow('001,1,A,20130824,222151,ScoutCharter,02.00,'.split(',')) # 'TroopMaster ME' changed to ScoutCharter
-    writer.writerow('020,2,Troop,1886,201401,Cedar Breaks,Cedar City,UT,84721,Valley View Ward,,,,,,,,,,,,,,,,,,,,20130824,20130829,20130824,'.split(','))
+    header_1 = ['001',
+                '1',
+                'A',
+                today_string,
+                now_string,
+                'ScoutCharter', # 'TroopMaster ME' changed to ScoutCharter
+                '02.00', # ?
+                None]
+
+    header_2 = ['020',
+                '2',
+                'Troop', # unit level
+                '1886', # unit id
+                '201401', # year-month of charter expiration
+                'Cedar Breaks', # district name
+                'Cedar City', # city
+                'UT', # state
+                '84721', # zip
+                'Valley View Ward', # charter organization
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                today_string,
+                today_string,
+                today_string,
+                None]
+
+    writer = csv.writer(response, delimiter=',')
+
+    writer.writerow(header_1)
+    writer.writerow(header_2)
     
     i = 0
     for i, scout_merit_badge in enumerate(scout_merit_badges, start=3):
     	# Need to figure out the merit badge ids and the 021
-    	row_list = ['021', i, scout_merit_badge.scout.user.first_name, None, scout_merit_badge.scout.user.first_name, scout_merit_badge.scout.birth_date.strftime('%Y%m%d'), None, scout_merit_badge.date_earned.strftime('%Y%m%d'), '033', None]
-    	writer.writerow(row_list)
+    	row_dict = ['021',
+    	            i,
+    	            scout_merit_badge.scout.user.first_name,
+    	            None,
+    	            scout_merit_badge.scout.user.last_name,
+    	            scout_merit_badge.scout.birth_date.strftime('%Y%m%d'),
+    	            None,
+    	            scout_merit_badge.date_earned.strftime('%Y%m%d'),
+    	            scout_merit_badge.merit_badge.bsa_id,
+    	            None]
+    	writer.writerow(row_dict)
 
+    j = 0
     for j, scout_rank in enumerate(scout_ranks, start=i+1):
     	# Need to figure out the rank ids and the 021
-    	row_list = ['021', j, scout_rank.scout.user.first_name, None, scout_rank.scout.user.first_name, scout_rank.scout.birth_date.strftime('%Y%m%d'), None, scout_rank.date_earned.strftime('%Y%m%d'), 'RN', None]
-    	writer.writerow(row_list)
+    	row_dict = ['021',
+    	            j,
+    	            scout_rank.scout.user.first_name,
+    	            None,
+    	            scout_rank.scout.user.last_name,
+    	            scout_rank.scout.birth_date.strftime('%Y%m%d'),
+    	            None,
+    	            scout_rank.date_earned.strftime('%Y%m%d'),
+    	            scout_rank.rank.bsa_id,
+    	            None]
+    	writer.writerow(row_dict)
 
-    writer.writerow('900,6,'.split(','))
+    writer.writerow(['900',
+    	             j + 1,
+    	             None])
 
     return response
