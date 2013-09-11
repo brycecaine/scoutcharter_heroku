@@ -18,7 +18,6 @@ class Rank(models.Model):
 		return self.name
 
 class Scouter(models.Model):
-	bsa_id = models.CharField(max_length=10)
 	user = models.OneToOneField(User, unique=True)
 	birth_date = models.DateField(blank=True, null=True)
 	role = models.CharField(max_length=50, blank=True, null=True) 
@@ -42,6 +41,7 @@ class ScoutRank(models.Model):
 		return '{0} - {1}'.format(self.scout, self.rank)
 
 class MeritBadge(models.Model):
+	bsa_id = models.CharField(max_length=10)
 	name = models.CharField(max_length=100)
 	required = models.BooleanField()
 	alternates = models.CharField(max_length=200, blank=True, null=True)
