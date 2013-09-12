@@ -262,20 +262,14 @@
 				    		<thead>
 				    			<tr>
 				    				<th>Date</th>
-				    				<th>Method</th>
-				    				<th>Purpose</th>
 				    				<th>Comment</th>
-				    				<th>Followup Date</th>
 				    			</tr>
 				    		</thead>
 					    	<tbody>
 					    		{% for scout_note in scout_notes %}
 					    			<tr>
 					    				<td>{{ scout_note.note_date }}</td>
-					    				<td>{{ scout_note.method }}</td>
-					    				<td>{{ scout_note.purpose }}</td>
 					    				<td>{{ scout_note.comment }}</td>
-					    				<td>{{ scout_note.followup_date }}</td>
 					    			</tr>
 					    		{% endfor %}
 					    	</tbody>
