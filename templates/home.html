@@ -109,6 +109,7 @@
 					<!-- -------------------------------------------------------------------- -->
 
 					<!-- Rank images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_Ranks/ -->
+                    <div class="table-responsive container-fluid">
 			        <table class="table">
 			        	<tbody>
 			        		<tr>
@@ -119,10 +120,10 @@
 										    {% if scouter.role == 'leader' %}
 									        	<a class="delete-rank rank-delete hand-pointer" id="{{ scout_rank.id }}"><i class="icon-minus-sign"></i></a>
 										    {% endif %}
-		                        			<h3 class="text-center rank-label">
+		                        			<h3 class="rank-label">
 		                        				{{ scout_rank.rank_name }}
 		                        			</h3>
-		                        			<p class="text-center text-muted rank-label">
+		                        			<p class="text-muted rank-label">
 		                        				{{ scout_rank.date_earned }}
 		                        			</p>
 				                        </td>
@@ -134,116 +135,125 @@
 			                    {% endfor %}
 			            	</tr>
 			            </tbody>
-			        </table>
+                    </table>
+                    </div>
 			    </div>
 			</div>
 			<div class="row">
-			    <div class="col-lg-8">
-			        <div id="earned-mb-div" class="merit-badge-header">
-			            <h1>Merit Badges Earned
-			            	{% if scouter.role == 'leader' %}
-								<a class="open-earned-mb-form">
-									<i class="icon-plus-sign earned-mb-add"></i>
-								</a>
-								<div id="earned-mb-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
-									<form class="form-inline">
-										<div class="form-group">
-											<input type="text" class="form-control typeahead-earned-mb" id="earned-mb-name" placeholder="Add merit badge">
-										</div>
-										<div class="form-group">
-											<input type="text" class="form-control datepicker datepicker-input" id="earned-mb-date" placeholder="Date earned">
-										</div>
-										<a class="btn btn-default btn-link-short open-earned-mb-form">Close</a>
-										<button class="btn btn-primary btn-short save-earned-mb">Save</button>
-									</form>
-								</div>
-			            	{% endif %}
-			            </h1>
-						<!-- -------------------------------------------------------------------- -->
-						<!-- --------------------------- Merit Badges --------------------------- -->
-						<!-- -------------------------------------------------------------------- -->
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="earned-mb-div" class="merit-badge-header">
+                                <h1>Merit Badges Earned
+                                    {% if scouter.role == 'leader' %}
+                                        <a class="open-earned-mb-form">
+                                            <i class="icon-plus-sign earned-mb-add"></i>
+                                        </a>
+                                        <div id="earned-mb-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
+                                            <form class="form-inline">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control typeahead-earned-mb" id="earned-mb-name" placeholder="Add merit badge">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control datepicker datepicker-input" id="earned-mb-date" placeholder="Date earned">
+                                                </div>
+                                                <a class="btn btn-default btn-link-short open-earned-mb-form">Close</a>
+                                                <button class="btn btn-primary btn-short save-earned-mb">Save</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </h1>
+                                <!-- -------------------------------------------------------------------- -->
+                                <!-- --------------------------- Merit Badges --------------------------- -->
+                                <!-- -------------------------------------------------------------------- -->
 
-						<!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
-			            {% for scout_merit_badge_earned in scout_merit_badges_earned %}
-		                	<div class="pull-left mb-card">
-						    	<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small" style="margin: auto; display: block;">
-							    <div>
-							    	<h6 style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-							    		{{ scout_merit_badge_earned.merit_badge.name }}</h6>
-							    		<h6 class="text-muted">{{ scout_merit_badge_earned.date_earned }}</h6>
-							    	
-							    </div>
-							    {% if scouter.role == 'leader' %}
-						        	<a class="delete-earned-mb earned-mb-delete hand-pointer" id="{{ scout_merit_badge_earned.id }}"><i class="icon-minus-sign"></i></a>
-							    {% endif %}
-							</div>  
-			            {% endfor %}
-			        </div>
-			    </div>
+                                <!-- Merit badge images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_MeritBadges/ -->
+                                {% for scout_merit_badge_earned in scout_merit_badges_earned %}
+                                    <div class="pull-left mb-card">
+                                        <img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_earned.merit_badge.image_name }}" width="80" height="80" class="top-margin-small" style="margin: auto; display: block;">
+                                        <div>
+                                            <h6 style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                                {{ scout_merit_badge_earned.merit_badge.name }}</h6>
+                                                <h6 class="text-muted">{{ scout_merit_badge_earned.date_earned }}</h6>
+                                            
+                                        </div>
+                                        {% if scouter.role == 'leader' %}
+                                            <a class="delete-earned-mb earned-mb-delete hand-pointer" id="{{ scout_merit_badge_earned.id }}"><i class="icon-minus-sign"></i></a>
+                                        {% endif %}
+                                    </div>  
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end col-lg-8 -->
 			    <div class="col-lg-4">
-			        <div id="planned-mb-div" class="merit-badge-header">
-			            <h1>
-			            	Planned
-			            	{% if scouter.role == 'scout' %}
-								<a class="open-planned-mb-form">
-									<i class="icon-plus-sign planned-mb-add"></i>
-								</a>
-								<div id="planned-mb-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
-									<form class="form-inline">
-										<div class="form-group">
-											<input type="text" class="form-control typeahead-planned-mb" id="planned-mb-name" placeholder="Add merit badge">
-										</div>
-										<div class="form-group">
-											<input type="text" class="form-control datepicker datepicker-input" id="planned-mb-date" placeholder="Date planned">
-										</div>
-										<a class="btn btn-default btn-link-short open-planned-mb-form">Close</a>
-										<button class="btn btn-primary btn-short save-planned-mb">Save</button>
-									</form>
-								</div>
-			            	{% endif %}
-			            </h1>
-			            {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
-		                	<div class="row" id="planned-mb-{{ scout_merit_badge_planned.id }}">
-						    	<div class="col-lg-4">
-						    		<img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80">
-								    {% if scouter.role == 'scout' %}
-							        	<a class="delete-planned-mb badge-delete" id="{{ scout_merit_badge_planned.id }}"><i class="icon-minus-sign"></i></a>
-								    {% endif %}
-							    </div>
-							    <div class="col-lg-8"> 
-							        <h3 class="compact">
-							        	{{ scout_merit_badge_planned.merit_badge.name }} <small>{{ scout_merit_badge_planned.goal_date }}</small>
-							        </h3>
-									{% if scout_merit_badge_planned.book_in_library %}
-										{% if scout_merit_badge_planned.book_date_requested and not scout_merit_badge_planned.book_date_borrowed %}
-											Book requested, you will be contacted soon<br />
-										{% elif scout_merit_badge_planned.book_date_borrowed %}
-											Book checked out (due {{ scout_merit_badge_planned.book_date_due }})<br />
-										{% else %}
-											<a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Check out book</a><br />
-										{% endif %}
-									{% else %}
-										Book not in library<br />
-									{% endif %}
-									<a class="view-mbcounselors" id="{{ scout_merit_badge_planned.merit_badge.id }}" href="#">Merit Badge Counselors</a>
-									<hr class="dashed-line">
-							    </div>  
-							</div> 
-			            {% endfor %}
-						{% if scout_merit_badge_books_unplanned %}
-							<div class="row">
-								<div class="col-lg-12">
-									<h3>Books to return</h3>
-									{% for scout_merit_badge_book_unplanned in scout_merit_badge_books_unplanned %}
-										{% if scout_merit_badge_book_unplanned.date_borrowed %}
-											{{ scout_merit_badge_book_unplanned.merit_badge_book }} - due {{ scout_merit_badge_book_unplanned.date_due }}
-										{% endif %}
-									{% endfor %}
-								</div>
-							</div>
-						{% endif %}
-			        </div>
-			    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="planned-mb-div" class="merit-badge-header">
+                                <h1>
+                                    Planned
+                                    {% if scouter.role == 'scout' %}
+                                        <a class="open-planned-mb-form">
+                                            <i class="icon-plus-sign planned-mb-add"></i>
+                                        </a>
+                                        <div id="planned-mb-form" class="add-form translucent" style="z-index: 999999; position: absolute;">
+                                            <form class="form-inline">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control typeahead-planned-mb" id="planned-mb-name" placeholder="Add merit badge">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control datepicker datepicker-input" id="planned-mb-date" placeholder="Date planned">
+                                                </div>
+                                                <a class="btn btn-default btn-link-short open-planned-mb-form">Close</a>
+                                                <button class="btn btn-primary btn-short save-planned-mb">Save</button>
+                                            </form>
+                                        </div>
+                                    {% endif %}
+                                </h1>
+                                {% for scout_merit_badge_planned in scout_merit_badges_planned_list %}
+                                    <div class="row" id="planned-mb-{{ scout_merit_badge_planned.id }}">
+                                        <div class="col-lg-4">
+                                            <img src="{{ STATIC_URL }}img/merit_badges/{{ scout_merit_badge_planned.merit_badge.image_name }}" width="80" height="80">
+                                            {% if scouter.role == 'scout' %}
+                                                <a class="delete-planned-mb badge-delete" id="{{ scout_merit_badge_planned.id }}"><i class="icon-minus-sign"></i></a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-lg-8"> 
+                                            <h3 class="compact">
+                                                {{ scout_merit_badge_planned.merit_badge.name }} <small>{{ scout_merit_badge_planned.goal_date }}</small>
+                                            </h3>
+                                            {% if scout_merit_badge_planned.book_in_library %}
+                                                {% if scout_merit_badge_planned.book_date_requested and not scout_merit_badge_planned.book_date_borrowed %}
+                                                    Book requested, you will be contacted soon<br />
+                                                {% elif scout_merit_badge_planned.book_date_borrowed %}
+                                                    Book checked out (due {{ scout_merit_badge_planned.book_date_due }})<br />
+                                                {% else %}
+                                                    <a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Check out book</a><br />
+                                                {% endif %}
+                                            {% else %}
+                                                Book not in library<br />
+                                            {% endif %}
+                                            <a class="view-mbcounselors" id="{{ scout_merit_badge_planned.merit_badge.id }}" href="#">Merit Badge Counselors</a>
+                                            <hr class="dashed-line">
+                                        </div>  
+                                    </div> 
+                                {% endfor %}
+                                {% if scout_merit_badge_books_unplanned %}
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <h3>Books to return</h3>
+                                            {% for scout_merit_badge_book_unplanned in scout_merit_badge_books_unplanned %}
+                                                {% if scout_merit_badge_book_unplanned.date_borrowed %}
+                                                    {{ scout_merit_badge_book_unplanned.merit_badge_book }} - due {{ scout_merit_badge_book_unplanned.date_due }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end col-lg-4 -->
 			</div>
 			{% if scout_notes %}
 				<div class="row">
