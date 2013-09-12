@@ -29,19 +29,19 @@
 						</span>
 		        	{% endif %}
 			    	<h1>Scout List</h1>
-			        <div class="leader-note">
-			        	<table class="table fixed">
+			        <div class="leader-note table-responsive">
+			        	<table class="table">
 			        		<thead>
 			        			<tr>
-			        				<th nowrap width="14%" class="no-spill">Name</th>
-			        				<th nowrap width="7%" class="no-spill">Patrol</th>
-			        				<th nowrap width="10%" class="no-spill">Rank</th>
-			        				<th nowrap width="5%" class="no-spill">Age</th>
-			        				<th nowrap width="13%" class="no-spill">Birthday</th>
-			        				<th nowrap width="12%" class="no-spill">Phone</th>
-			        				<th nowrap width="6%" class="no-spill">Goals</th>
+			        				<th>Name</th>
+			        				<th>Patrol</th>
+			        				<th>Rank</th>
+			        				<th>Age</th>
+			        				<th>Birthday</th>
+			        				<th>Phone</th>
+			        				<th>Goals</th>
 			        				{% if scouter.role in 'leader' %}
-			        					<th nowrap width="33%" class="no-spill">Status</th>
+			        					<th>Status</th>
 			        				{% endif %}
 			        			</tr>
 			        		</thead>
@@ -51,14 +51,14 @@
 										<td width="14%">
 											<a href="/home/scout/{{ scout.id }}">{{ scout.first_name }} {{ scout.last_name }}</a>
 										</td>
-										<td nowrap width="7%" class="no-spill">{{ scout.patrol }}</td>
-										<td nowrap width="10%" class="no-spill">{{ scout.rank }}</td>
-										<td nowrap width="5%" class="no-spill">{{ scout.age }}</td>
-										<td nowrap width="13%" class="no-spill">{{ scout.birth_date }}</td>
-										<td nowrap width="12%" class="no-spill">{{ scout.phone_number }}</td>
-										<td nowrap width="6%" class="no-spill">{{ scout.mb_goals }}</td>
+										<td>{{ scout.patrol }}</td>
+										<td>{{ scout.rank }}</td>
+										<td>{{ scout.age }}</td>
+										<td>{{ scout.birth_date }}</td>
+										<td>{{ scout.phone_number }}</td>
+										<td>{{ scout.mb_goals }}</td>
 				        				{% if scouter.role in 'leader' %}
-											<td nowrap width="33%" class="no-spill">{{ scout.status }}</td>
+											<td>{{ scout.status }}</td>
 				        				{% endif %}
 									</tr>
 								{% endfor %}
