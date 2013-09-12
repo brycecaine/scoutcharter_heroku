@@ -50,7 +50,12 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                        <li><a href="#" class="navbar-link">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/userprofile">Edit Profile</a></li>
+                            </ul>
+                        </li>
                         <li><a href="{% url 'django.contrib.auth.views.logout' %}?next={% firstof request.path '/login' %}" class="navbar-link">Log out</a></li>
                     {% else %}
                         <li><a href="{% url 'django.contrib.auth.views.login' %}?next={% firstof request.path '/home' %}" class="navbar-link">Log in</a></li>

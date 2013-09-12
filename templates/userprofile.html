@@ -1,0 +1,5 @@
+<form action="/userprofile?next={{ request.path }}" method="POST">
+    {{ form }}
+    {% csrf_token %}
+    <input type="submit" value="Submit">
+</form>

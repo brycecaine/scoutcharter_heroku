@@ -3,8 +3,9 @@ from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
+from scoutcharter.forms import ScouterForm
 import csv
 import json
 import logging
@@ -430,3 +431,20 @@ def export(request):
     	             None])
 
     return response
+
+@login_required
+def userprofile(request):
+    if request.method == 'POST':
+        scouter = Scouter.objects.get(user=request.user)
+        form = ScouterForm(request.POST, instance=scouter)
+
+        if form.is_valid(): 
+            form.save() 
+            # return render_to_response("registration/cadastro_concluido.html",{})
+            if 'next' in request.GET:
+                return redirect(request.GET['next'])
+
+    else:    
+        form = ScouterForm(request.POST)
+        # return render_to_response("registration/registration.html", {'form': form})
+        return render_to_response('userprofile.html', locals(), context_instance=RequestContext(request))
