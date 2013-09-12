@@ -109,23 +109,23 @@
 					<!-- -------------------------------------------------------------------- -->
 
 					<!-- Rank images come from http://clipart.usscouts.org/library/BSA_Boy_Scout_Ranks/ -->
-                    <div class="table-responsive container-fluid">
+                    <div class="table-responsive">
 			        <table class="table">
 			        	<tbody>
 			        		<tr>
 			                    {% for scout_rank in scout_ranks_list %}
 		                        	{% if scout_rank.date_earned %}
-			                        	<td id="scout-rank-{{ scout_rank.id }}">
-									    	<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}" width="100%">
-										    {% if scouter.role == 'leader' %}
-									        	<a class="delete-rank rank-delete hand-pointer" id="{{ scout_rank.id }}"><i class="icon-minus-sign"></i></a>
-										    {% endif %}
-		                        			<h3 class="rank-label">
-		                        				{{ scout_rank.rank_name }}
-		                        			</h3>
-		                        			<p class="text-muted rank-label">
-		                        				{{ scout_rank.date_earned }}
-		                        			</p>
+			                        	<td id="scout-rank-{{ scout_rank.id }}" class="rank-td">
+                                            <div>
+                                                <a href="#" data-toggle="tooltip" data-html="true" class="tooltip-activate" title="<strong>{{ scout_rank.rank_name }}</strong><br />{{ scout_rank.date_earned }}">
+                                                    <img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}" width="100%">
+                                                </a>
+                                            </div>
+                                            {% if scouter.role == 'leader' %}
+                                                <div>
+                                                    <a class="delete-rank hand-pointer text-center" id="{{ scout_rank.id }}"><i class="icon-minus-sign"></i></a>
+                                                </div>
+                                            {% endif %}
 				                        </td>
 		                        	{% else %}
 				                        <td id="scout-rank-{{ scout_rank.rank_id }}">

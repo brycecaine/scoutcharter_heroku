@@ -122,10 +122,8 @@
                 top: -16px;
             }
 
-            .rank-delete {
-                position: relative;
-                top: -182px;
-                left: 138px;
+            .rank-td {
+                text-align: center;
             }
             
             hr.dashed-line {

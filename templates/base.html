@@ -69,21 +69,25 @@
             </div>
         </div>
 
-        <!-- Scripts ------------------------------------------------------ -->
+        <!-- Scripts ----------------------------------------------------- -->
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
         <script src="{{ STATIC_URL }}js/bootstrap-datepicker.js"></script>
         <script src="{{ STATIC_URL }}js/typeahead.min.js"></script>
         <script type="text/javascript">
-            // From http://goo.gl/y96Rq
-            $("#sc-navbar ul li a[href^='#']").on('click', function(e) {
-                e.preventDefault();
-                scroll_to = $(this.hash).offset().top - 110
-                $('html, body').animate({scrollTop: scroll_to}, 300);
-            });
+            $(document).ready(function() {
+                // From http://goo.gl/y96Rq
+                $("#sc-navbar ul li a[href^='#']").on('click', function(e) {
+                    e.preventDefault();
+                    scroll_to = $(this.hash).offset().top - 110
+                    $('html, body').animate({scrollTop: scroll_to}, 300);
+                });
+
+                $('.tooltip-activate').tooltip();
+            })
         </script>
         {% block script %}{% endblock %}
-        <!-- -------------------------------------------------------------- -->
+        <!-- ------------------------------------------------------------- -->
 
     </body>
 </html>
