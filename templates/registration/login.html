@@ -3,7 +3,7 @@
 {% block content %}
  	<div class="row">
 	    <div class="col-lg-12">
-			<div style="padding-top: 33px; padding-bottom: 20px; background-color: #EFEFEF;>
+			<div style="padding-top: 33px; padding-bottom: 20px; background-color: #EFEFEF;">
 				<form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="form-horizontal" role="form">
 					{% csrf_token %}
 					<div class="form-group">
@@ -23,7 +23,7 @@
 					<div class="form-group">
 						<div class="col-lg-5"></div>
 						<div class="col-lg-3">
-							<button type="submit" class="btn btn-primary">Log in</button>
+                            <input type="submit" class="btn btn-primary" value="Log in">
 							<input type="hidden" name="next" value="{{ next }}" />
 							{% if form.errors %}
 								<br />

@@ -434,17 +434,26 @@ def export(request):
 
 @login_required
 def userprofile(request):
+    scouter = Scouter.objects.get(user=request.user)
+    form_dict = {'username': scouter.user.username,
+                 'email': scouter.user.email,
+                 'phone_number': scouter.phone_number,
+                 'birth_date': scouter.birth_date}
     if request.method == 'POST':
-        scouter = Scouter.objects.get(user=request.user)
-        form = ScouterForm(request.POST, instance=scouter)
+        logging.error('1111111111111111111')
+        form = ScouterForm(request.POST)
 
         if form.is_valid(): 
             form.save() 
             # return render_to_response("registration/cadastro_concluido.html",{})
             if 'next' in request.GET:
                 return redirect(request.GET['next'])
+        else:
+            logging.error('000000000000000')
+            return render_to_response('registration/userprofile.html', locals(), context_instance=RequestContext(request))
 
     else:    
-        form = ScouterForm(request.POST)
+        logging.error('22222222222222222222')
+        form = ScouterForm(initial=form_dict)
         # return render_to_response("registration/registration.html", {'form': form})
-        return render_to_response('userprofile.html', locals(), context_instance=RequestContext(request))
+        return render_to_response('registration/userprofile.html', locals(), context_instance=RequestContext(request))
