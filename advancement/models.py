@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 class Patrol(models.Model):
@@ -103,3 +105,16 @@ class ScoutNote(models.Model):
 
 	def __unicode__(self):
 		return '{0}: {1} (Followup on {2})'.format(self.note_date, self.comment, self.followup_date)
+
+class Requirement(models.Model):
+	content_type = models.ForeignKey(ContentType)
+	object_id = models.PositiveIntegerField()
+	content_object = generic.GenericForeignKey('content_type', 'object_id')
+	number = models.CharField(max_length=10)
+	description = models.CharField(max_length=500)
+
+class ScoutRequirement(models.Model):
+	scout = models.ForeignKey(Scouter, related_name='scoutrequirement_scout')
+	requirement = models.ForeignKey(Requirement)
+	date_completed = models.DateField()
+	leader = models.ForeignKey(Scouter, related_name='scoutrequirement_leader')
