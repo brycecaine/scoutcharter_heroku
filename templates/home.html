@@ -117,7 +117,7 @@
 		                        	{% if scout_rank.date_earned %}
 			                        	<td id="scout-rank-{{ scout_rank.id }}" class="rank-td">
                                             <div>
-                                                <a href="#" data-toggle="tooltip" data-html="true" class="tooltip-activate" title="<strong>{{ scout_rank.rank_name }}</strong><br />{{ scout_rank.date_earned }}">
+                                                <a href="{% if scouter.role == 'leader' %}/rank-requirements/{{ scout_rank.id }}{% else %}#{% endif %}" data-toggle="tooltip" data-html="true" class="tooltip-activate" title="<strong>{{ scout_rank.rank_name }}</strong><br />{{ scout_rank.date_earned }}">
                                                     <img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_name }}" width="100%">
                                                 </a>
                                             </div>

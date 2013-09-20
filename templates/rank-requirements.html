@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block style %}
+    <link href="{{ STATIC_URL }}css/home.css" rel="stylesheet">        
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid main">
+        <div class="row">
+            <div class="col-sm-4">
+                <div align="center">
+                    {% if scout_rank.date_earned %}
+                        <img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.rank.image_name }}">
+                    {% else %}
+                        <img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.rank.image_ph_name }}">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <h1>{{ scout }}</h1>
+                <h2>Requirements for {{ rank }} Rank</h2>
+                <br />
+                <form role="form">
+                    <table class="table">
+                        <tbody>
+                            {% for rank_requirement in rank_requirements %}
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="rankreq-date-{{ scout.id }}-{{ rank_requirement }}" placeholder="Date completed">
+                                    </td>
+                                    <td>
+                                        <label for="rankreq-date-{{ scout.id }}-{{ rank_requirement }}" class="control-label">{{ rank_requirement.number }}. {{ rank_requirement.description }}</label>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+			</div>
+        </div>
+	</div>
+{% endblock %}

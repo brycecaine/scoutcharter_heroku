@@ -1,7 +1,8 @@
 from advancement import service
-from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor
+from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor, Requirement
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
@@ -466,3 +467,15 @@ def userprofile(request):
         form = ScouterForm(request.user, initial=form_dict)
         # return render_to_response("registration/registration.html", {'form': form})
         return render_to_response('registration/userprofile.html', locals(), context_instance=RequestContext(request))
+
+def rank_requirements(request, scoutrank_id):
+    user = request.user
+    leader = Scouter.objects.get(user=user)
+    scout_rank = ScoutRank.objects.get(id=scoutrank_id)
+    scout = scout_rank.scout
+    rank = scout_rank.rank
+
+    rank_type = ContentType.objects.get_for_model(Rank)
+    rank_requirements = Requirement.objects.filter(content_type=rank_type, object_id=rank.id)
+
+    return render_to_response('rank-requirements.html', locals(), context_instance=RequestContext(request))
