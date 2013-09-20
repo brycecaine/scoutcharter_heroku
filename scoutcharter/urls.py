@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     url(r'^update-scoutmeritbadge/?$', 'advancement.views.update_scoutmeritbadge', name='update_scoutmeritbadge'),
     url(r'^update-scoutrank/?$', 'advancement.views.update_scoutrank', name='update_scoutrank'),
 
+    url(r'^rank-requirements/(?P<scoutrank_id>\d+)/?$', 'advancement.views.rank_requirements', name='rank_requirements'),
+    
     url(r'^request-mbbook/?$', 'advancement.views.request_mbbook', name='request_mbbook'),
     url(r'^view-mbcounselors/(?P<meritbadge_id>\d+)/?$', 'advancement.views.view_mbcounselors', name='view_mbcounselors'),
 
