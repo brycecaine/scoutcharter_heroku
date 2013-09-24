@@ -113,8 +113,14 @@ class Requirement(models.Model):
 	number = models.CharField(max_length=10)
 	description = models.CharField(max_length=500)
 
+	def __unicode__(self):
+		return '{0}: {1}. {2}'.format(self.content_object, self.number, self.description)
+
 class ScoutRequirement(models.Model):
 	scout = models.ForeignKey(Scouter, related_name='scoutrequirement_scout')
 	requirement = models.ForeignKey(Requirement)
-	date_completed = models.DateField()
-	leader = models.ForeignKey(Scouter, related_name='scoutrequirement_leader')
+	date_completed = models.DateField(blank=True, null=True)
+	leader = models.ForeignKey(Scouter, related_name='scoutrequirement_leader', blank=True, null=True)
+
+	def __unicode__(self):
+		return '{0}: {1} - {2}'.format(self.scout, self.requirement, self.date_completed)
