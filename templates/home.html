@@ -129,7 +129,9 @@
 				                        </td>
 		                        	{% else %}
 				                        <td id="scout-rank-{{ scout_rank.rank_id }}">
-			                        		<img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_ph_name }}" width="100%">
+                                            <a href="{% if scouter.role == 'leader' %}/rank-requirements?scout_id={{ scout.id }}&rank_id={{ scout_rank.rank_id }}{% else %}#{% endif %}">
+                                                <img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.image_ph_name }}" width="100%">
+                                            </a>
 				                        </td>
 		                        	{% endif %}
 			                    {% endfor %}

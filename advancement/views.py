@@ -468,12 +468,20 @@ def userprofile(request):
         # return render_to_response("registration/registration.html", {'form': form})
         return render_to_response('registration/userprofile.html', locals(), context_instance=RequestContext(request))
 
-def rank_requirements(request, scoutrank_id):
+def rank_requirements(request, scoutrank_id=None):
     user = request.user
     leader = Scouter.objects.get(user=user)
-    scout_rank = ScoutRank.objects.get(id=scoutrank_id)
-    scout = scout_rank.scout
-    rank = scout_rank.rank
+
+    if scoutrank_id:
+        scout_rank = ScoutRank.objects.get(id=scoutrank_id)
+        scout = scout_rank.scout
+        rank = scout_rank.rank
+    else:
+        scout_id = request.GET.get('scout_id')
+        scout = Scouter.objects.get(id=scout_id)
+        rank_id = request.GET.get('rank_id')
+        rank = Rank.objects.get(id=rank_id)
+        scout_rank, created = ScoutRank.objects.get_or_create(scout=scout, rank=rank)
 
     rank_type = ContentType.objects.get_for_model(Rank)
     rank_requirements = Requirement.objects.filter(content_type=rank_type, object_id=rank.id)
