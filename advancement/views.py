@@ -1,5 +1,5 @@
 from advancement import service
-from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor, Requirement
+from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor, Requirement, ScoutRequirement
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
@@ -477,5 +477,17 @@ def rank_requirements(request, scoutrank_id):
 
     rank_type = ContentType.objects.get_for_model(Rank)
     rank_requirements = Requirement.objects.filter(content_type=rank_type, object_id=rank.id)
+    rank_requirements_dict = rank_requirements.values()
+
+    scout_rankreqs = ScoutRequirement.objects.filter(scout=scout, requirement__in=rank_requirements)
+
+    scout_rankreq_dict = {}
+    for scout_rankreq in scout_rankreqs:
+        scout_rankreq_dict[scout_rankreq.requirement.id] = scout_rankreq.date_completed
+
+    rank_requirements_list = []
+    for rank_requirement in rank_requirements_dict:
+        rank_requirement['date_completed'] = scout_rankreq_dict.get(rank_requirement['id'], None)
+        rank_requirements_list.append(rank_requirement)
 
     return render_to_response('rank-requirements.html', locals(), context_instance=RequestContext(request))
