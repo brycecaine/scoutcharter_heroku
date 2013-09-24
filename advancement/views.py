@@ -3,7 +3,7 @@ from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from scoutcharter.forms import ScouterForm
@@ -489,5 +489,22 @@ def rank_requirements(request, scoutrank_id):
     for rank_requirement in rank_requirements_dict:
         rank_requirement['date_completed'] = scout_rankreq_dict.get(rank_requirement['id'], None)
         rank_requirements_list.append(rank_requirement)
+
+    if request.method == 'POST':
+        # Loop over form fields
+        for key, value in request.POST.dict().items():
+            if 'rankreq-date-name' in key:
+                scout_id = key[-3:][0]
+                rank_requirement_id = key[-3:][2]
+
+                # Update each scout requirement
+                scout_rankreq, created = ScoutRequirement.objects.get_or_create(scout_id=scout_id, requirement_id=rank_requirement_id) 
+                if value:
+                    scout_rankreq.date_completed = datetime.strptime(value, '%m/%d/%Y')
+                else:
+                    scout_rankreq.date_completed = None
+                scout_rankreq.leader = leader
+                scout_rankreq.save()
+        return HttpResponseRedirect('/home/scout/' + str(scout.id))
 
     return render_to_response('rank-requirements.html', locals(), context_instance=RequestContext(request))
