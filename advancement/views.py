@@ -516,3 +516,6 @@ def rank_requirements(request, scoutrank_id=None):
         return HttpResponseRedirect('/home/scout/' + str(scout.id))
 
     return render_to_response('rank-requirements.html', locals(), context_instance=RequestContext(request))
+
+def signup(request):
+    return render_to_response('signup.html', locals(), context_instance=RequestContext(request))
