@@ -29,26 +29,25 @@
 						</span>
 		        	{% endif %}
 			    	<h1>Scout List</h1>
-			        <div class="leader-note table-responsive">
-			        	<table class="table">
+                        <table class="table" style="table-layout:fixed;">
 			        		<thead>
 			        			<tr>
-			        				<th>Name</th>
+			        				<th width="150px">Name</th>
 			        				<th>Patrol</th>
 			        				<th>Rank</th>
-			        				<th>Age</th>
-			        				<th>Birthday</th>
-			        				<th>Phone</th>
-			        				<th>Goals</th>
+			        				<th width="70px">Age</th>
+			        				<th width="160px">Birthday</th>
+			        				<th width="140px">Phone</th>
+			        				<th width="70px">Goals</th>
 			        				{% if scouter.role in 'leader' %}
-			        					<th>Status</th>
+			        					<th width="350px">Status</th>
 			        				{% endif %}
 			        			</tr>
 			        		</thead>
 			        		<tbody>
 								{% for scout in scout_list %}
 									<tr>
-										<td width="14%">
+										<td>
 											<a href="/home/scout/{{ scout.id }}">{{ scout.first_name }} {{ scout.last_name }}</a>
 										</td>
 										<td>{{ scout.patrol }}</td>
@@ -58,13 +57,14 @@
 										<td>{{ scout.phone_number }}</td>
 										<td>{{ scout.mb_goals }}</td>
 				        				{% if scouter.role in 'leader' %}
-											<td>{{ scout.status }}</td>
+                                            <td style="overflow: hidden; white-space: nowrap;">
+                                                {{ scout.status }}
+                                            </td>
 				        				{% endif %}
 									</tr>
 								{% endfor %}
 			        		</tbody>
 			        	</table>
-			        </div>
 			    </div>
 			</div>
 		{% else %}

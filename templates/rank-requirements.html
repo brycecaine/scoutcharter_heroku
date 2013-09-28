@@ -10,9 +10,9 @@
             <div class="col-sm-4">
                 <div align="center">
                     {% if scout_rank.date_earned %}
-                        <img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.rank.image_name }}">
+                        <img class="top-margin-small" src="{{ STATIC_URL }}img/ranks/{{ scout_rank.rank.image_name }}">
                     {% else %}
-                        <img src="{{ STATIC_URL }}img/ranks/{{ scout_rank.rank.image_ph_name }}">
+                        <img class="top-margin-small" src="{{ STATIC_URL }}img/ranks/{{ scout_rank.rank.image_ph_name }}">
                     {% endif %}
                 </div>
             </div>
