@@ -147,21 +147,22 @@ def home(request, scouter_id=None):
 
 	scout_merit_badges_planned_list = []
 	for scout_merit_badge_planned in scout_merit_badges_planned:
-		logging.error(1)
 		scout_merit_badge_planned_dict = {'id': scout_merit_badge_planned.id,
 		                                  'merit_badge': scout_merit_badge_planned.merit_badge,
 		                                  'goal_date': scout_merit_badge_planned.goal_date}
+		try:
+			merit_badge_book = MeritBadgeBook.objects.get(merit_badge=scout_merit_badge_planned.merit_badge)
+			scout_merit_badge_planned_dict['book_in_library'] = merit_badge_book.in_library
+		except:
+			scout_merit_badge_planned_dict['book_in_library'] = False
+        
 		for scout_merit_badge_book_planned in scout_merit_badge_books_planned:
-			logging.error(2)
 			if scout_merit_badge_book_planned.merit_badge_book.merit_badge == scout_merit_badge_planned.merit_badge:
-				logging.error(3)
-				scout_merit_badge_planned_dict['book_in_library'] = True
 				scout_merit_badge_planned_dict['book_date_requested'] = scout_merit_badge_book_planned.date_requested
 				scout_merit_badge_planned_dict['book_date_borrowed'] = scout_merit_badge_book_planned.date_borrowed
 				scout_merit_badge_planned_dict['book_date_due'] = scout_merit_badge_book_planned.date_due
 
 			else:
-				scout_merit_badge_planned_dict['book_in_library'] = False
 				scout_merit_badge_planned_dict['book_date_requested'] = None
 				scout_merit_badge_planned_dict['book_date_borrowed'] = None
 				scout_merit_badge_planned_dict['book_date_due'] = None
@@ -253,12 +254,11 @@ def ranks(request):
 	return render_to_response('ranks.json', locals(), context_instance=RequestContext(request))
 
 def update_scoutrank(request):
+	rank_json = None
 	if request.method == 'POST':
 		action = request.POST.get('action')
 		entry_type = request.POST.get('entry_type')
 		if action == 'add':
-			logger.debug('here1')
-
 			scout_id = request.POST.get('scout_id')
 			rank_name = request.POST.get('rank_name')
 			rank_date = datetime.strptime(request.POST.get('rank_date'), '%m/%d/%Y').strftime('%Y-%m-%d')
@@ -277,7 +277,6 @@ def update_scoutrank(request):
 		                            'created': created})
 
 		if action == 'delete':
-			logger.debug('here2')
 			scoutrank_id = request.POST.get('scout_rank_id')
 			scout_rank = ScoutRank.objects.get(id=scoutrank_id)
 			rank = scout_rank.rank
@@ -297,9 +296,7 @@ def request_mbbook(request):
 	merit_badge = MeritBadge.objects.get(id=meritbadge_id)
 	
 	try:
-		logging.error(0)
 		merit_badge_book = MeritBadgeBook.objects.get(merit_badge=merit_badge)
-		logging.error(1)
 	except:
 		outcome = '<div>Merit badge book not in library</div>'
 
@@ -312,13 +309,9 @@ def request_mbbook(request):
 
 	scout_merit_badge_book = ScoutMeritBadgeBook.objects.create(scout=scout, merit_badge_book=merit_badge_book)
 	
-	logging.error(2)
 	scout_merit_badge_book.date_requested = datetime.now()
-	logging.error(3)
 	scout_merit_badge_book.save()
-	logging.error(4)
 	outcome = '<div>Book requested, you will be contacted soon</div>'
-	logging.error(5)
 
 	# Email admin
 	# Add functionality to notify the admin of this request
@@ -458,7 +451,6 @@ def userprofile(request):
 
             # return render_to_response("registration/cadastro_concluido.html",{})
             if 'next' in request.GET:
-                logging.error(request.GET['next'])
                 return redirect(request.GET['next'])
         else:
             return render_to_response('registration/userprofile.html', locals(), context_instance=RequestContext(request))
