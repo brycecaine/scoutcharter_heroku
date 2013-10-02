@@ -4,3 +4,4 @@ venv
 *.sqlite
 fixtures/
 *.TODO
+staticfiles

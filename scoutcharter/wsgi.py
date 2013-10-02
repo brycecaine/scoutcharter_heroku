@@ -34,3 +34,8 @@ application = get_wsgi_application()
 
 sys.path.append('/scoutcharter')
 sys.path.append('/scoutcharter/settings')
+
+from django.core.wsgi import get_wsgi_application
+from dj_static import Cling
+
+application = Cling(get_wsgi_application())
