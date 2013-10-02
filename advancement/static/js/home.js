@@ -98,6 +98,9 @@
                             $('#planned-mb-' + data.scoutmeritbadge_id).remove()
                         }
                     })
+
+                    $('#earned-mb-form').toggle('fast')
+                    return false
                 })
 
                 $('.delete-earned-mb').click(function() {
@@ -228,6 +231,9 @@
                             $('#scout-rank-' + data.rank_id).replaceWith(earned_rank_html)
                         }
                     })
+
+                    $('#rank-form').toggle('fast')
+                    return false
                 })
 
                 $('.delete-rank').click(function() {
