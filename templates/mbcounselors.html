@@ -1,24 +1,37 @@
-{% if not merit_badge_counselors %}
-    No merit badge counselors found for {{ merit_badge }}. Please contact your scout leader for further direction.
-{% else %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Current</th>
-                <th>Phone number</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for merit_badge_counselor in merit_badge_counselors %}
-                <tr>
-                    <td>{{ merit_badge_counselor.scouter }}</td>
-                    <td>{{ merit_badge_counselor.active|yesno:"yes,?,?" }}</td>
-                    <td>{{ merit_badge_counselor.phone_number }}</td>
-                    <td>{{ merit_badge_counselor.email }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endif %}
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h3 id="myModalLabel">Merit Badge Counselors</h3>
+						{% if not merit_badge_counselors %}
+							No merit badge counselors found for {{ merit_badge }}. Please contact your scout leader for further direction.
+						{% else %}
+						    <table class="table">
+							<thead>
+							    <tr>
+								<th>Name</th>
+								<th>Current</th>
+								<th>Phone number</th>
+								<th>Email</th>
+							    </tr>
+							</thead>
+							<tbody>
+							    {% for merit_badge_counselor in merit_badge_counselors %}
+								<tr>
+								    <td>{{ merit_badge_counselor.scouter }}</td>
+								    <td>{{ merit_badge_counselor.active|yesno:"yes,?,?" }}</td>
+								    <td>{{ merit_badge_counselor.phone_number }}</td>
+								    <td>{{ merit_badge_counselor.email }}</td>
+								</tr>
+							    {% endfor %}
+							</tbody>
+						    </table>
+						{% endif %}
+					</div>
+					<div class="modal-body">
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
