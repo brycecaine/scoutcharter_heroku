@@ -230,10 +230,10 @@
                                                 {% elif scout_merit_badge_planned.book_date_borrowed %}
                                                     Book checked out (due {{ scout_merit_badge_planned.book_date_due }})<br />
                                                 {% else %}
-                                                    <a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Check out book</a><br />
+                                                    <a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Request book</a><br />
                                                 {% endif %}
                                             {% else %}
-                                                Book not in library<br />
+					        <a class="request-mbbook" href="#" id="{{ scout_merit_badge_planned.merit_badge.id }}">Request book</a><br />
                                             {% endif %}
                                             <a class="view-mbcounselors" id="{{ scout_merit_badge_planned.merit_badge.id }}" href="#">Merit Badge Counselors</a>
                                             <hr class="dashed-line">

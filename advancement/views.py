@@ -2,7 +2,9 @@ from advancement import service
 from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor, Requirement, ScoutRequirement
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
@@ -299,8 +301,8 @@ def request_mbbook(request):
 	
 	try:
 		merit_badge_book = MeritBadgeBook.objects.get(merit_badge=merit_badge)
-	except:
-		outcome = '<div>Merit badge book not in library</div>'
+	except MeritBadgeBook.DoesNotExist:
+		merit_badge_book = MeritBadgeBook.objects.create(merit_badge=merit_badge, owner='TBD', quantity=0)
 
 	try:
 		scout_merit_badge_book = ScoutMeritBadgeBook.objects.get(scout=scout, merit_badge_book=merit_badge_book)
@@ -309,14 +311,14 @@ def request_mbbook(request):
 	except:
 		scout_merit_badge_book = ScoutMeritBadgeBook.objects.create(scout=scout, merit_badge_book=merit_badge_book)
 
-	scout_merit_badge_book = ScoutMeritBadgeBook.objects.create(scout=scout, merit_badge_book=merit_badge_book)
-	
 	scout_merit_badge_book.date_requested = datetime.now()
 	scout_merit_badge_book.save()
 	outcome = '<div>Book requested, you will be contacted soon</div>'
 
 	# Email admin
-	# Add functionality to notify the admin of this request
+	mbbook_admin_group = Group.objects.get(name='mbbook_admin')
+	mbbook_admin_emails = mbbook_admin_group.user_set.all().values_list('email', flat=True)
+	send_mail('Merit badge book requested: %s' % merit_badge, '%s has requested the %s merit badge book.' % (scout_merit_badge_book.scout, merit_badge), 'admin@scoutcharter.com', mbbook_admin_emails, fail_silently=False) 
 
 	return_json = json.dumps({'outcome': outcome})
 
