@@ -6,7 +6,7 @@ try:
 except ImportError, e:
     print 'Unable to load settings_local.py:', e
 
-DEBUG = True # Change to False after configuring static files
+DEBUG = False
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 PROJECT_DIR = os.path.join(PROJECT_ROOT,'./')
