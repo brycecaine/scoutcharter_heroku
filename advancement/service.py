@@ -22,11 +22,21 @@ def get_birth_info(born_date, return_type):
 
     return return_val
 
+def get_li_text(item):
+    # Add text of a tag
+    for e in item.findAll('a'):
+        e.parent.insert(0, e.text)
+
+    # Get remaining text, but not children tags (also excludes a tag above)
+    text = ' '.join(' '.join(item.findAll(text=True, recursive=False)).split())
+
+    return text
+
 def ol_to_list(html_list):
     return_list = []
     # ---------- First loop ----------
     for idx1, item1 in enumerate(html_list.findAll('li', recursive=False), start=1):
-        text1 = " ".join(item1.find(text=True, recursive=False).split())
+        text1 = get_li_text(item1)
 
         sublist = item1.find(['ol', 'ul'])
 
@@ -36,7 +46,7 @@ def ol_to_list(html_list):
 
             # ---------- Second loop ----------
             for idx2, subitem in enumerate(sublist.findAll('li', recursive=False), start=1):
-                text2 = " ".join(subitem.find(text=True, recursive=False).split())
+                text2 = get_li_text(subitem)
 
                 sublist2 = subitem.find(['ol', 'ul'])
 
@@ -46,7 +56,7 @@ def ol_to_list(html_list):
 
                     # ---------- Third loop ----------
                     for idx3, subitem2 in enumerate(sublist2.findAll('li', recursive=False), start=1):
-                        text3 = " ".join(subitem2.find(text=True, recursive=False).split())
+                        text3 = get_li_text(subitem2)
                         return_list.append(('%s.%s.%s' % (idx1, idx2, idx3), text3))
 
                 else:
