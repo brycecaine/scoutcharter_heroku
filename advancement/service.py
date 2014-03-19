@@ -24,33 +24,36 @@ def get_birth_info(born_date, return_type):
 
 def ol_to_list(html_list):
 	return_list = []
-	for idx1, item in enumerate(html_list.findAll('li', recursive=False), start=1):
-	    text = " ".join(item.find(text=True, recursive=False).split())
+	# ---------- First loop ----------
+	for idx1, item1 in enumerate(html_list.findAll('li', recursive=False), start=1):
+	    text1 = " ".join(item1.find(text=True, recursive=False).split())
 
-	    # print idx1, text
+	    sublist = item1.find(['ol', 'ul'])
 
-	    sublist = item.find(['ol', 'ul'])
 	    if sublist:
-		    if text:
-			    return_list.append((idx1, text))
+		    if text1:
+			    return_list.append((idx1, text1))
+
+		    # ---------- Second loop ----------
 		    for idx2, subitem in enumerate(sublist.findAll('li', recursive=False), start=1):
-			    text = " ".join(subitem.find(text=True, recursive=False).split())
-
-
+			    text2 = " ".join(subitem.find(text=True, recursive=False).split())
 
 			    sublist2 = subitem.find(['ol', 'ul'])
+
 			    if sublist2:
-				    if text:
-					    return_list.append(('%s.%s' % (idx1, idx2), text))
+				    if text2:
+					    return_list.append(('%s.%s' % (idx1, idx2), text2))
+
+				    # ---------- Third loop ----------
 				    for idx3, subitem2 in enumerate(sublist2.findAll('li', recursive=False), start=1):
-					    text = " ".join(subitem2.find(text=True, recursive=False).split())
-					    return_list.append(('%s.%s.%s' % (idx1, idx2, idx3), text))
+					    text3 = " ".join(subitem2.find(text=True, recursive=False).split())
+					    return_list.append(('%s.%s.%s' % (idx1, idx2, idx3), text3))
 
 			    else:
-				    return_list.append(('%s.%s' % (idx1, idx2), text))
+				    return_list.append(('%s.%s' % (idx1, idx2), text2))
 
 	    else:
-		    return_list.append((idx1, text))
+		    return_list.append((idx1, text1))
 
 	return return_list
 
