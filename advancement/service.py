@@ -38,25 +38,25 @@ def ol_to_list(html_list):
     for idx1, item1 in enumerate(html_list.findAll('li', recursive=False), start=1):
         text1 = get_li_text(item1)
 
-        sublist = item1.find(['ol', 'ul'])
+        list1 = item1.find(['ol', 'ul'])
 
-        if sublist:
+        if list1:
             if text1:
                 return_list.append((idx1, text1))
 
             # ---------- Second loop ----------
-            for idx2, subitem in enumerate(sublist.findAll('li', recursive=False), start=1):
-                text2 = get_li_text(subitem)
+            for idx2, item1 in enumerate(list1.findAll('li', recursive=False), start=1):
+                text2 = get_li_text(item1)
 
-                sublist2 = subitem.find(['ol', 'ul'])
+                list2 = item1.find(['ol', 'ul'])
 
-                if sublist2:
+                if list2:
                     if text2:
                         return_list.append(('%s.%s' % (idx1, idx2), text2))
 
                     # ---------- Third loop ----------
-                    for idx3, subitem2 in enumerate(sublist2.findAll('li', recursive=False), start=1):
-                        text3 = get_li_text(subitem2)
+                    for idx3, item2 in enumerate(list2.findAll('li', recursive=False), start=1):
+                        text3 = get_li_text(item2)
                         return_list.append(('%s.%s.%s' % (idx1, idx2, idx3), text3))
 
                 else:
