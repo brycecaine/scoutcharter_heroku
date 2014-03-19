@@ -42,7 +42,7 @@ def ol_to_list(html_list):
 
         if list1:
             if text1:
-                return_list.append((idx1, text1))
+                return_list.append({'req_no': idx1, 'req_desc': text1, 'is_header': True})
 
             # ---------- Second loop ----------
             for idx2, item1 in enumerate(list1.findAll('li', recursive=False), start=1):
@@ -52,47 +52,18 @@ def ol_to_list(html_list):
 
                 if list2:
                     if text2:
-                        return_list.append(('%s.%s' % (idx1, idx2), text2))
+                        return_list.append({'req_no': '%s.%s' % (idx1, idx2), 'req_desc': text2, 'is_header': True})
 
                     # ---------- Third loop ----------
                     for idx3, item2 in enumerate(list2.findAll('li', recursive=False), start=1):
                         text3 = get_li_text(item2)
-                        return_list.append(('%s.%s.%s' % (idx1, idx2, idx3), text3))
+                        return_list.append({'req_no': '%s.%s.%s' % (idx1, idx2, idx3), 'req_desc': text3, 'is_header': False})
 
                 else:
-                    return_list.append(('%s.%s' % (idx1, idx2), text2))
+                    return_list.append({'req_no': '%s.%s' % (idx1, idx2), 'req_desc': text2, 'is_header': False})
 
         else:
-            return_list.append((idx1, text1))
+            return_list.append({'req_no': idx1, 'req_desc': text1, 'is_header': False})
 
     return return_list
 
-
-
-
-
-
-
-
-
-
-
-def ol_to_list_old(html_list, start_idx=''):
-    return_list = []
-    for i, item in enumerate(html_list.findAll('li', recursive=False), start=1):
-        text = " ".join(item.find(text=True, recursive=False).split())
-        idx = '%s.%s' % (start_idx, i)
-
-        # print idx, text
-
-        sublist = item.find(['ol', 'ul'])
-        if sublist:
-            subitems = sublist.findAll('li')
-            print subitems
-            if subitems:
-                return_list.append(ol_to_list(item, idx))
-
-        else:
-            return_list.append((idx, text))
-
-    return return_list
