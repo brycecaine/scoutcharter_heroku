@@ -112,6 +112,7 @@ class Requirement(models.Model):
 	content_object = generic.GenericForeignKey('content_type', 'object_id')
 	number = models.CharField(max_length=10)
 	description = models.CharField(max_length=500)
+	is_header = models.BooleanField()
 
 	def __unicode__(self):
 		return '{0}: {1}. {2}'.format(self.content_object, self.number, self.description)
