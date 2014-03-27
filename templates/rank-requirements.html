@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="col-sm-8">
-                <h1>{{ scout }}</h1>
+                <a href="/home/scout/{{ scout.id }}"><h1>{{ scout }}</h1></a>
                 <h2>Requirements for {{ rank }} Rank</h2>
                 <br />
                 <form method="post" role="form" action="">
@@ -26,10 +26,10 @@
                         <tbody>
                             {% for rank_requirement in rank_requirements_list %}
                                 <tr>
-                                    <td>
+                                    <td class="col-md-2">
                                         <input type="text" name="rankreq-date-name-{{ scout.id }}-{{ rank_requirement.id }}" class="form-control datepicker datepicker-input" id="rankreq-date-{{ scout.id }}-{{ rank_requirement.id }}"{% if rank_requirement.date_completed %} value="{{ rank_requirement.date_completed|date:"m/d/Y" }}"{% else %} placeholder="Date completed"{% endif %}>
                                     </td>
-                                    <td>
+                                    <td class="col-md-10">
                                         <label for="rankreq-date-{{ scout.id }}-{{ rank_requirement.id }}" class="control-label">{{ rank_requirement.number }}. {{ rank_requirement.description }}</label>
                                     </td>
                                 </tr>
