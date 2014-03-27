@@ -42,7 +42,7 @@ def ol_to_list(html_list):
 
         if list1:
             if text1:
-                return_list.append({'req_no': idx1, 'req_desc': text1, 'is_header': True})
+                return_list.append({'number': idx1, 'description': text1, 'is_header': True})
 
             # ---------- Second loop ----------
             for idx2, item1 in enumerate(list1.findAll('li', recursive=False), start=1):
@@ -52,18 +52,18 @@ def ol_to_list(html_list):
 
                 if list2:
                     if text2:
-                        return_list.append({'req_no': '%s.%s' % (idx1, idx2), 'req_desc': text2, 'is_header': True})
+                        return_list.append({'number': '%s.%s' % (idx1, idx2), 'description': text2, 'is_header': True})
 
                     # ---------- Third loop ----------
                     for idx3, item2 in enumerate(list2.findAll('li', recursive=False), start=1):
                         text3 = get_li_text(item2)
-                        return_list.append({'req_no': '%s.%s.%s' % (idx1, idx2, idx3), 'req_desc': text3, 'is_header': False})
+                        return_list.append({'number': '%s.%s.%s' % (idx1, idx2, idx3), 'description': text3, 'is_header': False})
 
                 else:
-                    return_list.append({'req_no': '%s.%s' % (idx1, idx2), 'req_desc': text2, 'is_header': False})
+                    return_list.append({'number': '%s.%s' % (idx1, idx2), 'description': text2, 'is_header': False})
 
         else:
-            return_list.append({'req_no': idx1, 'req_desc': text1, 'is_header': False})
+            return_list.append({'number': idx1, 'description': text1, 'is_header': False})
 
     return return_list
 
