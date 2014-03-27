@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from django.contrib.contenttypes.models import ContentType
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, render
 from django.template import RequestContext
 from scoutcharter.forms import ScouterForm
 import csv
@@ -514,3 +514,9 @@ def rank_requirements(request, scoutrank_id=None):
 
 def signup(request):
     return render_to_response('signup.html', locals(), context_instance=RequestContext(request))
+
+def custom_404(request):
+    return render(request, '404.html')
+
+def custom_500(request):
+    return render(request, '500.html')
