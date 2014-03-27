@@ -1,4 +1,5 @@
 from advancement import service
+from advancement.models import Rank, MeritBadge, Requirement
 from BeautifulSoup import BeautifulSoup
 from django.core.management.base import BaseCommand, CommandError
 import requests
@@ -6,41 +7,40 @@ import requests
 class Command(BaseCommand):
     help = 'Updates rank and merit-badge requirements from the scouting website.'
 
-    # [('1', 'Hike'), ('2', 'Cook'), ('2a', 'Hamburgers'), ('2b', 'Potatoes'), ('3', 'Complete...'), ('3a', '
-
     def handle(self, *args, **options):
-	r = requests.get('http://usscouts.org/advance/boyscout/bsrank2.asp')
-	soup = BeautifulSoup(r.text)
-	requirements_list = soup.find('ol')
-	# requirements_list = requirements_div.find('ol').findAll('li')
-	req_list = service.ol_to_list(requirements_list)
-	for req in req_list:
-	    print req
+        ranks = Rank.objects.all()
+        for rank in ranks:
+            print rank
+            r = requests.get('http://usscouts.org/advance/boyscout/bsrank%s.asp' % rank.id)
+            soup = BeautifulSoup(r.text)
+            reqs_html_list = soup.find('ol')
+            reqs_list = service.ol_to_list(reqs_html_list)
 
-	"""
-	for requirement in requirements_list:
-		try:
-			subreqs = requirement.find('ol').findAll('li')
-			for subreq in subreqs:
-				print " ".join(subreq.text.split())
-		except:
-			pass
-			
-		print " ".join(requirement.text.split())
+            req_objects = []
+            for req in reqs_list:
+                req['content_object'] = rank
+                req_objects.append(Requirement(**req))
+            
+            Requirement.objects.bulk_create(req_objects)
+            print '- rank done -'
+        print '-- All ranks done --'
 
-	print requirement.escapeUnrecognizedEntities
-	print requirement.name
-	print requirement.parent
-	print requirement.parserClass
-	print requirement.convertHTMLEntities
-	print requirement.nextSibling
-	print requirement.next
-	print requirement.isSelfClosing
-	print requirement.convertXMLEntities
-	print requirement.hidden
-	print requirement.previous
-	print requirement.previousSibling
-	print requirement.containsSubstitutions
-	print requirement.contents
-	print requirement.attr
-	"""
+        """
+        # Use the following for populating merit-badge requirements if needed
+        merit_badges = MeritBadge.objects.all()
+        for merit_badge in merit_badges:
+            print merit_badge
+            r = requests.get('http://usscouts.org/mb/mb%s.asp' % merit_badge.bsa_id)
+            soup = BeautifulSoup(r.text)
+            reqs_html_list = soup.find('ol')
+            reqs_list = service.ol_to_list(reqs_html_list)
+
+            req_objects = []
+            for req in reqs_list:
+                req['content_object'] = merit_badge
+                req_objects.append(Requirement(**req))
+            
+            Requirement.objects.bulk_create(req_objects)
+            print '- merit badge done -'
+        print '-- All merit badges done --'
+        """
