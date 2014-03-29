@@ -573,18 +573,80 @@ def report_list(request):
 
 @login_required
 def report_scout(request, scouter_id=None):
-    # Create the HttpResponse object with the appropriate PDF headers.
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+    user = request.user
+    try:
+        scouter = Scouter.objects.get(user=user)
+        scouter_role = scouter.role
+    except:
+        scouter = None
+        scouter_role = None
 
-    # Create the PDF object, using the response object as its "file."
+    if scouter_role == 'leader':
+        if scouter_id:
+            scouts_by_age = Scouter.objects.filter(id=scouter_id)
+        else:
+            scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
+            scouts_by_age = scouts.order_by('birth_date')
+
+            if scouter.patrol == 'all':
+                scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
+                scouts_by_age = scouts.order_by('birth_date') # Need to fix this so the order_by doesn't happen twice
+
+    response = HttpResponse(content_type='application/pdf')
+    # Uncommenting this line downloads the pdf rather than displaying it in the browser
+    # response['Content-Disposition'] = 'attachment; filename="Scout List.pdf"'
+
     p = canvas.Canvas(response)
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 100, "Hello world.")
+    # -------------------------------------------------------------------------
+    # Draw the pdf report
+    for scout in scouts_by_age:
+        x = 1 * inch
+        y = 10.5 * inch
+        scout_name = '%s %s' % (scout.user.first_name, scout.user.last_name)
+        scout_birth_date = ''
+        if scout.birth_date:
+            scout_birth_date = scout.birth_date.strftime("%B %d, %Y")
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
+        p.drawString(x, y, scout_name)
+        p.drawString(5 * x, y, scout_birth_date) 
+
+        y -= 0.4 * inch
+
+        # ---------------------------------------------------------------------
+        # List Ranks
+        p.drawString(x, y, '------ Ranks ------')
+        y -= 0.2 * inch
+        scout_ranks = ScoutRank.objects.filter(scout=scout)
+        if not scout_ranks:
+            p.drawString(x, y, 'No ranks found')
+            y -= 0.2 * inch
+            
+        for scout_rank in scout_ranks:
+            p.drawString(x, y, scout_rank.rank.name)
+            if scout_rank.date_earned:
+                p.drawString(5 * x, y, scout_rank.date_earned.strftime("%B %d, %Y"))
+            y -= 0.2 * inch
+
+        y -= 0.2 * inch
+
+        # ---------------------------------------------------------------------
+        # List Merit Badges
+        p.drawString(x, y, '------ Merit Badges ------')
+        y -= 0.2 * inch
+        scout_merit_badges = ScoutMeritBadge.objects.filter(scout=scout)
+        if not scout_merit_badges:
+            p.drawString(x, y, 'No merit badges found')
+            y -= 0.2 * inch
+            
+        for scout_merit_badge in scout_merit_badges:
+            p.drawString(x, y, scout_merit_badge.merit_badge.name)
+            if scout_merit_badge.date_earned:
+                p.drawString(5 * x, y, scout_merit_badge.date_earned.strftime("%B %d, %Y"))
+            y -= 0.2 * inch
+
+        y -= 0.4 * inch
+
+        p.showPage()
     p.save()
     return response
