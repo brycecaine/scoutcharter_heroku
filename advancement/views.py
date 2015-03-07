@@ -468,6 +468,7 @@ def userprofile(request):
 def rank_requirements(request, scoutrank_id=None):
     user = request.user
     leader = Scouter.objects.get(user=user)
+    scouter = leader
 
     if scoutrank_id:
         scout_rank = ScoutRank.objects.get(id=scoutrank_id)
