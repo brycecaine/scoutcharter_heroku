@@ -24,36 +24,18 @@ def index(request):
 @login_required
 def home(request, scouter_id=None):
     user = request.user
-    try:
-        scouter = Scouter.objects.get(user=user)
-        scouter_role = scouter.role
-    except:
-        scouter = None
-        scouter_role = None
-
+    scouter = Scouter.objects.get(user=user)
     scout = None
+    if scouter_id:
+        scout = Scouter.objects.get(id=scouter_id)
+
     # -------------------------------------------------------------------------
     # Get list of scouts for leaders or parents
-    scouts_by_age = []
-    if scouter_role == 'leader':
-        scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
-        scouts_by_age = scouts.order_by('birth_date')
+    scouts = service.get_scouts(scouter.role, scouter.patrol)
+    scouts_by_age = scouts.order_by('birth_date')
 
-        if scouter.patrol == 'all':
-            scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
-            scouts_by_age = scouts.order_by('birth_date') # Need to fix this so the order_by doesn't happen twice
-
-        if scouter_id:
-            scout = Scouter.objects.get(id=scouter_id)
-
-    elif scouter_role == 'parent':
-        parent = Parent.objects.get(user=user)
-        scouts = parent.scouts.all()
-        scouts_by_age = scouts.order_by('birth_date')
-        if scouter_id:
-            scout = Scouter.objects.get(id=scouter_id)
-            if scout not in scouts:
-                scout = None
+    if scout not in scouts:
+        scout = None
 
     scout_list = []
     for scout_item in scouts_by_age:
@@ -89,7 +71,7 @@ def home(request, scouter_id=None):
             
     # -------------------------------------------------------------------------
     # Get other info if a scout is logged in
-    if scouter_role == 'scout':
+    if scouter.role == 'scout':
         scout_list = []
         scout = scouter
 
@@ -133,7 +115,7 @@ def home(request, scouter_id=None):
             scout_dict['turns_month'] = service.get_birth_info(scout.birth_date, 'next_birthday').strftime('%b %d, %Y')
 
         scout_notes = []
-        if scouter_role == 'leader':
+        if scouter.role == 'leader':
             scout_notes = ScoutNote.objects.filter(scout=scout).order_by('-note_date')
 
     # -------------------------------------------------------------------------
@@ -467,8 +449,10 @@ def userprofile(request):
 
 def rank_requirements(request, scoutrank_id=None):
     user = request.user
-    leader = Scouter.objects.get(user=user)
-    scouter = leader
+    scouter = Scouter.objects.get(user=user)
+    scouter_role = scouter.role
+
+    scouts = service.get_scouts(scouter.role, scouter.patrol)
 
     if scoutrank_id:
         scout_rank = ScoutRank.objects.get(id=scoutrank_id)
@@ -509,7 +493,7 @@ def rank_requirements(request, scoutrank_id=None):
                     scout_rankreq.date_completed = datetime.strptime(value, '%m/%d/%Y')
                 else:
                     scout_rankreq.date_completed = None
-                scout_rankreq.leader = leader
+                scout_rankreq.leader = scouter
                 scout_rankreq.save()
         return HttpResponseRedirect('/home/scout/' + str(scout.id))
 
@@ -527,20 +511,10 @@ def custom_500(request):
 @login_required
 def report_list(request):
     user = request.user
-    try:
-        scouter = Scouter.objects.get(user=user)
-        scouter_role = scouter.role
-    except:
-        scouter = None
-        scouter_role = None
+    scouter = Scouter.objects.get(user=user)
 
-    if scouter_role == 'leader':
-        scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
-        scouts_by_age = scouts.order_by('birth_date')
-
-        if scouter.patrol == 'all':
-            scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
-            scouts_by_age = scouts.order_by('birth_date') # Need to fix this so the order_by doesn't happen twice
+    scouts = service.get_scouts(scouter.role, scouter.patrol)
+    scouts_by_age = scouts.order_by('birth_date') # Need to fix this so the order_by doesn't happen twice
 
     response = HttpResponse(content_type='application/pdf')
     # Uncommenting this line downloads the pdf rather than displaying it in the browser
@@ -552,6 +526,7 @@ def report_list(request):
     # Draw the pdf report
     x = 1 * inch
     y = 10.5 * inch
+
     for scout in scouts_by_age:
         scout_name = '%s %s' % (scout.user.first_name, scout.user.last_name)
         scout_birth_date = ''
@@ -570,28 +545,18 @@ def report_list(request):
 
     p.showPage()
     p.save()
+
     return response
 
 @login_required
 def report_scout(request, scouter_id=None):
     user = request.user
-    try:
-        scouter = Scouter.objects.get(user=user)
-        scouter_role = scouter.role
-    except:
-        scouter = None
-        scouter_role = None
+    scouter = Scouter.objects.get(user=user)
 
-    if scouter_role == 'leader':
-        if scouter_id:
-            scouts_by_age = Scouter.objects.filter(id=scouter_id)
-        else:
-            scouts = Scouter.objects.filter(patrol=scouter.patrol).exclude(role='leader').order_by('user__first_name')
-            scouts_by_age = scouts.order_by('birth_date')
-
-            if scouter.patrol == 'all':
-                scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
-                scouts_by_age = scouts.order_by('birth_date') # Need to fix this so the order_by doesn't happen twice
+    scouts = service.get_scouts(scouter.role, scouter.patrol)
+    scouts_by_age = scouts.order_by('birth_date')
+    if scouter_id:
+        scouts_by_age = scouts_by_age.filter(id=scouter_id)
 
     response = HttpResponse(content_type='application/pdf')
     # Uncommenting this line downloads the pdf rather than displaying it in the browser
@@ -650,4 +615,5 @@ def report_scout(request, scouter_id=None):
 
         p.showPage()
     p.save()
+
     return response

@@ -1,5 +1,21 @@
+from advancement.models import Parent, Scouter
 from BeautifulSoup import BeautifulSoup
 from datetime import date
+
+def get_scouts(role, patrol):
+    scouts = Scouter.objects.none()
+
+    if role == 'leader':
+        scouts = Scouter.objects.filter(patrol=patrol).exclude(role='leader').order_by('user__first_name')
+
+        if patrol == 'all':
+            scouts = Scouter.objects.exclude(role='leader').order_by('user__first_name')
+
+    elif role == 'parent':
+        parent = Parent.objects.get(user=user)
+        scouts = parent.scouts.all().order_by('user__first_name')
+
+    return scouts
 
 def get_birth_info(born_date, return_type):
     today = date.today()
