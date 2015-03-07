@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'raven.contrib.django.raven_compat',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'crispy_forms',
@@ -191,3 +192,5 @@ EMAIL_PORT = os.environ['SC_EMAIL_PORT']
 EMAIL_HOST_USER = os.environ['SC_EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['SC_EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = os.environ['SC_EMAIL_USE_TLS']
+
+RAVEN_CONFIG = { 'dsn': 'https://%s@app.getsentry.com/%s' % (os.environ['SENTRY_HASH'], os.environ['SENTRY_FIVE_DIGIT']), }
