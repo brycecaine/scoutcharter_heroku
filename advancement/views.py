@@ -499,8 +499,8 @@ def rank_requirements(request, scoutrank_id=None):
         # Loop over form fields
         for key, value in request.POST.dict().items():
             if 'rankreq-date-name' in key:
-                scout_id = key[-3:][0]
-                rank_requirement_id = key[-3:][2]
+                scout_id = key.split('-')[-2]
+                rank_requirement_id = key.split('-')[-1]
 
                 # Update each scout requirement
                 scout_rankreq, created = ScoutRequirement.objects.get_or_create(scout_id=scout_id, requirement_id=rank_requirement_id) 
