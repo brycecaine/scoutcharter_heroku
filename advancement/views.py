@@ -2,7 +2,7 @@ from advancement import service
 from advancement.models import Scouter, Parent, Rank, ScoutRank, ScoutMeritBadge, MeritBadge, ScoutNote, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor, Requirement, ScoutRequirement
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.contrib.contenttypes.models import ContentType
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
@@ -14,6 +14,8 @@ from scoutcharter.forms import ScouterForm
 import csv
 import json
 import logging
+import random
+import string
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +109,7 @@ def home(request, scouter_id=None):
     scout_dict = {}
     if scout:
         scout_dict['name'] = '{0} {1}'.format(scout.user.first_name, scout.user.last_name)
+        scout_dict['username'] = scout.user.username
         scout_dict['phone_number'] = scout.phone_number
         if scout.birth_date:
             age = service.get_birth_info(scout.birth_date, 'age')
@@ -414,38 +417,70 @@ def export(request):
     return response
 
 @login_required
-def userprofile(request):
+def edit_scouter(request, username=None):
     user = request.user
     scouter = Scouter.objects.get(user=user)
-    form_dict = {'username': scouter.user.username,
-                 'email': scouter.user.email,
-                 'phone_number': scouter.phone_number,
-                 'birth_date': scouter.birth_date}
+    user_to_edit = None
+    scouter_to_edit = Scouter()
+    form_dict = {}
+    mode = 'A'
 
-    next_path = request.GET['next']
+    if username:
+        user_to_edit = User.objects.get(username=username)
+        scouter_to_edit = Scouter.objects.get(user=user_to_edit)
+
+        if ((scouter.role == 'leader' and scouter_to_edit.role == 'scout') or
+            scouter == scouter_to_edit):
+
+            form_dict = {'first_name': scouter_to_edit.user.first_name,
+                         'last_name': scouter_to_edit.user.last_name,
+                         'email': scouter_to_edit.user.email,
+                         'username': scouter_to_edit.user.username,
+                         'phone_number': scouter_to_edit.phone_number,
+                         'birth_date': scouter_to_edit.birth_date,
+                         'role': scouter_to_edit.role,
+                         'patrol': scouter_to_edit.patrol,
+                         'rank': scouter_to_edit.rank}
+            mode = 'E'
+
+    next_path = request.GET.get('next')
 
     if request.method == 'POST':
-        form = ScouterForm(request.user, request.POST)
+        form = ScouterForm(username, mode, request.POST)
 
         if form.is_valid():
-            user.username = form.cleaned_data['username']
-            user.email = form.cleaned_data['email']
-            user.save()
+            form_username = form.cleaned_data['username']
+            form_email = form.cleaned_data['email']
+            if mode == 'A':
+                password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+                user_to_edit = User.objects.create_user(form_username, form_email, password)
+            else:
+                user_to_edit.username = form_username
+                user_to_edit.email = form_email
+            user_to_edit.first_name = form.cleaned_data['first_name']
+            user_to_edit.last_name = form.cleaned_data['last_name']
+            user_to_edit.save()
 
-            scouter.phone_number = form.cleaned_data['phone_number']
-            scouter.birth_date = form.cleaned_data['birth_date']
-            scouter.save()
+            scouter_to_edit.user = user_to_edit
+            scouter_to_edit.phone_number = form.cleaned_data['phone_number']
+            scouter_to_edit.birth_date = form.cleaned_data['birth_date']
+            scouter_to_edit.role = form.cleaned_data['role']
+            scouter_to_edit.patrol = form.cleaned_data['patrol']
+            scouter_to_edit.rank = form.cleaned_data['rank']
+            scouter_to_edit.save()
+
+            send_mail('Your New ScoutCharter Account', 'One of your scout leaders has created your ScoutCharter account. Please log in with the username %s and password %s' % (form_username, password), 'admin@scoutcharter.com', [form_email], fail_silently=False)
 
             # return render_to_response("registration/cadastro_concluido.html",{})
             if 'next' in request.GET:
-                return redirect(request.GET['next'])
+                return redirect(request.GET.get('next'))
         else:
-            return render_to_response('registration/userprofile.html', locals(), context_instance=RequestContext(request))
+            return render_to_response('registration/edit_scouter.html', locals(), context_instance=RequestContext(request))
 
     else:    
-        form = ScouterForm(request.user, initial=form_dict)
+        form = ScouterForm(username, mode, initial=form_dict)
         # return render_to_response("registration/registration.html", {'form': form})
-        return render_to_response('registration/userprofile.html', locals(), context_instance=RequestContext(request))
+        return render_to_response('registration/edit_scouter.html', locals(), context_instance=RequestContext(request))
 
 def rank_requirements(request, scoutrank_id=None):
     user = request.user

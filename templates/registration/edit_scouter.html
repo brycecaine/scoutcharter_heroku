@@ -4,7 +4,7 @@
  	<div class="row">
 	    <div class="col-lg-12">
 			<div style="padding-top: 33px; padding-bottom: 20px; background-color: #EFEFEF;">
-                <form method="post" action="/userprofile?next={{ next_path }}" class="form-horizontal" role="form">
+                <form method="post" action="/scouter/edit/{{ username|default:"" }}?next={{ next_path }}" class="form-horizontal" role="form">
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="form-group">

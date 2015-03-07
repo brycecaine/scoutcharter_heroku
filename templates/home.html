@@ -74,7 +74,7 @@
 			            {% if scouter.role in 'leader, parent' %}
 			            	<h5 class="pull-right text-right">
 
-			            		{{ scout_dict.name }}
+                                <a href="/scouter/edit/{{ scout_dict.username }}?next={{ request.path }}">{{ scout_dict.name }}</a>
 
 			            		{% if scout.birth_date %}
 			            			<small>Age {{ scout_dict.age }}</small><br />

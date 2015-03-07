@@ -1,7 +1,10 @@
 from django.contrib import admin
 from advancement.models import Scouter, Parent, Rank, ScoutRank, MeritBadge, ScoutMeritBadge, MeritBadgeBook, ScoutMeritBadgeBook, MeritBadgeCounselor, ScoutNote, Requirement, ScoutRequirement
 
-admin.site.register(Scouter)
+class ScouterAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role', 'patrol')
+
+admin.site.register(Scouter, ScouterAdmin)
 admin.site.register(Parent)
 admin.site.register(Rank)
 admin.site.register(ScoutRank)
